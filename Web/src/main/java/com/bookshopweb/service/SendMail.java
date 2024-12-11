@@ -37,86 +37,86 @@ public class SendMail {
     }
 
     public static void sendLogForAdmin(Log log) {
-        String title = "Log dangerous từ hệ thống";
-        UserDAO userDAO = new UserDAO();
-        String adminEmail = "";
-        List<User> admin = userDAO.getByRole("ADMIN");
-        for (User user : admin) {
-            adminEmail += user.getEmail()+",";
-        }
-
-        adminEmail = adminEmail.substring(0,adminEmail.length()-1);
-//        System.out.println(adminEmail);
-        if(log.getCurValue()==null){
-            log.setCurValue("");
-        }
-        if (log.getPreValue()==null) {
-            log.setPreValue("");
-        }
-
-        File file = new File("Web/src/main/webapp/template/templateEmail.html");
-        try {
-            String content = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
-            content = content.replace("{ID}", log.getId() + "");
-            content = content.replace("{IP}", IPUtils.getIPInfo(log.getIp()).getCountry());
-            content = content.replace("{level}",log.getLevelLog()+"");
-            content = content.replace("{resource}",log.getRes());
-            content = content.replace("{prevalue}", log.getPreValue());
-            content = content.replace("{curvalue}",log.getCurValue());
-            Properties props = new Properties();
-            props.put("mail.smtp.host", "smtp.gmail.com"); // SMTP HOST
-            props.put("mail.smtp.port", "587"); // TLS 587 SSL 465
-            props.put("mail.smtp.auth", "true");
-            props.put("mail.smtp.starttls.enable", "true");
-
-            // create Authenticator
-            Authenticator auth = new Authenticator() {
-                @Override
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    // TODO Auto-generated method stub
-                    return new PasswordAuthentication(from, password);
-                }
-            };
-
-            // Phiên làm việc
-
-            if(session == null){
-                session = Session.getInstance(props, auth);
-            }
-
-
-            // Tạo một tin nhắn
-            MimeMessage msg = new MimeMessage(session);
-                // Kiểu nội dung
-                msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
-
-                // Người gửi
-                msg.setFrom(from);
-
-                // Người nhận
-                msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(adminEmail, false));
-
-                // Tiêu đề email
-                msg.setSubject(title);
-
-                // Quy đinh ngày gửi
-                msg.setSentDate(new Date(Calendar.getInstance().getTimeInMillis()));
-
-                // Quy định email nhận phản hồi
-                // msg.setReplyTo(InternetAddress.parse(from, false))
-
-                // Nội dung
-                msg.setContent(content, "text/HTML; charset=UTF-8");
-
-                // Gửi email
-                Transport.send(msg);
-                System.out.println("Gửi email thành công");
-
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        String title = "Log dangerous từ hệ thống";
+//        UserDAO userDAO = new UserDAO();
+//        String adminEmail = "";
+//        List<User> admin = userDAO.getByRole("ADMIN");
+//        for (User user : admin) {
+//            adminEmail += user.getEmail()+",";
+//        }
+//
+//        adminEmail = adminEmail.substring(0,adminEmail.length()-1);
+////        System.out.println(adminEmail);
+//        if(log.getCurValue()==null){
+//            log.setCurValue("");
+//        }
+//        if (log.getPreValue()==null) {
+//            log.setPreValue("");
+//        }
+//
+//        File file = new File("Web/src/main/webapp/template/templateEmail.html");
+//        try {
+//            String content = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
+//            content = content.replace("{ID}", log.getId() + "");
+//            content = content.replace("{IP}", IPUtils.getIPInfo(log.getIp()).getCountry());
+//            content = content.replace("{level}",log.getLevelLog()+"");
+//            content = content.replace("{resource}",log.getRes());
+//            content = content.replace("{prevalue}", log.getPreValue());
+//            content = content.replace("{curvalue}",log.getCurValue());
+//            Properties props = new Properties();
+//            props.put("mail.smtp.host", "smtp.gmail.com"); // SMTP HOST
+//            props.put("mail.smtp.port", "587"); // TLS 587 SSL 465
+//            props.put("mail.smtp.auth", "true");
+//            props.put("mail.smtp.starttls.enable", "true");
+//
+//            // create Authenticator
+//            Authenticator auth = new Authenticator() {
+//                @Override
+//                protected PasswordAuthentication getPasswordAuthentication() {
+//                    // TODO Auto-generated method stub
+//                    return new PasswordAuthentication(from, password);
+//                }
+//            };
+//
+//            // Phiên làm việc
+//
+//            if(session == null){
+//                session = Session.getInstance(props, auth);
+//            }
+//
+//
+//            // Tạo một tin nhắn
+//            MimeMessage msg = new MimeMessage(session);
+//                // Kiểu nội dung
+//                msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
+//
+//                // Người gửi
+//                msg.setFrom(from);
+//
+//                // Người nhận
+//                msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(adminEmail, false));
+//
+//                // Tiêu đề email
+//                msg.setSubject(title);
+//
+//                // Quy đinh ngày gửi
+//                msg.setSentDate(new Date(Calendar.getInstance().getTimeInMillis()));
+//
+//                // Quy định email nhận phản hồi
+//                // msg.setReplyTo(InternetAddress.parse(from, false))
+//
+//                // Nội dung
+//                msg.setContent(content, "text/HTML; charset=UTF-8");
+//
+//                // Gửi email
+//                Transport.send(msg);
+//                System.out.println("Gửi email thành công");
+//
+//
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
     }
 

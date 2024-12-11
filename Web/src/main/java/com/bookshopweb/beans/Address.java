@@ -1,5 +1,7 @@
 package com.bookshopweb.beans;
 
+import com.google.gson.JsonObject;
+
 public class Address {
     private long id;
     private long userId;
@@ -76,15 +78,14 @@ public class Address {
         this.houseNumber = houseNumber;
     }
 
-    @Override
-    public String toString() {
-        return "Address{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", province='" + province + '\'' +
-                ", district='" + district + '\'' +
-                ", ward='" + ward + '\'' +
-                ", houseNumber='" + houseNumber + '\'' +
-                '}';
+
+    public JsonObject getInfo() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", this.id);
+        jsonObject.addProperty("province", this.province);
+        jsonObject.addProperty("district", this.district);
+        jsonObject.addProperty("ward", this.ward);
+        jsonObject.addProperty("houseNumber", this.houseNumber);
+        return jsonObject;
     }
 }

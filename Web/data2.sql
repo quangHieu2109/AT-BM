@@ -1,5 +1,5 @@
 -- --------------------------------------------------------
--- Host:                         127.0.0.1
+-- Host:                         localhost
 -- Server version:               10.4.28-MariaDB - mariadb.org binary distribution
 -- Server OS:                    Win64
 -- HeidiSQL Version:             12.4.0.6659
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `accuracyuser` (
   PRIMARY KEY (`id`),
   KEY `username` (`username`),
   CONSTRAINT `accuracyuser_ibfk_1` FOREIGN KEY (`username`) REFERENCES `user` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Dumping data for table bookshopdb.accuracyuser: ~1 rows (approximately)
 INSERT INTO `accuracyuser` (`id`, `username`, `accuracyCode`, `endAt`) VALUES
@@ -45,16 +45,32 @@ CREATE TABLE IF NOT EXISTS `address` (
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`),
   CONSTRAINT `address_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table bookshopdb.address: ~6 rows (approximately)
+-- Dumping data for table bookshopdb.address: ~7 rows (approximately)
 INSERT INTO `address` (`id`, `userId`, `houseNumber`, `province`, `district`, `ward`) VALUES
 	(33, 1, '123', 'Hà Giang', 'HUYỆN ĐỒNG VĂN', 'XÃ TẢ LỦNG'),
 	(34, 1, '123', 'Nam Ðịnh', 'HUYỆN NAM TRỰC', 'XÃ NAM THẮNG'),
 	(35, 1, '111', 'Hà Giang', 'HUYỆN ĐỒNG VĂN', 'XÃ SỦNG LÀ'),
 	(36, 1, '123', 'Hà Giang', 'THÀNH PHỐ HÀ GIANG', 'PHƯỜNG NGỌC HÀ'),
-	(39, 1, '1144', 'Ninh Bình', 'HUYỆN YÊN MÔ', 'XÃ YÊN ĐÔNG'),
-	(40, 1, '555', 'Hải Dương', 'HUYỆN TỨ KỲ', 'XÃ NGỌC KỲ');
+	(39, 1, '114', 'Ninh Bình', 'HUYỆN YÊN MÔ', 'XÃ YÊN ĐÔNG'),
+	(40, 1, '555', 'Hải Dương', 'HUYỆN TỨ KỲ', 'XÃ NGỌC KỲ'),
+	(41, 133620766698527084, '43', 'Hồ Chí Minh', 'QUẬN 3', 'PHƯỜNG 4');
+
+-- Dumping structure for table bookshopdb.authenticator
+CREATE TABLE IF NOT EXISTS `authenticator` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `userId` bigint(20) NOT NULL,
+  `publicKey` text NOT NULL,
+  `createdAt` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `status` bit(1) NOT NULL DEFAULT b'1',
+  `updatedAt` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `FK__user` (`userId`),
+  CONSTRAINT `FK__user` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Dumping data for table bookshopdb.authenticator: ~0 rows (approximately)
 
 -- Dumping structure for table bookshopdb.cart
 CREATE TABLE IF NOT EXISTS `cart` (
@@ -65,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `cart` (
   PRIMARY KEY (`id`),
   KEY `idx_cart_user` (`userId`),
   CONSTRAINT `fk_cart_user` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Dumping data for table bookshopdb.cart: ~8 rows (approximately)
 INSERT INTO `cart` (`id`, `userId`, `createdAt`, `updatedAt`) VALUES
@@ -75,7 +91,7 @@ INSERT INTO `cart` (`id`, `userId`, `createdAt`, `updatedAt`) VALUES
 	(14, 2, '2024-05-21 04:28:31', NULL),
 	(15, 3, '2024-05-21 06:10:19', NULL),
 	(16, 1714833219717, '2024-06-05 09:04:29', NULL),
-	(17, 133620766698527080, '2024-07-08 16:09:08', NULL);
+	(19, 1720625491113, '2024-07-10 15:30:23', NULL);
 
 -- Dumping structure for table bookshopdb.cart_item
 CREATE TABLE IF NOT EXISTS `cart_item` (
@@ -91,9 +107,9 @@ CREATE TABLE IF NOT EXISTS `cart_item` (
   KEY `idx_cart_item_product` (`productId`),
   CONSTRAINT `fk_cart_item_cart` FOREIGN KEY (`cartId`) REFERENCES `cart` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_cart_item_product` FOREIGN KEY (`productId`) REFERENCES `product` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table bookshopdb.cart_item: ~12 rows (approximately)
+-- Dumping data for table bookshopdb.cart_item: ~9 rows (approximately)
 INSERT INTO `cart_item` (`id`, `cartId`, `productId`, `quantity`, `createdAt`, `updatedAt`) VALUES
 	(1, 2, 55, 3, '2021-07-13 03:21:51', NULL),
 	(2, 2, 36, 2, '2021-07-05 00:21:45', NULL),
@@ -103,10 +119,7 @@ INSERT INTO `cart_item` (`id`, `cartId`, `productId`, `quantity`, `createdAt`, `
 	(14, 1, 73, 1, '2024-04-04 15:40:17', NULL),
 	(16, 1, 99, 1, '2024-04-05 09:41:52', NULL),
 	(27, 14, 99, 1, '2024-05-21 04:32:43', NULL),
-	(31, 8, 37, 5, '2024-06-04 08:20:24', NULL),
-	(37, 8, 78, 7, '2024-06-05 07:45:52', '2024-06-05 07:45:52'),
-	(38, 8, 99, 1, '2024-06-05 07:35:45', NULL),
-	(41, 8, 93, 1111, '2024-07-08 17:41:06', NULL);
+	(31, 8, 37, 5, '2024-06-04 08:20:24', NULL);
 
 -- Dumping structure for table bookshopdb.category
 CREATE TABLE IF NOT EXISTS `category` (
@@ -145,9 +158,9 @@ CREATE TABLE IF NOT EXISTS `categorys_of_voucher` (
   KEY `FK__category` (`categoryId`),
   CONSTRAINT `FK__category` FOREIGN KEY (`categoryId`) REFERENCES `category` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK__voucher` FOREIGN KEY (`voucherId`) REFERENCES `voucher` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table bookshopdb.categorys_of_voucher: ~7 rows (approximately)
+-- Dumping data for table bookshopdb.categorys_of_voucher: ~9 rows (approximately)
 INSERT INTO `categorys_of_voucher` (`id`, `voucherId`, `categoryId`) VALUES
 	(15, 10, 2),
 	(16, 10, 3),
@@ -155,7 +168,10 @@ INSERT INTO `categorys_of_voucher` (`id`, `voucherId`, `categoryId`) VALUES
 	(18, 11, 2),
 	(19, 11, 3),
 	(20, 11, 6),
-	(21, 11, 7);
+	(21, 11, 7),
+	(26, 15, 2),
+	(27, 15, 7),
+	(28, 15, 12);
 
 -- Dumping structure for table bookshopdb.google_user
 CREATE TABLE IF NOT EXISTS `google_user` (
@@ -167,6 +183,8 @@ CREATE TABLE IF NOT EXISTS `google_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Dumping data for table bookshopdb.google_user: ~0 rows (approximately)
+INSERT INTO `google_user` (`email`, `userId`) VALUES
+	('hieu8a52016@gmail.com', 1720625491113);
 
 -- Dumping structure for table bookshopdb.log
 CREATE TABLE IF NOT EXISTS `log` (
@@ -181,9 +199,8 @@ CREATE TABLE IF NOT EXISTS `log` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table bookshopdb.log: ~49 rows (approximately)
+-- Dumping data for table bookshopdb.log: ~121 rows (approximately)
 INSERT INTO `log` (`id`, `ip`, `levelLog`, `res`, `preValue`, `curValue`, `createAt`, `updateAt`) VALUES
-	(1711553190592, '123123', 1, 'Update on table User', '{"id":10,"username":"hiu","password":"111","fullname":"Quang Hieu","email":"","phoneNumber":"123123123","gender":1,"address":"","role":"","createAt":"Mar 27, 2024, 10:25:59 PM"}', '{"id":10,"username":"hiu","password":"111","fullname":"Quang Hieu","email":"","phoneNumber":"123123123","gender":1,"address":"","role":""}', '2024-04-28 08:33:18', '2024-03-27 15:25:59'),
 	(1719986696178, '42.112.79.162', 2, 'Insert on table User', 'null', '{"id":0,"username":"user13333","password":"16DEDE70EF3D625C8A073E422784DCA9","fullname":"Hiếu Ngô Quang Hiếu","email":"hiu@123.com","phoneNumber":"0361235351","gender":0,"role":"CUSTOMER","createAt":"Jul 3, 2024, 1:04:10 PM","googleUser":false,"accuracy":true}', '2024-07-03 06:04:10', '2024-07-03 06:04:12'),
 	(1720018401685, '42.112.79.162', 3, 'Update on table CartItem', '{"id":41,"cartId":8,"productId":93,"quantity":1,"createdAt":"Jun 5, 2024, 2:50:19 PM"}', '{"id":41,"cartId":8,"productId":93,"quantity":1111,"createdAt":"Jun 5, 2024, 2:50:19 PM"}', '2024-06-05 07:50:19', '2024-07-03 14:51:53'),
 	(1720018746481, '42.112.79.162', 3, 'Update on table CartItem', '{"id":41,"cartId":8,"productId":93,"quantity":1111,"createdAt":"Jul 3, 2024, 9:51:53 PM"}', '{"id":41,"cartId":8,"productId":93,"quantity":1,"createdAt":"Jul 3, 2024, 9:51:53 PM"}', '2024-07-03 14:51:53', '2024-07-03 14:57:52'),
@@ -236,7 +253,75 @@ INSERT INTO `log` (`id`, `ip`, `levelLog`, `res`, `preValue`, `curValue`, `creat
 	(1720530355189, '42.112.79.162', 4, 'Delete on table User', '{"id":133620766698527082,"username":"user1333","password":"F0F2BEDDD5B2CDDC7B898DC01862181F","fullname":"Hiếu Ngô Quang Hiếu","email":"hiu@1s23.com","phoneNumber":"0361123535","gender":0,"role":"CUSTOMER","createAt":"Jul 8, 2024, 11:13:19 PM","googleUser":false,"accuracy":true}', 'null', '2024-07-08 16:13:19', '2024-07-09 13:05:10'),
 	(1720530364947, '42.112.79.162', 4, 'Delete on table User', '{"id":133620766698527071,"username":"user1111","password":"D3C5B51332FE9ABB655B37CACF906228","fullname":"Hiếu Ngô Quang Hiếu","email":"hao@ASD.H","phoneNumber":"0366123535","gender":0,"role":"CUSTOMER","createAt":"Jul 3, 2024, 12:32:53 PM","googleUser":false,"accuracy":true}', 'null', '2024-07-03 05:32:53', '2024-07-09 13:05:05'),
 	(1720530390024, '42.112.79.162', 4, 'Delete on table User', '{"id":133620766698527079,"username":"user13333","password":"16DEDE70EF3D625C8A073E422784DCA9","fullname":"Hiếu Ngô Quang Hiếu","email":"hiu@123.com","phoneNumber":"0361235351","gender":0,"role":"CUSTOMER","createAt":"Jul 3, 2024, 1:04:12 PM","googleUser":false,"accuracy":true}', 'null', '2024-07-03 06:04:12', '2024-07-09 13:05:19'),
-	(1720530405532, '42.112.79.162', 4, 'Delete on table User', '{"id":133620766698527081,"username":"user11212","password":"F0F2BEDDD5B2CDDC7B898DC01862181F","fullname":"Hiếu Ngô Quang Hiếu","email":"hiu@123.co2m","phoneNumber":"0366121535","gender":0,"role":"CUSTOMER","createAt":"Jul 8, 2024, 11:12:45 PM","googleUser":false,"accuracy":true}', 'null', '2024-07-08 16:12:45', '2024-07-09 13:05:14');
+	(1720530405532, '42.112.79.162', 4, 'Delete on table User', '{"id":133620766698527081,"username":"user11212","password":"F0F2BEDDD5B2CDDC7B898DC01862181F","fullname":"Hiếu Ngô Quang Hiếu","email":"hiu@123.co2m","phoneNumber":"0366121535","gender":0,"role":"CUSTOMER","createAt":"Jul 8, 2024, 11:12:45 PM","googleUser":false,"accuracy":true}', 'null', '2024-07-08 16:12:45', '2024-07-09 13:05:14'),
+	(1720621424671, '42.112.79.162', 3, 'Update on table CartItem', '{"id":41,"cartId":8,"productId":93,"quantity":1,"createdAt":"Jul 10, 2024, 9:23:24 PM"}', '{"id":41,"cartId":8,"productId":93,"quantity":1,"createdAt":"Jul 10, 2024, 9:23:24 PM"}', '2024-07-10 14:23:24', '2024-07-10 14:23:24'),
+	(1720621455955, '42.112.79.162', 3, 'Update on table CartItem', '{"id":41,"cartId":8,"productId":93,"quantity":1111,"createdAt":"Jul 9, 2024, 12:41:06 AM"}', '{"id":41,"cartId":8,"productId":93,"quantity":1,"createdAt":"Jul 9, 2024, 12:41:06 AM"}', '2024-07-08 17:41:06', '2024-07-10 14:23:23'),
+	(1720621464090, '42.112.79.162', 3, 'Update on table CartItem', '{"id":41,"cartId":8,"productId":93,"quantity":1,"createdAt":"Jul 10, 2024, 9:23:24 PM"}', '{"id":41,"cartId":8,"productId":93,"quantity":1,"createdAt":"Jul 10, 2024, 9:23:24 PM"}', '2024-07-10 14:23:24', '2024-07-10 14:23:25'),
+	(1720621471887, '42.112.79.162', 2, 'Insert on table CartItem', 'null', '{"id":0,"cartId":8,"productId":57,"quantity":1,"createdAt":"Jul 10, 2024, 9:23:44 PM"}', '2024-07-10 14:23:44', '2024-07-10 14:23:44'),
+	(1720621479492, '42.112.79.162', 3, 'Update on table CartItem', '{"id":41,"cartId":8,"productId":93,"quantity":1,"createdAt":"Jul 10, 2024, 9:23:24 PM"}', '{"id":41,"cartId":8,"productId":93,"quantity":1,"createdAt":"Jul 10, 2024, 9:23:24 PM"}', '2024-07-10 14:23:24', '2024-07-10 14:23:25'),
+	(1720621984804, '42.112.79.162', 2, 'Insert on table CartItem', 'null', '{"id":0,"cartId":8,"productId":31,"quantity":1,"createdAt":"Jul 10, 2024, 9:31:33 PM"}', '2024-07-10 14:31:33', '2024-07-10 14:31:33'),
+	(1720625495555, '42.112.79.162', 2, 'Insert on table Cart', 'null', '{"id":0,"userId":1720625491113,"createdAt":"Jul 10, 2024, 10:30:23 PM","listCartItem":[]}', '2024-07-10 15:30:23', '2024-07-10 15:30:23'),
+	(1720625498312, '42.112.79.162', 2, 'Insert on table User', 'null', '{"id":1720625491113,"fullname":"Hiếu Ngô Quang","email":"hieu8a52016@gmail.com","gender":0,"role":"CUSTOMER","googleUser":false,"accuracy":true}', '2024-07-10 15:30:22', '2024-07-10 15:30:22'),
+	(1720930133836, '42.112.79.162', 2, 'Insert on table product_import', 'null', '{"id":102,"productId":25,"userId":2,"importAt":"Dec 11, 2021, 2:13:04 AM","quantity":60,"price":70300.2,"createAt":"Jul 14, 2024, 8:10:00 AM"}', '2024-07-14 01:10:00', '2024-07-14 04:07:59'),
+	(1720930154324, '42.112.79.162', 2, 'Insert on table product_import', 'null', '{"id":101,"productId":10,"userId":1,"importAt":"Jun 7, 2021, 11:23:46 PM","quantity":100,"price":52500.0,"createAt":"Jul 14, 2024, 8:00:00 AM"}', '2024-07-14 01:00:00', '2024-07-14 04:07:59'),
+	(1720930155225, '42.112.79.162', 2, 'Insert on table product_import', 'null', '{"id":103,"productId":6,"userId":3,"importAt":"Jun 18, 2021, 5:55:06 AM","quantity":77,"price":102005.0,"createAt":"Jul 14, 2024, 8:20:00 AM"}', '2024-07-14 01:20:00', '2024-07-14 04:08:00'),
+	(1720933280300, '42.112.79.162', 1, 'Login', 'username: user1 password: 202CB962AC59075B964B07152D234B70', 'Login success', '2024-07-14 05:00:04', '2024-07-14 05:00:04'),
+	(1720933488191, '42.112.79.162', 1, 'Login', 'username: user1 password: 4297F44B13955235245B2497399D7A93', 'Login error', '2024-07-14 05:04:22', '2024-07-14 05:04:22'),
+	(1720933529597, '42.112.79.162', 1, 'Login', 'username: user1 password: 202CB962AC59075B964B07152D234B70', 'Login success', '2024-07-14 05:04:29', '2024-07-14 05:04:29'),
+	(1720933553922, '42.112.79.162', 1, 'Login admin', 'username: user1 password: 202CB962AC59075B964B07152D234B70', 'Login success', '2024-07-14 05:05:04', '2024-07-14 05:05:04'),
+	(1720933581219, '42.112.79.162', 1, 'Login admin', 'username: user1 password: EA281B47CB711DA418C35B07B9F06CD5', 'Login error', '2024-07-14 05:05:02', '2024-07-14 05:05:02'),
+	(1720933594998, '42.112.79.162', 1, 'Login admin', 'username: user1 password: 202CB962AC59075B964B07152D234B70', 'Login success', '2024-07-14 05:05:22', '2024-07-14 05:05:21'),
+	(1720933614019, '42.112.79.162', 1, 'Login admin', 'username: user4 password: 202CB962AC59075B964B07152D234B70', 'Login error Unauthorized', '2024-07-14 05:05:18', '2024-07-14 05:05:18'),
+	(1720936531311, '42.112.79.162', 1, 'Login admin', 'username: user1 password: 202CB962AC59075B964B07152D234B70', 'Login success', '2024-07-14 05:54:33', '2024-07-14 05:54:33'),
+	(1720957911426, '42.112.79.162', 4, 'Delete on table User', '{"id":133620766698527080,"username":"hieu2109","password":"F0F2BEDDD5B2CDDC7B898DC01862181F","fullname":"Quang Hiếu","email":"21130356@st.hcmuaf.edu.vn","phoneNumber":"0911294910","gender":0,"role":"CUSTOMER","createAt":"Jul 8, 2024, 11:08:54 PM","googleUser":false,"accuracy":true}', 'null', '2024-07-08 16:08:54', '2024-07-14 11:51:06'),
+	(1720957917731, '42.112.79.162', 1, 'Login', 'username: user1 password: 202CB962AC59075B964B07152D234B70', 'Login success', '2024-07-14 11:50:44', '2024-07-14 11:50:43'),
+	(1720958194284, '42.112.79.162', 1, 'Login', 'username: user1 password: 202CB962AC59075B964B07152D234B70', 'Login success', '2024-07-14 11:55:20', '2024-07-14 11:55:20'),
+	(1720958470698, '42.112.79.162', 1, 'Login', 'username: user1 password: 202CB962AC59075B964B07152D234B70', 'Login success', '2024-07-14 11:59:43', '2024-07-14 11:59:42'),
+	(1720958620316, '42.112.79.162', 1, 'Login', 'username: user1 password: 202CB962AC59075B964B07152D234B70', 'Login success', '2024-07-14 12:02:22', '2024-07-14 12:02:22'),
+	(1720958787512, '42.112.79.162', 1, 'Login', 'username: user1 password: 202CB962AC59075B964B07152D234B70', 'Login success', '2024-07-14 12:06:21', '2024-07-14 12:06:20'),
+	(1720959147034, '42.112.79.162', 1, 'Login', 'username: user1 password: 202CB962AC59075B964B07152D234B70', 'Login success', '2024-07-14 12:11:30', '2024-07-14 12:11:29'),
+	(1720960092772, '42.112.79.162', 1, 'Login', 'username: hieu2109 password: F0F2BEDDD5B2CDDC7B898DC01862181F', 'Login success', '2024-07-14 12:27:23', '2024-07-14 12:27:23'),
+	(1720960096796, '42.112.79.162', 2, 'Insert on table User', 'null', '{"id":0,"username":"hieu2109","password":"F0F2BEDDD5B2CDDC7B898DC01862181F","fullname":"Quang Hiếu","email":"21130356@st.hcmuaf.edu.vn","phoneNumber":"12312309876","gender":0,"role":"CUSTOMER","createAt":"Jul 14, 2024, 7:27:11 PM","googleUser":false,"accuracy":true}', '2024-07-14 12:27:11', '2024-07-14 12:27:12'),
+	(1720960971584, '42.112.79.162', 1, 'Login', 'username: user1 password: 202CB962AC59075B964B07152D234B70', 'Login success', '2024-07-14 12:42:39', '2024-07-14 12:42:39'),
+	(1720961008890, '42.112.79.162', 1, 'Login', 'username: hieu2109 password: F0F2BEDDD5B2CDDC7B898DC01862181F', 'Login success', '2024-07-14 12:43:00', '2024-07-14 12:43:00'),
+	(1720961627069, '42.112.79.162', 1, 'Login', 'username: hieu2109 password: C0F22BFFA42242D71BEA5CBF29728DAF', 'Login error', '2024-07-14 12:52:40', '2024-07-14 12:52:40'),
+	(1720961649833, '42.112.79.162', 1, 'Login', 'username: hieu2109 password: F0F2BEDDD5B2CDDC7B898DC01862181F', 'Login success', '2024-07-14 12:52:46', '2024-07-14 12:52:46'),
+	(1720962238113, '42.112.79.162', 1, 'Login', 'username: hieu2109 password: F0F2BEDDD5B2CDDC7B898DC01862181F', 'Login success', '2024-07-14 13:03:25', '2024-07-14 13:03:25'),
+	(1720964513064, '42.112.79.162', 2, 'Insert on table Cart', 'null', '{"id":0,"userId":133620766698527083,"createdAt":"Jul 14, 2024, 8:41:27 PM","listCartItem":[]}', '2024-07-14 13:41:27', '2024-07-14 13:41:28'),
+	(1720967393079, '42.112.79.162', 2, 'Insert on table Voucher', 'null', '{"id":0,"voucherCode":"8S118d","voucherName":"Freeship","description":"Voucher giảm phi phíp","quantity":100,"percentDecrease":50.0,"maxDecrease":50000.0,"minPrice":100000.0,"type":0,"startAt":"Jul 14, 2024, 9:28:00 PM","endAt":"Jul 20, 2024, 9:28:00 PM","createAt":"Jul 14, 2024, 9:28:49 PM","voucherImage":"https://i.imgur.com/iw7C6MI.png"}', '2024-07-14 14:28:49', '2024-07-14 14:28:52'),
+	(1720967611806, '42.112.79.162', 2, 'Insert on table Voucher', 'null', '{"id":0,"voucherCode":"o8l707","voucherName":"Mã giảm giá sản phẩm","description":"Voucher giảm giá sản phẩm","quantity":100,"percentDecrease":40.0,"maxDecrease":200000.0,"minPrice":200000.0,"type":1,"startAt":"Jul 14, 2024, 9:32:00 PM","endAt":"Jul 20, 2024, 9:32:00 PM","createAt":"Jul 14, 2024, 9:32:13 PM","voucherImage":"https://i.imgur.com/8o1BfRI.png"}', '2024-07-14 14:32:13', '2024-07-14 14:32:15'),
+	(1720968258657, '42.112.79.162', 4, 'Delete on table CartItem', '{"id":43,"cartId":8,"productId":31,"quantity":1,"createdAt":"Jul 10, 2024, 9:31:33 PM"}', 'null', '2024-07-10 14:31:33', '2024-07-14 14:44:11'),
+	(1720968274188, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":1720968250596,"productId":57,"price":153427.0,"discount":0.0,"quantity":1,"createdAt":"Jul 14, 2024, 9:44:10 PM"}', '2024-07-14 14:44:10', '2024-07-14 14:44:11'),
+	(1720968282087, '42.112.79.162', 4, 'Delete on table CartItem', '{"id":42,"cartId":8,"productId":57,"quantity":1,"createdAt":"Jul 10, 2024, 9:23:44 PM"}', 'null', '2024-07-10 14:23:44', '2024-07-14 14:44:12'),
+	(1720968325097, '42.112.79.162', 2, 'Insert on table Order', 'null', '{"id":1720968250596,"userId":1,"status":0,"deliveryMethod":1,"deliveryPrice":21600.0,"createdAt":"Jul 14, 2024, 9:44:10 PM","totalPrice":0.0}', '2024-07-14 14:44:10', '2024-07-14 14:44:11'),
+	(1720968335173, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":1720968250596,"productId":31,"price":231331.0,"discount":20.0,"quantity":1,"createdAt":"Jul 14, 2024, 9:44:10 PM"}', '2024-07-14 14:44:10', '2024-07-14 14:44:11'),
+	(1721008919587, '203.113.146.152', 4, 'Delete on table User', '{"id":133620766698527083,"username":"hieu2109","password":"F0F2BEDDD5B2CDDC7B898DC01862181F","fullname":"Quang Hiếu","email":"21130356@st.hcmuaf.edu.vn","phoneNumber":"12312309876","gender":0,"role":"CUSTOMER","createAt":"Jul 14, 2024, 7:27:12 PM","googleUser":false,"accuracy":true}', 'null', '2024-07-14 12:27:12', '2024-07-15 02:01:12'),
+	(1721011439438, '103.199.32.200', 2, 'Insert on table User', 'null', '{"id":0,"username":"hieu2109","password":"F0F2BEDDD5B2CDDC7B898DC01862181F","fullname":"Hiếu Ngô Quang Hiếu","email":"21130356@st.hcmuaf.edu.vn","phoneNumber":"03661111535","gender":0,"role":"CUSTOMER","createAt":"Jul 15, 2024, 9:43:50 AM","googleUser":false,"accuracy":true}', '2024-07-15 02:43:50', '2024-07-15 02:43:51'),
+	(1721011499937, '103.199.32.200', 2, 'Insert on table Cart', 'null', '{"id":0,"userId":133620766698527084,"createdAt":"Jul 15, 2024, 9:44:38 AM","listCartItem":[]}', '2024-07-15 02:44:38', '2024-07-15 02:44:38'),
+	(1721011502818, '103.199.32.200', 2, 'Insert on table CartItem', 'null', '{"id":0,"cartId":21,"productId":78,"quantity":1,"createdAt":"Jul 15, 2024, 9:44:47 AM"}', '2024-07-15 02:44:47', '2024-07-15 02:44:47'),
+	(1721011581257, '103.199.32.200', 2, 'Insert on table Order', 'null', '{"id":1721011564682,"userId":133620766698527084,"status":0,"deliveryMethod":1,"deliveryPrice":22000.0,"createdAt":"Jul 15, 2024, 9:46:04 AM","totalPrice":0.0}', '2024-07-15 02:46:04', '2024-07-15 02:46:05'),
+	(1721011598069, '103.199.32.200', 4, 'Delete on table CartItem', '{"id":44,"cartId":21,"productId":78,"quantity":1,"createdAt":"Jul 15, 2024, 9:44:47 AM"}', 'null', '2024-07-15 02:44:47', '2024-07-15 02:46:06'),
+	(1721011657278, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":1721011564682,"productId":78,"price":104405.0,"discount":0.0,"quantity":1,"createdAt":"Jul 15, 2024, 9:46:04 AM"}', '2024-07-15 02:46:04', '2024-07-15 02:46:05'),
+	(1721011689070, '103.199.32.200', 2, 'Insert on table Voucher', 'null', '{"id":0,"voucherCode":"qkGpcH","voucherName":"Freeship","description":"","quantity":100,"percentDecrease":50.0,"maxDecrease":100000.0,"minPrice":200000.0,"type":0,"startAt":"Jul 15, 2024, 9:46:00 AM","endAt":"Jul 18, 2024, 9:46:00 AM","createAt":"Jul 15, 2024, 9:46:56 AM","voucherImage":"https://i.imgur.com/0TqUZQz.png"}', '2024-07-15 02:46:56', '2024-07-15 02:46:59'),
+	(1721011716604, '103.199.32.200', 3, 'Update on table Order', '{"id":7,"userId":5,"status":0,"deliveryMethod":1,"deliveryPrice":10000.0,"createdAt":"Jul 9, 2024, 6:39:13 PM","totalPrice":0.0}', '{"id":7,"userId":5,"status":1,"deliveryMethod":1,"deliveryPrice":10000.0,"createdAt":"Jul 9, 2024, 6:39:13 PM","updatedAt":"Jul 15, 2024, 9:47:58 AM","totalPrice":0.0}', '2024-07-09 11:39:13', '2024-07-15 02:47:58'),
+	(1721011761438, '103.199.32.200', 2, 'Insert on table product_import', 'null', '{"id":104,"productId":17,"userId":1,"quantity":100,"price":52500.0}', '2024-07-15 02:48:34', '2024-07-15 02:48:34'),
+	(1721011797951, '103.199.32.200', 2, 'Insert on table product_import', 'null', '{"id":105,"productId":22,"userId":2,"quantity":60,"price":70300.2}', '2024-07-15 02:48:34', '2024-07-15 02:48:34'),
+	(1721011799467, '103.199.32.200', 2, 'Insert on table product_import', 'null', '{"id":106,"productId":77,"userId":3,"quantity":77,"price":102005.0}', '2024-07-15 02:48:35', '2024-07-15 02:48:35'),
+	(1733904380545, '42.118.115.134', 3, 'Update on table CartItem', '{"id":37,"cartId":8,"productId":78,"quantity":7,"createdAt":"Jun 5, 2024, 2:45:52 PM","updatedAt":"Jun 5, 2024, 2:45:52 PM"}', '{"id":37,"cartId":8,"productId":78,"quantity":8,"createdAt":"Jun 5, 2024, 2:45:52 PM","updatedAt":"Dec 11, 2024, 3:05:35 PM","product":{"id":78,"name":"Sách Kenegy","price":104405.0,"discount":0.0,"quantity":395,"totalBuy":406,"author":"Carrie Boone","pages":150,"publisher":"NXB Đại học Sư phạm TP.HCM","yearPublishing":2011,"description":"Pariatur ex labore deserunt non deserunt aliqua non reprehenderit elit fugiat elit officia reprehenderit laboris. Irure veniam veniam fugiat aliqua officia ullamco ex sit. Qui esse consequat ipsum sunt et aliqua exercitation Lorem deserunt tempor sunt ullamco. Esse fugiat laborum ut Lorem ad fugiat reprehenderit. Exercitation consequat cupidatat anim sint exercitation est dolor mollit ut cillum non eiusmod eu voluptate. Labore elit sunt labore velit ad anim. Dolor id aliquip et anim sint sint proident duis in sint.\\r\\nUllamco ad id deserunt reprehenderit deserunt ad laborum ad. Laboris id amet dolor ad ex ut id. Exercitation et velit duis amet elit.\\r\\n","imageName":"temp-7329036107498680084.jpg","shop":1,"createdAt":"Jan 4, 2022, 10:35:13 AM"}}', '2024-06-05 07:45:52', '2024-12-11 08:05:35'),
+	(1733904492419, '42.118.115.134', 2, 'Insert on table Order', 'null', '{"id":1733904490987,"userId":1,"status":0,"deliveryMethod":1,"deliveryPrice":36001.0,"createdAt":"Dec 11, 2024, 3:08:10 PM","totalPrice":0.0}', '2024-12-11 08:08:10', '2024-12-11 08:08:11'),
+	(1733904495905, '42.118.115.134', 4, 'Delete on table CartItem', '{"id":37,"cartId":8,"productId":78,"quantity":8,"createdAt":"Dec 11, 2024, 3:05:35 PM","updatedAt":"Dec 11, 2024, 3:05:35 PM"}', 'null', '2024-12-11 08:05:35', '2024-12-11 08:08:11'),
+	(1733904544331, '42.118.115.134', 4, 'Delete on table CartItem', '{"id":41,"cartId":8,"productId":93,"quantity":1,"createdAt":"Jul 10, 2024, 9:23:24 PM"}', 'null', '2024-07-10 14:23:24', '2024-12-11 08:08:12'),
+	(1733904559437, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":1733904490987,"productId":78,"price":104405.0,"discount":0.0,"quantity":8,"createdAt":"Dec 11, 2024, 3:08:10 PM"}', '2024-12-11 08:08:10', '2024-12-11 08:08:11'),
+	(1733904581448, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":1733904490987,"productId":93,"price":215800.0,"discount":20.0,"quantity":1,"createdAt":"Dec 11, 2024, 3:08:10 PM"}', '2024-12-11 08:08:10', '2024-12-11 08:08:11'),
+	(1733904821262, '42.118.115.134', 3, 'Update on table CartItem', '{"id":38,"cartId":8,"productId":99,"quantity":1,"createdAt":"Jun 5, 2024, 2:35:45 PM"}', '{"id":38,"cartId":8,"productId":99,"quantity":5,"createdAt":"Jun 5, 2024, 2:35:45 PM"}', '2024-06-05 07:35:45', '2024-12-11 08:13:06'),
+	(1733906470244, '42.118.115.134', 4, 'Delete on table CartItem', '{"id":38,"cartId":8,"productId":99,"quantity":5,"createdAt":"Dec 11, 2024, 3:13:06 PM"}', 'null', '2024-12-11 08:13:06', '2024-12-11 08:40:44'),
+	(1733906490816, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":1733906443276,"productId":99,"price":199763.0,"discount":20.0,"quantity":5,"createdAt":"Dec 11, 2024, 3:40:43 PM"}', '2024-12-11 08:40:43', '2024-12-11 08:40:43'),
+	(1733906525713, '42.118.115.134', 2, 'Insert on table Order', 'null', '{"id":1733906443276,"userId":1,"status":0,"deliveryMethod":1,"deliveryPrice":38001.0,"createdAt":"Dec 11, 2024, 3:40:43 PM","totalPrice":0.0}', '2024-12-11 08:40:43', '2024-12-11 08:40:43'),
+	(1733906575765, '42.118.115.134', 2, 'Insert on table CartItem', 'null', '{"id":0,"cartId":8,"productId":22,"quantity":1,"createdAt":"Dec 11, 2024, 3:42:29 PM"}', '2024-12-11 08:42:29', '2024-12-11 08:42:29'),
+	(1733906781658, '42.118.115.134', 3, 'Update on table CartItem', '{"id":45,"cartId":8,"productId":22,"quantity":1,"createdAt":"Dec 11, 2024, 3:42:29 PM"}', '{"id":45,"cartId":8,"productId":22,"quantity":3,"createdAt":"Dec 11, 2024, 3:42:29 PM"}', '2024-12-11 08:42:29', '2024-12-11 08:45:38'),
+	(1733907755956, '42.118.115.134', 2, 'Insert on table Order', 'null', '{"id":1733907700536,"userId":1,"status":0,"deliveryMethod":1,"deliveryPrice":38001.0,"createdAt":"Dec 11, 2024, 4:01:40 PM","totalPrice":0.0}', '2024-12-11 09:01:40', '2024-12-11 09:01:40'),
+	(1733907766513, '42.118.115.134', 4, 'Delete on table CartItem', '{"id":45,"cartId":8,"productId":22,"quantity":3,"createdAt":"Dec 11, 2024, 3:45:38 PM"}', 'null', '2024-12-11 08:45:38', '2024-12-11 09:01:41'),
+	(1733907784088, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":1733907700536,"productId":22,"price":116529.0,"discount":0.0,"quantity":3,"createdAt":"Dec 11, 2024, 4:01:40 PM"}', '2024-12-11 09:01:40', '2024-12-11 09:01:41');
 
 -- Dumping structure for table bookshopdb.orders
 CREATE TABLE IF NOT EXISTS `orders` (
@@ -250,42 +335,47 @@ CREATE TABLE IF NOT EXISTS `orders` (
   PRIMARY KEY (`id`),
   KEY `idx_orders_user` (`userId`),
   CONSTRAINT `fk_orders_user` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=1720018358557 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1733907700539 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table bookshopdb.orders: ~32 rows (approximately)
+-- Dumping data for table bookshopdb.orders: ~37 rows (approximately)
 INSERT INTO `orders` (`id`, `userId`, `status`, `deliveryMethod`, `deliveryPrice`, `createdAt`, `updatedAt`) VALUES
-	(1, 4, 4, 1, 10000, '2024-07-09 11:39:13', '2024-07-09 13:04:16'),
-	(2, 5, 2, 2, 50000, '2024-07-09 11:39:13', '2024-07-09 13:02:44'),
-	(3, 4, 3, 1, 10000, '2023-07-09 11:39:13', '2023-07-09 13:01:22'),
-	(4, 5, 3, 2, 50000, '2024-07-09 11:39:13', '2024-07-09 13:01:25'),
-	(5, 4, 4, 1, 10000, '2024-07-09 11:39:13', '2024-07-09 13:04:19'),
-	(6, 4, 2, 2, 50000, '2024-07-09 11:39:13', '2024-07-09 13:02:51'),
-	(7, 5, 0, 1, 10000, '2024-07-09 11:39:13', NULL),
-	(8, 4, 0, 2, 50000, '2024-07-09 11:39:13', NULL),
-	(9, 5, 1, 1, 10000, '2024-07-09 11:39:13', '2024-07-09 13:02:08'),
-	(10, 4, 2, 2, 50000, '2024-07-09 11:39:13', '2024-07-09 13:02:53'),
-	(11, 5, 0, 1, 10000, '2024-05-05 08:25:12', NULL),
-	(12, 1714833219717, 2, 3, 50000, '2023-07-09 16:06:49', '2023-07-11 13:02:11'),
-	(13, 4, 2, 1, 10000, '2024-07-09 11:39:13', '2024-07-09 13:02:55'),
-	(14, 6, 2, 2, 50000, '2022-07-09 16:07:07', '2022-07-11 14:01:50'),
-	(15, 4, 1, 1, 10000, '2024-07-09 11:39:13', '2024-07-09 13:01:55'),
-	(16, 5, 1, 2, 50000, '2024-05-05 08:25:10', '2024-07-09 13:01:37'),
-	(17, 133620766698527078, 2, 1, 10000, '2023-07-09 16:07:19', '2023-02-12 13:03:21'),
-	(18, 4, 2, 2, 50000, '2024-07-09 11:39:13', '2024-07-09 13:03:14'),
-	(19, 4, 1, 1, 10000, '2024-07-09 11:39:13', '2024-07-09 13:02:03'),
-	(20, 5, 2, 2, 50000, '2024-07-09 11:39:13', '2024-07-09 13:03:03'),
-	(21, 4, 4, 1, 10000, '2024-07-09 11:39:13', '2024-07-09 13:04:23'),
-	(22, 9, 2, 2, 50000, '2024-07-09 16:09:17', '2023-10-13 16:01:01'),
-	(23, 4, 0, 1, 10000, '2024-07-09 11:39:13', NULL),
-	(24, 2, 2, 2, 50000, '2024-07-09 16:06:51', NULL),
-	(25, 133620766698527070, 2, 1, 10000, '2024-01-08 16:06:46', '2024-01-10 13:04:27'),
-	(27, 1, 0, 1, 15000, '2024-07-09 11:39:13', NULL),
-	(28, 1, 2, 1, 15000, '2024-07-09 11:39:13', '2024-07-09 13:03:11'),
-	(30, 1, 3, 1, 15000, '2023-07-08 11:39:13', '2023-07-09 13:03:18'),
-	(1717525929835, 1, 0, 1, 216000, '2024-06-04 18:32:09', NULL),
-	(1717526036853, 1, 0, 1, 38001, '2024-06-04 18:33:56', NULL),
-	(1717526953253, 1, 1, 1, 38001, '2024-06-04 18:49:13', '2024-07-09 13:02:28'),
-	(1720018358556, 1, 0, 1, 38500, '2024-07-03 14:52:38', NULL);
+	(1, 4, 4, 1, 10000, '2024-12-11 10:25:07', '2024-07-09 13:04:16'),
+	(2, 5, 2, 2, 50000, '2024-12-11 10:25:08', '2024-07-09 13:02:44'),
+	(3, 4, 3, 1, 10000, '2024-12-11 10:25:09', '2023-07-09 13:01:22'),
+	(4, 5, 3, 2, 50000, '2024-12-11 10:25:10', '2024-07-09 13:01:25'),
+	(5, 4, 4, 1, 10000, '2024-12-11 10:25:10', '2024-07-09 13:04:19'),
+	(6, 4, 2, 2, 50000, '2024-12-11 10:25:11', '2024-07-09 13:02:51'),
+	(7, 5, 1, 1, 10000, '2024-12-11 10:25:11', '2024-07-15 02:47:58'),
+	(8, 4, 0, 2, 50000, '2024-12-11 10:25:11', NULL),
+	(9, 5, 1, 1, 10000, '2024-12-11 10:25:12', '2024-07-09 13:02:08'),
+	(10, 4, 2, 2, 50000, '2024-12-11 10:25:12', '2024-07-09 13:02:53'),
+	(11, 5, 0, 1, 10000, '2024-12-11 10:25:13', NULL),
+	(12, 4, 2, 3, 50000, '2024-12-11 10:33:35', '2023-07-11 13:02:11'),
+	(13, 4, 2, 1, 10000, '2024-12-11 10:25:13', '2024-07-09 13:02:55'),
+	(14, 6, 2, 2, 50000, '2024-12-11 10:25:14', '2022-07-11 14:01:50'),
+	(15, 4, 1, 1, 10000, '2024-12-11 10:25:15', '2024-07-09 13:01:55'),
+	(16, 5, 1, 2, 50000, '2024-12-11 10:25:15', '2024-07-09 13:01:37'),
+	(17, 6, 2, 1, 10000, '2024-12-11 10:33:29', '2023-02-12 13:03:21'),
+	(18, 4, 2, 2, 50000, '2024-12-11 10:25:16', '2024-07-09 13:03:14'),
+	(19, 4, 1, 1, 10000, '2024-12-11 10:25:16', '2024-07-09 13:02:03'),
+	(20, 5, 2, 2, 50000, '2024-12-11 10:25:17', '2024-07-09 13:03:03'),
+	(21, 4, 4, 1, 10000, '2024-12-11 10:25:17', '2024-07-09 13:04:23'),
+	(22, 9, 2, 2, 50000, '2024-12-11 10:25:17', '2023-10-13 16:01:01'),
+	(23, 4, 0, 1, 10000, '2024-12-11 10:25:18', NULL),
+	(24, 2, 2, 2, 50000, '2024-12-11 10:25:18', NULL),
+	(25, 6, 2, 1, 10000, '2024-12-11 10:33:23', '2024-01-10 13:04:27'),
+	(27, 1, 0, 1, 15000, '2024-12-11 10:25:19', NULL),
+	(28, 1, 2, 1, 15000, '2024-12-11 10:25:19', '2024-07-09 13:03:11'),
+	(30, 1, 3, 1, 15000, '2024-12-11 10:25:20', '2023-07-09 13:03:18'),
+	(1717525929835, 1, 0, 1, 216000, '2024-12-11 10:25:20', NULL),
+	(1717526036853, 1, 0, 1, 38001, '2024-12-11 10:25:21', NULL),
+	(1717526953253, 1, 1, 1, 38001, '2024-12-11 10:25:21', '2024-07-09 13:02:28'),
+	(1720018358556, 1, 0, 1, 38500, '2024-12-11 10:25:21', NULL),
+	(1720968250596, 1, 0, 1, 21600, '2024-12-11 10:25:22', NULL),
+	(1721011564682, 6, 0, 1, 22000, '2024-12-11 10:33:32', NULL),
+	(1733904490987, 1, 0, 1, 36001, '2024-12-11 10:25:23', NULL),
+	(1733906443276, 1, 0, 1, 38001, '2024-12-11 10:25:23', NULL),
+	(1733907700536, 1, 0, 1, 38001, '2024-12-11 10:25:24', NULL);
 
 -- Dumping structure for table bookshopdb.order_detail
 CREATE TABLE IF NOT EXISTS `order_detail` (
@@ -304,14 +394,19 @@ CREATE TABLE IF NOT EXISTS `order_detail` (
   CONSTRAINT `FK__orders` FOREIGN KEY (`orderId`) REFERENCES `orders` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_order_detail_voucher` FOREIGN KEY (`shipVoucherId`) REFERENCES `voucher` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_order_detail_voucher_2` FOREIGN KEY (`productVoucherId`) REFERENCES `voucher` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=1720018358557 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1733907700537 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table bookshopdb.order_detail: ~4 rows (approximately)
+-- Dumping data for table bookshopdb.order_detail: ~9 rows (approximately)
 INSERT INTO `order_detail` (`orderId`, `addressId`, `shipVoucherId`, `shipVoucherDecrease`, `productVoucherId`, `productVoucherDecrease`, `totalPrice`) VALUES
 	(1717525929835, 33, NULL, 0, NULL, 0, 2152767.4),
 	(1717526036853, 33, 9, -19000.5, 11, 0, 868828.5000000002),
 	(1717526953253, 33, NULL, 0, 11, 0, 144070.4),
-	(1720018358556, 36, 9, -19250, 12, -100000, 771198.2);
+	(1720018358556, 36, 9, -19250, 12, -100000, 771198.2),
+	(1720968250596, 33, 10, 0, 12, -100000, 238491.80000000005),
+	(1721011564682, 41, 10, 0, 12, -52202.5, 52202.5),
+	(1733904490987, 33, NULL, 0, NULL, 0, 1007880),
+	(1733906443276, 35, NULL, 0, NULL, 0, 799052),
+	(1733907700536, 33, NULL, 0, NULL, 0, 349587);
 
 -- Dumping structure for table bookshopdb.order_item
 CREATE TABLE IF NOT EXISTS `order_item` (
@@ -328,9 +423,9 @@ CREATE TABLE IF NOT EXISTS `order_item` (
   KEY `idx_order_item_product` (`productId`),
   CONSTRAINT `fk_order_item_orders` FOREIGN KEY (`orderId`) REFERENCES `orders` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_order_item_product` FOREIGN KEY (`productId`) REFERENCES `product` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=97 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table bookshopdb.order_item: ~71 rows (approximately)
+-- Dumping data for table bookshopdb.order_item: ~75 rows (approximately)
 INSERT INTO `order_item` (`id`, `orderId`, `productId`, `price`, `discount`, `quantity`, `createdAt`, `updatedAt`) VALUES
 	(1, 1, 78, 286587, 0, 4, '2021-06-26 20:11:05', NULL),
 	(2, 2, 21, 29619, 0, 2, '2021-03-26 03:39:47', NULL),
@@ -409,7 +504,40 @@ INSERT INTO `order_item` (`id`, `orderId`, `productId`, `price`, `discount`, `qu
 	(86, 1717526036853, 22, 116529, 0, 1, '2024-06-04 18:33:56', NULL),
 	(87, 1717526953253, 17, 90044, 20, 2, '2024-06-04 18:49:13', NULL),
 	(88, 1720018358556, 22, 116529, 0, 5, '2024-07-03 14:52:38', NULL),
-	(89, 1720018358556, 46, 384754, 20, 1, '2024-07-03 14:52:38', NULL);
+	(89, 1720018358556, 46, 384754, 20, 1, '2024-07-03 14:52:38', NULL),
+	(90, 1720968250596, 31, 231331, 20, 1, '2024-07-14 14:44:10', NULL),
+	(91, 1720968250596, 57, 153427, 0, 1, '2024-07-14 14:44:10', NULL),
+	(92, 1721011564682, 78, 104405, 0, 1, '2024-07-15 02:46:04', NULL),
+	(93, 1733904490987, 78, 104405, 0, 8, '2024-12-11 08:08:10', NULL),
+	(94, 1733904490987, 93, 215800, 20, 1, '2024-12-11 08:08:10', NULL),
+	(95, 1733906443276, 99, 199763, 20, 5, '2024-12-11 08:40:43', NULL),
+	(96, 1733907700536, 22, 116529, 0, 3, '2024-12-11 09:01:40', NULL);
+
+-- Dumping structure for table bookshopdb.order_signature
+CREATE TABLE IF NOT EXISTS `order_signature` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `orderId` bigint(20) DEFAULT NULL,
+  `signature` varchar(500) DEFAULT NULL,
+  `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedAt` date DEFAULT NULL,
+  `status` bit(1) NOT NULL DEFAULT b'1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Dumping data for table bookshopdb.order_signature: ~0 rows (approximately)
+
+-- Dumping structure for table bookshopdb.otp
+CREATE TABLE IF NOT EXISTS `otp` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `userId` bigint(20) NOT NULL,
+  `otp` varchar(50) NOT NULL DEFAULT '',
+  `expireAt` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK__user2` (`userId`),
+  CONSTRAINT `FK__user2` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Dumping data for table bookshopdb.otp: ~0 rows (approximately)
 
 -- Dumping structure for table bookshopdb.product
 CREATE TABLE IF NOT EXISTS `product` (
@@ -767,7 +895,13 @@ INSERT INTO `product_import` (`id`, `productId`, `userId`, `importAt`, `quanlity
 	(97, 97, 1, '2021-07-02 22:51:31', 450, 86683.2, '2024-06-04 07:35:15'),
 	(98, 98, 1, '2021-07-09 12:58:01', 200, 381982, '2024-06-04 07:35:15'),
 	(99, 99, 1, '2022-01-22 08:29:03', 400, 159810, '2024-06-04 07:35:16'),
-	(100, 100, 1, '2021-08-14 12:14:31', 300, 137122, '2024-06-04 07:35:16');
+	(100, 100, 1, '2021-08-14 12:14:31', 300, 137122, '2024-06-04 07:35:16'),
+	(101, 10, 1, '2021-06-07 16:23:46', 100, 52500, '2024-07-14 01:00:00'),
+	(102, 25, 2, '2021-12-10 19:13:04', 60, 70300.2, '2024-07-14 01:10:00'),
+	(103, 6, 3, '2021-06-17 22:55:06', 77, 102005, '2024-07-14 01:20:00'),
+	(104, 17, 1, '2024-07-15 02:48:34', 100, 52500, '2024-07-15 02:48:34'),
+	(105, 22, 2, '2024-07-15 02:48:34', 60, 70300.2, '2024-07-15 02:48:34'),
+	(106, 77, 3, '2024-07-15 02:48:35', 77, 102005, '2024-07-15 02:48:35');
 
 -- Dumping structure for table bookshopdb.product_review
 CREATE TABLE IF NOT EXISTS `product_review` (
@@ -956,9 +1090,9 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `uq_username` (`username`),
   UNIQUE KEY `uq_email` (`email`),
   UNIQUE KEY `uq_phoneNumber` (`phoneNumber`)
-) ENGINE=InnoDB AUTO_INCREMENT=133620766698527083 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=133620766698527085 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table bookshopdb.user: ~13 rows (approximately)
+-- Dumping data for table bookshopdb.user: ~12 rows (approximately)
 INSERT INTO `user` (`id`, `username`, `password`, `fullname`, `email`, `phoneNumber`, `gender`, `role`, `createAt`) VALUES
 	(1, 'user1', '202CB962AC59075B964B07152D234B70', 'Dunn Mcpherson', 'dunnmcpherson@recrisys.com', '0989894900', b'0', 'ADMIN', '2024-04-26 07:43:42'),
 	(2, 'user2', '202CB962AC59075B964B07152D234B70', 'Foreman Carter', 'foremancarter@recrisys.com', '0993194154', b'0', 'EMPLOYEE', '2024-03-27 14:08:39'),
@@ -969,9 +1103,10 @@ INSERT INTO `user` (`id`, `username`, `password`, `fullname`, `email`, `phoneNum
 	(9, 'user111', '123', 'Quang Hiu', 'hiu@g.com', '(NULL)', b'0', 'CUSTOMER', '2024-06-05 15:55:58'),
 	(1714833219716, 'user11', '202CB962AC59075B964B07152D234B70', 'HIu', 'hh@fm.cm', '0912123123', b'0', 'CUSTOMER', '2024-05-31 06:40:04'),
 	(1714833219717, 'admin', '21232F297A57A5A743894A0E4A801FC3', 'Admin Test', 'admin@admin.com', '0917294910', b'0', 'ADMIN', '2024-06-05 09:03:53'),
+	(1720625491113, NULL, NULL, 'Hiếu Ngô Quang', 'hieu8a52016@gmail.com', NULL, b'0', 'CUSTOMER', '2024-07-10 15:30:22'),
 	(133620766698527070, 'user122', '123', 'Quang Hiu Ne', 'hiu@1g.com', NULL, b'0', 'CUSTOMER', '2024-06-05 15:57:49'),
 	(133620766698527078, 'user12211', 'F58CA236DBC252D47D100636E72F2CBD', 'Hiếu Ngô Quang Hiếu', 'hao@ASD.VVV', '0366123135', b'0', 'CUSTOMER', '2024-07-03 05:46:40'),
-	(133620766698527080, 'hieu2109', 'F0F2BEDDD5B2CDDC7B898DC01862181F', 'Quang Hiếu', '21130356@st.hcmuaf.edu.vn', '0911294910', b'0', 'CUSTOMER', '2024-07-08 16:08:54');
+	(133620766698527084, 'hieu2109', 'F0F2BEDDD5B2CDDC7B898DC01862181F', 'Hiếu Ngô Quang Hiếu', '21130356@st.hcmuaf.edu.vn', '03661111535', b'0', 'CUSTOMER', '2024-07-15 02:43:51');
 
 -- Dumping structure for table bookshopdb.voucher
 CREATE TABLE IF NOT EXISTS `voucher` (
@@ -989,14 +1124,17 @@ CREATE TABLE IF NOT EXISTS `voucher` (
   `endAt` timestamp NULL DEFAULT NULL,
   `voucher_image` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table bookshopdb.voucher: ~4 rows (approximately)
+-- Dumping data for table bookshopdb.voucher: ~7 rows (approximately)
 INSERT INTO `voucher` (`id`, `voucher_code`, `voucher_name`, `description`, `quantity`, `percent_decrease`, `max_decrease`, `min_price`, `type`, `createAt`, `startAt`, `endAt`, `voucher_image`) VALUES
 	(9, '5YfYL7', 'Freeship', '', 50, 50, 50000, 100000, 0, '2024-06-04 17:01:54', '2024-06-04 17:00:00', '2024-07-12 17:00:00', 'https://i.imgur.com/hDFplsi.png'),
-	(10, 'OWHhiU', 'Freeship', '', 50, 50, 100000, 100000, 0, '2024-06-04 17:02:11', '2024-06-04 17:00:00', '2024-10-05 17:00:00', 'https://i.imgur.com/fLcIV7T.png'),
+	(10, 'OWHhiU', 'Freeship', '', 48, 50, 100000, 100000, 0, '2024-06-04 17:02:11', '2024-06-04 17:00:00', '2024-10-05 17:00:00', 'https://i.imgur.com/fLcIV7T.png'),
 	(11, 'i3s8u2', 'Mã giảm giá sản phẩm', '', 100, 50, 150000, 100000, 1, '2024-06-04 17:02:36', '2024-05-04 17:00:00', '2024-05-05 17:00:00', 'https://i.imgur.com/zseqFPm.png'),
-	(12, 'yQn8YR', 'Mã giảm giá sản phẩm', '', 100, 50, 100000, 100000, 1, '2024-06-04 17:02:55', '2024-06-04 17:00:00', '2024-09-05 17:00:00', 'https://i.imgur.com/iwQ4otE.png');
+	(12, 'yQn8YR', 'Mã giảm giá sản phẩm', '', 98, 50, 100000, 100000, 1, '2024-06-04 17:02:55', '2024-06-04 17:00:00', '2024-09-05 17:00:00', 'https://i.imgur.com/iwQ4otE.png'),
+	(13, '8S118d', 'Freeship', 'Voucher giảm phi phíp', 100, 50, 50000, 100000, 0, '2024-07-14 14:28:49', '2024-07-14 14:28:00', '2024-07-20 14:28:00', 'https://i.imgur.com/iw7C6MI.png'),
+	(14, 'o8l707', 'Mã giảm giá sản phẩm', 'Voucher giảm giá sản phẩm', 100, 40, 200000, 200000, 1, '2024-07-14 14:32:13', '2024-07-14 14:32:00', '2024-07-20 14:32:00', 'https://i.imgur.com/8o1BfRI.png'),
+	(15, 'qkGpcH', 'Freeship', '', 100, 50, 100000, 200000, 0, '2024-07-15 02:46:56', '2024-07-15 02:46:00', '2024-07-18 02:46:00', 'https://i.imgur.com/0TqUZQz.png');
 
 -- Dumping structure for table bookshopdb.wishlist_item
 CREATE TABLE IF NOT EXISTS `wishlist_item` (
