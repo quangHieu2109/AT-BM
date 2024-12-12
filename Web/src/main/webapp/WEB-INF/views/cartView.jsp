@@ -16,12 +16,76 @@
 
 
   <!-- Custom Scripts -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
   <script src="${pageContext.request.contextPath}/js/toast.js" type="module"></script>
   <script src="${pageContext.request.contextPath}/js/cart2.js" type="module"></script>
   <script src="${pageContext.request.contextPath}/js/address.js" type="text/javascript"></script>
   <script src="${pageContext.request.contextPath}/js/voucher.js" type="text/javascript"></script>
   <script src="${pageContext.request.contextPath}/js/feeship.js" type="module"></script>
   <style>
+    /* Modal Container */
+    .modal-container {
+      display: none; /* Ẩn modal mặc định */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5); /* Màu nền mờ */
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    /* Nội dung Modal */
+    .modal-content {
+      background-color: #fff;
+      border-radius: 5px;
+      width: 400px;
+      padding: 20px;
+    }
+
+    /* Tiêu đề Modal */
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      margin: 0;
+    }
+
+    .close-btn {
+      background-color: transparent;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    /* Thân Modal */
+    .modal-body {
+      margin-top: 10px;
+    }
+
+    /* Chân Modal */
+    .modal-footer {
+      margin-top: 20px;
+      text-align: right;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+
+
+
+
     #add_address_content{
       display: none;
     }
@@ -286,6 +350,24 @@
     </div>
 
   </div>
+  <!-- Modal Xác Thực Key -->
+
+  <!-- Modal -->
+  <div id="authKeyModal" class="modal-container">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Xác thực đơn hàng</h5>
+        <button type="button" id="closeModal" class="close-btn">X</button>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="authKeyInput" class="form-control" placeholder="Nhập private key của bạn để xác thực đơn hàng...">
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="confirmAuthKeyBtn" class="btn btn-primary">Xác nhận</button>
+      </div>
+    </div>
+  </div>
+
 </section> <!-- section-content.// -->
 
 <jsp:include page="_footer.jsp"/>
