@@ -1,6 +1,12 @@
 package com.bookshopweb.beans;
 
+import com.bookshopweb.dao.AddressDAO;
+import com.bookshopweb.dao.OrderDAO;
+import com.bookshopweb.dao.OrderItemDAO;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONObject;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -124,24 +130,31 @@ public class Order extends AbsModel<Order> {
     public String getResource() {
         return "Order";
     }
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", Order.class.getSimpleName() + "[", "]")
-                .add("id=" + id)
-                .add("userId=" + userId)
-                .add("status=" + status)
-                .add("deliveryMethod=" + deliveryMethod)
-                .add("deliveryPrice=" + deliveryPrice)
-                .add("createdAt=" + createdAt)
-                .add("updatedAt=" + updatedAt)
-                .add("user=" + user)
-                .add("orderItems=" + orderItems)
-                .add("totalPrice=" + totalPrice)
-                .toString();
+
+    public String getInfo() {
+        Address address = new AddressDAO().selectByOrder(this.id);
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", this.id);
+        jsonObject.addProperty("userId", this.userId);
+        jsonObject.add("delivery_address", address.getInfo());
+        JsonArray jsonArray = new JsonArray();
+        for(OrderItem item: new OrderItemDAO().getByOrderId(this.id)){
+            jsonArray.add(item.getInfo());
+        }
+        jsonObject.add("OrderItems", jsonArray);
+
+
+        return jsonObject.toString();
     }
 
     @Override
     public Timestamp getCreateAt() {
         return createdAt;
     }
+
+    public static void main(String[] args) {
+        Order order = new OrderDAO().selectPrevalue(1733907700536l);
+        System.out.println(order.getInfo());
+    }
+
 }

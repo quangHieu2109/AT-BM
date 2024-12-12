@@ -1,5 +1,7 @@
 package com.bookshopweb.beans;
 
+import com.bookshopweb.dao.OrderItemDAO;
+import com.google.gson.JsonObject;
 import org.jdbi.v3.core.mapper.Nested;
 import org.jetbrains.annotations.Nullable;
 
@@ -116,23 +118,25 @@ public class OrderItem extends AbsModel<OrderItem>{
         this.product = product;
     }
 
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", OrderItem.class.getSimpleName() + "[", "]")
-                .add("id=" + id)
-                .add("orderId=" + orderId)
-                .add("productId=" + productId)
-                .add("price=" + price)
-                .add("discount=" + discount)
-                .add("quantity=" + quantity)
-                .add("createdAt=" + createdAt)
-                .add("updatedAt=" + updatedAt)
-                .add("product=" + product)
-                .toString();
+    public JsonObject getInfo() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", this.id);
+        jsonObject.addProperty("productId", this.productId);
+        jsonObject.addProperty("quantity", this.quantity);
+        jsonObject.addProperty("price", this.price);
+        jsonObject.addProperty("discount", this.discount);
+
+        return jsonObject;
     }
 
     @Override
     public Timestamp getCreateAt() {
         return createdAt;
+    }
+
+    public static void main(String[] args) {
+        OrderItemDAO orderItemDAO = new OrderItemDAO();
+        OrderItem orderItem = orderItemDAO.selectPrevalue(1L);
+        System.out.println(orderItem.toString());
     }
 }

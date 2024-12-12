@@ -99,6 +99,32 @@ public class AddressDAO {
 
         return result;
     }
+    public Address selectByOrder(long orderId){
+        Address result = null;
+        try {
+            String sql = "SELECT address.id, address.userId, address.houseNumber, address.ward, address.district, address.province\n" +
+                    "FROM address JOIN order_detail ON address.id = order_detail.addressId\n" +
+                    "WHERE order_detail.orderId =?";
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setLong(1, orderId);
+            ResultSet rs = st.executeQuery();
+            while(rs.next()){
+                long id = rs.getLong("id");
+                long userId = rs.getLong("userId");
+                String houseNumber = rs.getString("houseNumber");
+                String province = rs.getString("province");
+                String district = rs.getString("district");
+                String ward = rs.getString("ward");
+                Address ad = new Address(id, userId, province, district, ward, houseNumber);
+
+                result=(ad);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return result;
+    }
     public int insertAddress(Address address){
         int result =0;
         try {
@@ -137,5 +163,8 @@ public class AddressDAO {
         return result;
     }
 
-
+    public static void main(String[] args) {
+        AddressDAO addressDAO = new AddressDAO();
+        System.out.println(addressDAO.selectByOrder(1733907700536L));
+    }
 }
