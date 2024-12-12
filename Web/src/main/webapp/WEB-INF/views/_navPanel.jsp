@@ -27,6 +27,9 @@
        href="${pageContext.request.contextPath}/setting" role="button">
       <fmt:message key="thiet_dat"/>
     </a>
+    <a class="list-group-item ${param.active == 'AUTHENTICATOR' ? 'active' : ''}"
+       href="${pageContext.request.contextPath}/authenticator" role="button">Authenticator
+    </a>
     <a class="list-group-item" href="${pageContext.request.contextPath}/signout" role="button"><fmt:message key="dang_xuat"/></a>
   </nav>
 </aside> <!-- col.// -->

@@ -167,8 +167,28 @@ function getTotalProductPrice() {
 $('#checkoutBtn').on('click', function () {
     if (!$(this).prop('disabled')) {
         createOrder();
+        $('#authKeyModal').css('display', 'flex');
     }
 })
+
+// Hàm đóng modal khi click vào nút "X"
+$('#closeModal').on('click', function() {
+    $('#authKeyModal').css('display', 'none');  // Ẩn modal
+});
+
+// Xử lý xác nhận khi nhập mã và nhấn "Xác nhận"
+$('#confirmAuthKeyBtn').on('click', function() {
+    const authKey = $('#authKeyInput').val().trim();
+    if (authKey === '') {
+        alert('Vui lòng nhập mã xác thực!');
+        return;
+    }
+    // Thực hiện xử lý mã xác thực tại đây
+    alert(`Mã xác thực bạn nhập: ${authKey}`);
+    $('#authKeyInput').val('');
+    $('#authKeyModal').css('display', 'none');  // Đóng modal sau khi xác nhận
+});
+
 
 function createOrder() {
 
