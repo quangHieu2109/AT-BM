@@ -43,8 +43,8 @@
                         <jsp:param name="active" value="CHANGE_PASSWORD"/>
                     </jsp:include>
 
-                    <main class="col-md-9">
-                        <article class="card">
+                    <main class="col-md-9 d-flex justify-content-center align-items-center">
+                        <article class="card w-100">
                             <div class="card-body">
                                 <c:if test="${not empty requestScope.successMessage}">
                                     <div class="alert alert-success" role="alert">${requestScope.successMessage}</div>
@@ -52,7 +52,7 @@
                                 <c:if test="${not empty requestScope.errorMessage}">
                                     <div class="alert alert-danger" role="alert">${requestScope.errorMessage}</div>
                                 </c:if>
-                                <div class="col-lg-6">
+                                <div class="col-lg-6 mx-auto">
                                     <form action="${pageContext.request.contextPath}/changePassword" method="post">
                                         <div class="mb-3">
                                             <label for="inputCurrentPassword" class="form-label">
