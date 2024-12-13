@@ -380,6 +380,9 @@
         <c:if test="${0 > 0}">
           <button type="button" id="confirmAuthKeyBtn" class="btn btn-primary">Xác nhận</button>
         </c:if>
+      <div class="modal-footer justify-content-around">
+        <button type="button" id="confirmAuthKeyBtn" class="btn btn-primary">Xác nhận</button>
+        <button type="button" id="loadFromFile" class="btn btn-primary">Nhập Key từ file</button>
       </div>
     </div>
   </div>

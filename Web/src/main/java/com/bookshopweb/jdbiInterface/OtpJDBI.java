@@ -20,10 +20,10 @@ public interface OtpJDBI {
     @SqlQuery("SELECT * FROM otp WHERE userId = :userId")
     OTP getByUserId(@Bind("userId") long userId);
 
-    @SqlUpdate("DELETE otp WHERE userId = :userId")
+    @SqlUpdate("DELETE from otp WHERE userId = :userId")
     int removeByUserId(@Bind("userId") long userId);
 
-    @SqlUpdate("UPDATE otp SET otp=:otp, expireAt=:exprireAt WHERE id = :id")
+    @SqlUpdate("UPDATE otp SET otp=:otp, expireAt=:expireAt WHERE id = :id")
     int updateByOTP(@BindBean OTP otp);
 
     // cho id trong sql tự tăng

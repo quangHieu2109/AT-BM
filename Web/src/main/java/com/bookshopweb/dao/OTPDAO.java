@@ -23,8 +23,18 @@ public class OTPDAO {
     public int updateByOTP(OTP otp){
         return otpJDBI.updateByOTP(otp);
     }
-    public int addOtpWithoutId(OTP otp){
-        return otpJDBI.addOtpWithoutId(otp);
+
+    // Trả về id khi insert thành công
+    public long addOtpWithoutId(OTP otp){
+
+        return JDBIUltis.getJDBI().withHandle(handle ->
+                handle.createUpdate("INSERT INTO otp (userId, otp, expireAt) VALUES (:userId, :otp, :expireAt)")
+                        .bindBean(otp)
+                        .executeAndReturnGeneratedKeys("id") // Lấy ID
+                        .mapTo(Long.class) // Chuyển đổi thành Long
+                        .findOne()
+                        .orElse(0l)
+        );
     }
     public int addOtpFullInfo(OTP otp){
         return otpJDBI.addOtpFullInfo(otp);

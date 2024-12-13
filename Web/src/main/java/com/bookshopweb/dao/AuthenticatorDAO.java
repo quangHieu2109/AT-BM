@@ -22,7 +22,16 @@ public class AuthenticatorDAO {
     public int updateStatus(Authenticator authenticator){
         return authenticatorJDBI.updateStatus(authenticator);
     }
-    public int addAuthenticator(Authenticator authenticator){
-        return addAuthenticator(authenticator);
+    // trả về id khi insert thành công
+    public long addAuthenticator(Authenticator authenticator){
+        return JDBIUltis.getJDBI().withHandle(handle ->
+                handle.createUpdate("INSERT INTO authenticator (userId, publicKey, createdAt, status)\n" +
+                                "VALUES (:userId, :publicKey, :createdAt, :status)")
+                        .bindBean(authenticator)
+                        .executeAndReturnGeneratedKeys("id") // Lấy ID
+                        .mapTo(Long.class) // Chuyển đổi thành Long
+                        .findOne()
+                        .orElse(0l)
+        );
     }
 }

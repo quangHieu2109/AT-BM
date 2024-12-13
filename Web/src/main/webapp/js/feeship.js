@@ -32,6 +32,7 @@ async function updateDeliveryMethod() {
     let width =20;
     let height = 2;
     let address = $('input[name="address"]:checked').val()
+    console.log(address)
     let province = address.split('-')[0] ,district=address.split('-')[1] ,
         ward=address.split('-')[2];
     // console.log(province, district, ward)
@@ -78,7 +79,10 @@ async function updateDeliveryPrice() {
     unit_ship.addEventListener("change", updateDeliveryMethod
     );
 
+
 }
+// document.getElementById("address_content").addEventListener("DOMNodeInserted", updateDeliveryMethod())
+;
 
 document.addEventListener('DOMContentLoaded', updateDeliveryPrice);
 export default _getFeeship;
