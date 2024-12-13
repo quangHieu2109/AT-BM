@@ -5,10 +5,13 @@ import com.bookshopweb.beans.OTP;
 import com.bookshopweb.beans.OrderSignature;
 import com.bookshopweb.beans.User;
 import com.bookshopweb.utils.JDBIUltis;
+import com.bookshopweb.utils.SignatureUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.jdbi.v3.core.Handle;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Clock;
@@ -59,16 +62,27 @@ public class Main {
         System.out.println("Get new added item by order id: " + osd.getByOrderId(1));
     }
     private static void testAuth()  {
+        SignatureUtils signatureUtils = new SignatureUtils();
+        String publicKey = "";
+        try {
+            signatureUtils.genKey();
+            publicKey = signatureUtils.getPublicKeyBase64();
+            System.out.println(signatureUtils.getPrivateKeyBase64());
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchProviderException e) {
+            throw new RuntimeException(e);
+        }
         AuthenticatorDAO authDAO  = new AuthenticatorDAO();
         Timestamp timeNow = Timestamp.from(Instant.now(Clock.systemDefaultZone()));
-        Authenticator auth = new Authenticator(1,"this is my time", timeNow, 0, timeNow);
-        System.out.println("Old list Auth: "+ authDAO.getAll());
+        Authenticator auth = new Authenticator(1,publicKey, timeNow, 0, timeNow);
+//        System.out.println("Old list Auth: "+ authDAO.getAll());
         long id = authDAO.addAuthenticator(auth);
         System.out.println("Add new Auth id: " + id);
-        System.out.println("New list Auth: " + authDAO.getAll());
-        auth.setId(id);
-        auth.setStatus(1);
-        System.out.println("Update Auth: " + authDAO.updateStatus(auth));
-        System.out.println("Get new added item by user id: " + authDAO.getByUserId(1));
+//        System.out.println("New list Auth: " + authDAO.getAll());
+//        auth.setId(id);
+//        auth.setStatus(1);
+//        System.out.println("Update Auth: " + authDAO.updateStatus(auth));
+//        System.out.println("Get new added item by user id: " + authDAO.getByUserId(1));
     }
 }

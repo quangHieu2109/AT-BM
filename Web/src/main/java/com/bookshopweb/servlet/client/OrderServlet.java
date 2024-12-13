@@ -5,6 +5,7 @@ import com.bookshopweb.dao.*;
 import com.bookshopweb.dto.OrderResponse;
 import com.bookshopweb.utils.IPUtils;
 import com.bookshopweb.utils.Protector;
+import com.bookshopweb.utils.SignatureUtils;
 import com.bookshopweb.utils.VoucherUtils;
 
 import javax.servlet.ServletException;
@@ -14,16 +15,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SignatureException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.Clock;
+import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @WebServlet(name = "OrderServlet", value = "/order")
 @MultipartConfig
 public class OrderServlet extends HttpServlet {
-
+    private final SignatureUtils signatureUtils = new SignatureUtils();
     private final OrderDAO orderDAO = new OrderDAO();
+    private final OrderSignatureDAO orderSignatureDAO = new OrderSignatureDAO();
     private final OrderItemDAO orderItemDAO = new OrderItemDAO();
     private final CartItemDAO cartItemDAO = new CartItemDAO();
     private final ProductDAO productDAO = new ProductDAO();
@@ -92,7 +100,6 @@ public class OrderServlet extends HttpServlet {
             request.setAttribute("page", page);
             request.setAttribute("orders", orderResponses);
         }
-
         request.getRequestDispatcher("/WEB-INF/views/orderView.jsp").forward(request, response);
     }
 
@@ -135,6 +142,7 @@ public class OrderServlet extends HttpServlet {
         double totalPrice =0;
         int rs = orderDAO.insert(order, IPUtils.getIP(req));
         if(rs > 0){
+
             for(CartItem cartItem : cartItems){
                 Product product = productDAO.selectPrevalue(cartItem.getProductId());
                 OrderItem orderItem = new OrderItem();
@@ -171,6 +179,20 @@ public class OrderServlet extends HttpServlet {
             for(CartItem cartItem : cartItems){
                 cartItemDAO.delete(cartItem, IPUtils.getIP(req));
             }
+            //Kí đơn hàng
+//            String privateKey = req.getParameter("privateKey");
+//            signatureUtils.loadPrivateKey(privateKey);
+//            try {
+//                signatureUtils.authenticate();
+//                String signMess = signatureUtils.sign(order.getInfo());
+//                Timestamp timeNow = Timestamp.from(Instant.now(Clock.systemDefaultZone()));
+//                long res = orderSignatureDAO.addOrderSignature(new OrderSignature(order.getId(),signMess,timeNow,timeNow,0));
+//                if (res == 1) {
+//                    System.out.println("Kí và đặt hàng thành công");
+//                }
+//            } catch (Exception e) {
+//               e.printStackTrace();
+//            }
         }
 
 

@@ -361,7 +361,7 @@
       </div>
       <div class="modal-body">
         <c:choose>
-          <c:when test="${0 > 0}">
+          <c:when test="${true}">
             <!-- Hiển thị form nếu điều kiện đúng -->
             <div id="authKeyForm">
               <input type="text" id="authKeyInput" class="form-control" placeholder="Nhập private key của bạn để xác thực đơn hàng...">
@@ -377,7 +377,7 @@
         </c:choose>
       </div>
       <div class="modal-footer">
-        <c:if test="${0 > 0}">
+        <c:if test="${true}">
           <div class="modal-footer justify-content-around">
             <button type="button" id="confirmAuthKeyBtn" class="btn btn-primary">Xác nhận</button>
             <button type="button" id="loadFromFile" class="btn btn-primary">Nhập Key từ file</button>
