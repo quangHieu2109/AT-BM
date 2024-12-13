@@ -25,8 +25,8 @@ public class Main {
 //                handle.createQuery("select * from user").map(new UserMapper())
 //                        .list()); // lấy dữ liệu thông qua mapper object
 //        System.out.println(new OrderItemDAO().getTotalPriceByOrderId(1));
-        testOrderSignature();
-        testOTP();
+//        testOrderSignature();
+//        testOTP();
         testAuth();
 
     }
@@ -40,10 +40,12 @@ public class Main {
         System.out.println("Add OTP none id: " + (otpDAO.addOtpWithoutId(otpNoneID)==1));
         System.out.println("New list OTP: " + otpDAO.getAll());
         System.out.println("Get OTP by user id: " + otpDAO.getByUserId(otpNoneID.getUserId()));
+        otpFullIn4.setOtp("QWERTY");
         System.out.println("Get OTP by id: " + otpDAO.getByUserId(otpFullIn4.getId()));
-//        System.out.println("Remove user id for OTP: "+ (otpDAO.removeByUserId(otpFullIn4.getUserId())==1));
-//        System.out.println("Get OTP using user id after deleting user id"+ otpDAO.getByUserId(otpFullIn4.getUserId()));
-//        System.out.println("Update user id for OTP: "+ (otpDAO.updateByOTP(otpFullIn4)==1));
+        System.out.println("Remove user id for OTP: "+ (otpDAO.removeByUserId(otpFullIn4.getUserId())==1));
+        System.out.println("Get OTP using user id after deleting user id"+ otpDAO.getByUserId(otpFullIn4.getUserId()));
+        System.out.println("Update user id for OTP: "+ (otpDAO.updateByOTP(otpFullIn4)==1));
+
         System.out.println("Get OTP using user id after updating user id"+ otpDAO.getByUserId(otpFullIn4.getUserId()));
     }
     private static void testOrderSignature(){
@@ -61,11 +63,12 @@ public class Main {
         Timestamp timeNow = Timestamp.from(Instant.now(Clock.systemDefaultZone()));
         Authenticator auth = new Authenticator(1,"this is my time", timeNow, 0, timeNow);
         System.out.println("Old list Auth: "+ authDAO.getAll());
-//        boolean addResult = authDAO.addAuthenticator(auth)==1;
-//        System.out.println("Add new Auth: " + addResult);
-//        System.out.println("New list Auth: " + authDAO.getAll());
-//        auth.setStatus(1);
-//        System.out.println("Update Auth: " + authDAO.updateStatus(auth));
-//        System.out.println("Get new added item by user id: " + authDAO.getByUserId(1));
+        long id = authDAO.addAuthenticator(auth);
+        System.out.println("Add new Auth id: " + id);
+        System.out.println("New list Auth: " + authDAO.getAll());
+        auth.setId(id);
+        auth.setStatus(1);
+        System.out.println("Update Auth: " + authDAO.updateStatus(auth));
+        System.out.println("Get new added item by user id: " + authDAO.getByUserId(1));
     }
 }

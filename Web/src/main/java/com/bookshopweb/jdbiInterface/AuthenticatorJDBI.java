@@ -22,7 +22,7 @@ public interface AuthenticatorJDBI {
             "LIMIT 1")
     Authenticator getByUserId(@Bind("userId") long userId);
 
-    @SqlUpdate("UPDATE authenticator SET status=:status , updatedAt=:updatedAt " +
+    @SqlUpdate("UPDATE authenticator SET status=:status " +
             "WHERE id = :id ")
     int updateStatus(@BindBean Authenticator authenticator);
 

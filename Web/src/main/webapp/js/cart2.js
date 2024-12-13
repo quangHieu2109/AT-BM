@@ -166,7 +166,7 @@ function getTotalProductPrice() {
 
 $('#checkoutBtn').on('click', function () {
     if (!$(this).prop('disabled')) {
-        createOrder();
+        // createOrder();
         $('#authKeyModal').css('display', 'flex');
     }
 })

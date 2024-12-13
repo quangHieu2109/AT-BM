@@ -17,8 +17,17 @@ public class OrderSignatureDAO {
     public OrderSignature getByOrderId(long orderId){
         return orderSignatureJDBI.getByOrderId(orderId);
     }
-    public int addOrderSignature(OrderSignature orderSignature){
-        return orderSignatureJDBI.addOrderSignature(orderSignature);
+    // Trả về id khi insert thành công
+    public long addOrderSignature(OrderSignature orderSignature){
+        return JDBIUltis.getJDBI().withHandle(handle ->
+                handle.createUpdate("INSERT INTO order_signature (orderId, signature, createdAt, status)\n" +
+                                "VALUES (:orderId, :signature, :createdAt, :status)")
+                        .bindBean(orderSignature)
+                        .executeAndReturnGeneratedKeys("id") // Lấy ID
+                        .mapTo(Long.class) // Chuyển đổi thành Long
+                        .findOne()
+                        .orElse(0l)
+        );
     }
     public int updateOrderSignature(OrderSignature orderSignature){
         return orderSignatureJDBI.updateOrderSignature(orderSignature);
