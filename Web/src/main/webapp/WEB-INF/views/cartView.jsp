@@ -360,10 +360,26 @@
         <button type="button" id="closeModal" class="close-btn">X</button>
       </div>
       <div class="modal-body">
-        <input type="text" id="authKeyInput" class="form-control" placeholder="Nhập private key của bạn để xác thực đơn hàng...">
+        <c:choose>
+          <c:when test="${0 > 0}">
+            <!-- Hiển thị form nếu điều kiện đúng -->
+            <div id="authKeyForm">
+              <input type="text" id="authKeyInput" class="form-control" placeholder="Nhập private key của bạn để xác thực đơn hàng...">
+            </div>
+          </c:when>
+          <c:otherwise>
+            <!-- Hiển thị thông báo nếu điều kiện sai -->
+            <div id="authKeyMessage" class="text-center">
+              <p>Bạn chưa có key. Vui lòng tạo key mới để sử dụng chức năng này.</p>
+              <a  href=${pageContext.request.contextPath}/createAuthenticator class="btn btn-primary justify-content-center">Tạo key mới</a>
+            </div>
+          </c:otherwise>
+        </c:choose>
       </div>
       <div class="modal-footer">
-        <button type="button" id="confirmAuthKeyBtn" class="btn btn-primary">Xác nhận</button>
+        <c:if test="${0 > 0}">
+          <button type="button" id="confirmAuthKeyBtn" class="btn btn-primary">Xác nhận</button>
+        </c:if>
       </div>
     </div>
   </div>

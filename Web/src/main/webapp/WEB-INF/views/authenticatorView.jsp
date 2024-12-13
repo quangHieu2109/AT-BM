@@ -127,12 +127,14 @@
 <%--                                </c:forEach>--%>
                                 </tbody>
                             </table>
-                            <a class="btn btn-primary" href="${pageContext.request.contextPath}/authenticator">
+                            <div class="button-container d-flex justify-content-between">
+                            <a class="btn btn-primary" href="${pageContext.request.contextPath}/createAuthenticator">
                                 <fmt:message key="tao_key"/>
                             </a>
                             <a class="btn btn-danger" href="${pageContext.request.contextPath}/authenticator">
                                 <fmt:message key="report_key"/>
                             </a>
+                            </div>
                         </div>
 
 <%--                        <c:if test="${requestScope.totalPages != 0}">--%>
@@ -178,7 +180,7 @@
                                 <p class="alert alert-warning">
                                     <fmt:message key="ban_chua_co_key"/>! <fmt:message key="vui_long_tao_key"/>.
                                 </p>
-                                <a class="btn btn-primary" href="${pageContext.request.contextPath}/createKey">
+                                <a class="btn btn-primary" href="${pageContext.request.contextPath}/createAuthenticator">
                                     <fmt:message key="tao_key"/>
                                 </a>
                             </div>
