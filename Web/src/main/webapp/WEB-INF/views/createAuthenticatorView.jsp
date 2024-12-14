@@ -15,7 +15,12 @@
     <jsp:include page="_meta.jsp"/>
 
     <title>Authenticator</title>
-
+    <script src="${pageContext.request.contextPath}/js/createAuthenticator.js" type="text/javascript"></script>
+    <style>
+        .disabled {
+            /*background-color: #e0e0e0;*/
+        }
+    </style>
 </head>
 
 <body>
@@ -54,14 +59,16 @@
                                     <div class="alert alert-danger" role="alert">${requestScope.errorMessage}</div>
                                 </c:if>
                                 <i class="bi bi-arrow-left-square w-auto">
-                                    <a href="${pageContext.request.contextPath}/authenticator" style="color: inherit; text-decoration: none;">Quay lại</a>
+                                    <a href="${pageContext.request.contextPath}/authenticator"
+                                       style="color: inherit; text-decoration: none;">Quay lại</a>
                                 </i>
 
                                 <div class="col-lg-6 mx-auto">
 
                                     <form action="${pageContext.request.contextPath}/createAuthenticator" method="post">
                                         <div class="mb-3">
-                                            <label for="inputOTP" class="form-label">OTP</label>
+                                            <label for="inputOTP" class="form-label w-100">OTP</label>
+                                            <label class="text-info" id="notifi_sendOTP"></label>
                                             <input type="text"
                                                    class="form-control"
                                                    id="inputOTP"
@@ -75,9 +82,10 @@
                                                        class="form-control"
                                                        id="showPublickey"
                                                        name="publicKey"
-                                                       value="day la public key"
+                                                       value=""
                                                        disabled>
-                                                <span class="input-group-text" id="togglePublicKey" style="cursor: pointer;">
+                                                <span class="input-group-text" id="togglePublicKey"
+                                                      style="cursor: pointer;">
                                 <i class="bi bi-eye"></i>
                             </span>
                                             </div>
@@ -89,22 +97,23 @@
                                                        class="form-control"
                                                        id="showPrivatekey"
                                                        name="privateKey"
-                                                       value="day la private key"
+                                                       value=""
                                                        disabled>
-                                                <span class="input-group-text" id="togglePrivateKey" style="cursor: pointer;">
+                                                <span class="input-group-text" id="togglePrivateKey"
+                                                      style="cursor: pointer;">
                                 <i class="bi bi-eye"></i>
                             </span>
                                             </div>
                                         </div>
                                         <div class="button-container d-flex justify-content-between">
-                                            <button type="button" class="btn btn-warning w-30">
+                                            <button type="button" class="btn btn-warning w-30" id="resendOTP">
                                                 <fmt:message key="gui_lai_OTP"/>
                                             </button>
-                                            <button type="button" class="btn btn-warning w-30">
+                                            <button type="button" class="btn btn-warning w-30" id="exportKey" disabled>
                                                 <fmt:message key="export_file_privateKey"/>
                                             </button>
 
-                                            <button type="submit" class="btn btn-primary w-30">
+                                            <button type="submit" class="btn btn-primary w-30" id="verifyOTP" disabled>
                                                 <fmt:message key="xac_nhan_OTP"/>
                                             </button>
                                         </div>
@@ -123,7 +132,7 @@
 
 
 <jsp:include page="_footer.jsp"/>
-<script src="${pageContext.request.contextPath}/js/authenticator.js"></script>
+<script src="${pageContext.request.contextPath}/js/createAuthenticator.js"></script>
 </body>
 
 </html>
