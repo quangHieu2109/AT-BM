@@ -1,16 +1,10 @@
 package com.bookshopweb.service;
 
 import com.bookshopweb.beans.Log;
-import com.bookshopweb.beans.User;
-import com.bookshopweb.dao.UserDAO;
-import com.bookshopweb.utils.IPUtils;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.UnsupportedEncodingException;
 import java.sql.Date;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Properties;
 import java.sql.Timestamp;
 import jakarta.mail.Authenticator;
@@ -20,6 +14,7 @@ import jakarta.mail.Session;
 import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.mail.internet.MimeUtility;
 
 public class SendMail {
     static final String from = "fitstore567@gmail.com";
@@ -121,7 +116,7 @@ public class SendMail {
     }
 
 
-    public static boolean sendEmail(String to, String verification, String userName) {
+    public static boolean sendEmailVerifyUser(String to, String verification, String userName) {
         String title = "Xác nhận tài khoản bookstore";
         String content = "Mã xác nhận của tài khoản " + userName + " là: <strong>" + verification +
                 "</strong> mã có hiệu lực trong 5 phút, hết hạn lúc: " + new Timestamp(Calendar.getInstance().getTimeInMillis() + 300000).toString();
@@ -140,14 +135,10 @@ public class SendMail {
                 return new PasswordAuthentication(from, password);
             }
         };
-
         // Phiên làm việc
-
         if (session == null) {
             session = Session.getInstance(props, auth);
         }
-
-
         // Tạo một tin nhắn
         MimeMessage msg = new MimeMessage(session);
 
@@ -166,13 +157,8 @@ public class SendMail {
 
             // Quy đinh ngày gửi
             msg.setSentDate(new Date(Calendar.getInstance().getTimeInMillis()));
-
-            // Quy định email nhận phản hồi
-            // msg.setReplyTo(InternetAddress.parse(from, false))
-
             // Nội dung
             msg.setContent(content, "text/HTML; charset=UTF-8");
-
             // Gửi email
             Transport.send(msg);
             System.out.println("Gửi email thành công");
@@ -184,5 +170,62 @@ public class SendMail {
         }
     }
 
+    public static boolean sendEmailOtpAuth(String to, String otp) {
+        String title = "Xác nhận cấp PrivateKey mới";
+        try {
+            title = MimeUtility.encodeText(title, "UTF-8", "B");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String content = "Mã xác nhận cấp PrivateKey của bạn là: <strong>" + otp +
+                "</strong> mã có hiệu lực trong 5 phút, hết hạn lúc: " + new Timestamp(Calendar.getInstance().getTimeInMillis() + 300000).toString();
+        // Properties : khai báo các thuộc tính
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com"); // SMTP HOST
+        props.put("mail.smtp.port", "587"); // TLS 587 SSL 465
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
 
+        // create Authenticator
+        Authenticator auth = new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                // TODO Auto-generated method stub
+                return new PasswordAuthentication(from, password);
+            }
+        };
+        // Phiên làm việc
+        if (session == null) {
+            session = Session.getInstance(props, auth);
+        }
+        // Tạo một tin nhắn
+        MimeMessage msg = new MimeMessage(session);
+
+        try {
+            // Kiểu nội dung
+            msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
+
+            // Người gửi
+            msg.setFrom(from);
+
+            // Người nhận
+            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to, false));
+
+            // Tiêu đề email
+            msg.setSubject(title);
+
+            // Quy đinh ngày gửi
+            msg.setSentDate(new Date(Calendar.getInstance().getTimeInMillis()));
+            // Nội dung
+            msg.setContent(content, "text/HTML; charset=UTF-8");
+            // Gửi email
+            Transport.send(msg);
+            System.out.println("Gửi email thành công");
+            return true;
+        } catch (Exception e) {
+            System.out.println("Gặp lỗi trong quá trình gửi email");
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

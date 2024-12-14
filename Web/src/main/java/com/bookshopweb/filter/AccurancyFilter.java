@@ -50,7 +50,7 @@ public class AccurancyFilter implements Filter {
 
                         accurancyUser = new AccurancyUser(currentUser.getUsername());
                         new AccurancyDAO().insertAccurancy(accurancyUser);
-                        SendMail.sendEmail(currentUser.getEmail(),accurancyUser.getAccurancyCode(), currentUser.getUsername());
+                        SendMail.sendEmailVerifyUser(currentUser.getEmail(),accurancyUser.getAccurancyCode(), currentUser.getUsername());
                     }
 //                    response.sendRedirect (request.getContextPath()+"/accuracyView.jsp");
                     request.getRequestDispatcher("/WEB-INF/views/accuracyView.jsp").forward(request, response);

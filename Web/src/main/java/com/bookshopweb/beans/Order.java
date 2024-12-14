@@ -136,13 +136,14 @@ public class Order extends AbsModel<Order> {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("id", this.id);
         jsonObject.addProperty("userId", this.userId);
+        jsonObject.addProperty("createdAt", this.createdAt.toString());
         jsonObject.add("delivery_address", address.getInfo());
+
         JsonArray jsonArray = new JsonArray();
         for(OrderItem item: new OrderItemDAO().getByOrderId(this.id)){
             jsonArray.add(item.getInfo());
         }
         jsonObject.add("OrderItems", jsonArray);
-
 
         return jsonObject.toString();
     }
