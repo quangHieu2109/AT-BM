@@ -18,6 +18,7 @@ public interface OrderJDBI {
     int updateStatus(@Bind("status") int status, @Bind("id") long id);
     @SqlQuery("select count(*) from orders where status=:status")
     int getQuantityByStatus(@Bind("status") int status);
-
+    @SqlQuery("select * from orders where status= -1 and userId=:userId")
+    List<Order> getUnconfirmOrdersByUserId(@Bind("userId") long userId);
 
 }

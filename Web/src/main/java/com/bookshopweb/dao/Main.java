@@ -52,14 +52,14 @@ public class Main {
         System.out.println("Get OTP using user id after updating user id"+ otpDAO.getByUserId(otpFullIn4.getUserId()));
     }
     private static void testOrderSignature(){
-        OrderSignatureDAO osd  = new OrderSignatureDAO();
-        Timestamp timeNow = Timestamp.from(Instant.now(Clock.systemDefaultZone()));
-        OrderSignature os = new OrderSignature(1,"AGYGY",timeNow,timeNow,0);
-        System.out.println("Old list OS: "+ osd.getAll());
-        boolean addResult = osd.addOrderSignature(os)==1;
-        System.out.println("Add new OS: " + addResult);
-        System.out.println("New list OS: " + osd.getAll());
-        System.out.println("Get new added item by order id: " + osd.getByOrderId(1));
+//        OrderSignatureDAO osd  = new OrderSignatureDAO();
+//        Timestamp timeNow = Timestamp.from(Instant.now(Clock.systemDefaultZone()));
+//        OrderSignature os = new OrderSignature(1,"AGYGY",timeNow,timeNow,0);
+//        System.out.println("Old list OS: "+ osd.getAll());
+//        boolean addResult = osd.addOrderSignature(os)==1;
+//        System.out.println("Add new OS: " + addResult);
+//        System.out.println("New list OS: " + osd.getAll());
+//        System.out.println("Get new added item by order id: " + osd.getByOrderId(1));
     }
     private static void testAuth()  {
         SignatureUtils signatureUtils = new SignatureUtils();

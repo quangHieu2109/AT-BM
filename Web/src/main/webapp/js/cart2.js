@@ -165,10 +165,10 @@ function getTotalProductPrice() {
 }
 
 $('#checkoutBtn').on('click', function () {
-    if (!$(this).prop('disabled')) {
-        // createOrder();
-        $('#authKeyModal').css('display', 'flex');
-    }
+    // if (!$(this).prop('disabled')) {
+        createOrder();
+        // $('#authKeyModal').css('display', 'flex');
+    // }
 })
 
 // Hàm đóng modal khi click vào nút "X"

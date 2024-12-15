@@ -1,19 +1,12 @@
 package com.bookshopweb.servlet.client;
 
 import com.bookshopweb.beans.AccurancyUser;
-import com.bookshopweb.beans.Order;
-import com.bookshopweb.beans.OrderItem;
 import com.bookshopweb.beans.User;
 import com.bookshopweb.dao.AccurancyDAO;
 import com.bookshopweb.dao.CartDAO;
 import com.bookshopweb.dao.OrderDAO;
 import com.bookshopweb.dao.OrderItemDAO;
-import com.bookshopweb.dto.ErrorMessage;
-import com.bookshopweb.dto.OrderRequest;
-import com.bookshopweb.dto.SuccessMessage;
 import com.bookshopweb.service.SendMail;
-import com.bookshopweb.utils.JsonUtils;
-import com.bookshopweb.utils.Protector;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,10 +14,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @WebServlet(name = "AccuracyServlet", value = "/accuracy")
 public class AccuracyServlet extends HttpServlet {
@@ -37,7 +26,7 @@ public class AccuracyServlet extends HttpServlet {
         User user = (User) request.getSession().getAttribute("currentUser");
         AccurancyUser accurancyUser = new AccurancyUser(user.getUsername());
         new AccurancyDAO().insertAccurancy(accurancyUser);
-        boolean send =  SendMail.sendEmail(user.getEmail(),accurancyUser.getAccurancyCode(), user.getUsername());
+        boolean send =  SendMail.sendEmailVerifyUser(user.getEmail(),accurancyUser.getAccurancyCode(), user.getUsername());
 //        int status =200;
 //        if(!send){
 //            status = 404;

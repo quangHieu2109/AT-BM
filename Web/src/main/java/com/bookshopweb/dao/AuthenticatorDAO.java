@@ -22,8 +22,12 @@ public class AuthenticatorDAO {
     public int updateStatus(Authenticator authenticator){
         return authenticatorJDBI.updateStatus(authenticator);
     }
+    public int expireAll(long userId){
+        return authenticatorJDBI.expireAll(userId);
+    }
     // trả về id khi insert thành công
     public long addAuthenticator(Authenticator authenticator){
+        expireAll(authenticator.getUserId());
         return JDBIUltis.getJDBI().withHandle(handle ->
                 handle.createUpdate("INSERT INTO authenticator (userId, publicKey, createdAt, status)\n" +
                                 "VALUES (:userId, :publicKey, :createdAt, :status)")

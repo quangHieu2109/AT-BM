@@ -20,11 +20,11 @@ public interface OrderSignatureJDBI {
     @SqlQuery("SELECT * FROM order_signature WHERE orderId=:orderId")
     OrderSignature getByOrderId(@Bind("orderId") long orderId);
 
-    @SqlUpdate("INSERT INTO order_signature (orderId, signature, createdAt, status)\n" +
-            "VALUES (:orderId, :signature, :createdAt, :status)")
+    @SqlUpdate("INSERT INTO order_signature (orderId, hashOrderInfo, createdAt, status)\n" +
+            "VALUES (:orderId, :hashOrderInfo, :createdAt, :status)")
     int addOrderSignature(@BindBean OrderSignature orderSignature);
 
-    @SqlUpdate("UPDATE order_signature SET signature =:signature, updatedAt = :updatedAt, status:status " +
+    @SqlUpdate("UPDATE order_signature SET authId:=authId, signature =:signature, hashOrderInfo=:hashOrderInfo, updatedAt = :updatedAt, status=:status " +
             "WHERE id = :id")
     int updateOrderSignature(@BindBean OrderSignature orderSignature);
 }

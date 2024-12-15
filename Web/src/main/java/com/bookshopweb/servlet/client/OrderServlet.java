@@ -3,9 +3,9 @@ package com.bookshopweb.servlet.client;
 import com.bookshopweb.beans.*;
 import com.bookshopweb.dao.*;
 import com.bookshopweb.dto.OrderResponse;
+import com.bookshopweb.utils.HashUtils;
 import com.bookshopweb.utils.IPUtils;
 import com.bookshopweb.utils.Protector;
-import com.bookshopweb.utils.SignatureUtils;
 import com.bookshopweb.utils.VoucherUtils;
 
 import javax.servlet.ServletException;
@@ -15,28 +15,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.SignatureException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.time.Clock;
-import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @WebServlet(name = "OrderServlet", value = "/order")
 @MultipartConfig
 public class OrderServlet extends HttpServlet {
-    private final SignatureUtils signatureUtils = new SignatureUtils();
+
     private final OrderDAO orderDAO = new OrderDAO();
-    private final OrderSignatureDAO orderSignatureDAO = new OrderSignatureDAO();
     private final OrderItemDAO orderItemDAO = new OrderItemDAO();
     private final CartItemDAO cartItemDAO = new CartItemDAO();
     private final ProductDAO productDAO = new ProductDAO();
     private final OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
     private final VoucherDAO voucherDAO = new VoucherDAO();
+    private final OrderSignatureDAO orderSignatureDAO = new OrderSignatureDAO();
 
     private static final int ORDERS_PER_PAGE = 3;
 
@@ -100,6 +94,7 @@ public class OrderServlet extends HttpServlet {
             request.setAttribute("page", page);
             request.setAttribute("orders", orderResponses);
         }
+
         request.getRequestDispatcher("/WEB-INF/views/orderView.jsp").forward(request, response);
     }
 
@@ -135,14 +130,15 @@ public class OrderServlet extends HttpServlet {
         Order order = new Order();
         order.setId(Calendar.getInstance().getTimeInMillis());
         order.setUserId(user.getId());
-        order.setStatus(0);
+        order.setStatus(-1);
         order.setDeliveryMethod(deliveryMethod);
         order.setDeliveryPrice(ship);
         order.setCreatedAt(new Timestamp(Calendar.getInstance().getTimeInMillis()));
         double totalPrice =0;
         int rs = orderDAO.insert(order, IPUtils.getIP(req));
-        if(rs > 0){
 
+
+        if(rs > 0){
             for(CartItem cartItem : cartItems){
                 Product product = productDAO.selectPrevalue(cartItem.getProductId());
                 OrderItem orderItem = new OrderItem();
@@ -165,7 +161,7 @@ public class OrderServlet extends HttpServlet {
             orderDetail.setProductVoucherDecrease(productVoucherDecrease);
             orderDetail.setAddressId(addressId);
             orderDetail.setTotalPrice(totalPrice);
-            System.out.println(orderDetail);
+//            System.out.println(orderDetail);
             orderDetailDAO.addOrderDetailNoVoucher(orderDetail);
             if(shipVoucherId > 0){
                 orderDetailDAO.updateShipVoucherId(shipVoucherId, orderDetail.getOrderId());
@@ -179,20 +175,8 @@ public class OrderServlet extends HttpServlet {
             for(CartItem cartItem : cartItems){
                 cartItemDAO.delete(cartItem, IPUtils.getIP(req));
             }
-            //Kí đơn hàng
-//            String privateKey = req.getParameter("privateKey");
-//            signatureUtils.loadPrivateKey(privateKey);
-//            try {
-//                signatureUtils.authenticate();
-//                String signMess = signatureUtils.sign(order.getInfo());
-//                Timestamp timeNow = Timestamp.from(Instant.now(Clock.systemDefaultZone()));
-//                long res = orderSignatureDAO.addOrderSignature(new OrderSignature(order.getId(),signMess,timeNow,timeNow,0));
-//                if (res == 1) {
-//                    System.out.println("Kí và đặt hàng thành công");
-//                }
-//            } catch (Exception e) {
-//               e.printStackTrace();
-//            }
+            OrderSignature orderSignature = new OrderSignature(order.getId(), HashUtils.hash(orderDAO.selectPrevalue(order.getId()).getInfo()), new Timestamp(System.currentTimeMillis()), 1);
+            orderSignatureDAO.addOrderSignature(orderSignature);
         }
 
 
