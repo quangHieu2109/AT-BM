@@ -71,9 +71,14 @@ public class OrderTab extends JPanel implements BaseUI, Observer {
         this.add(panelSouth, BorderLayout.SOUTH);
     }
     private Map<Long,String> sign() {
-        System.out.println("Bắt đầu ký");
+        Map<Long,String> signatures = new HashMap<>();
         for (Order order : ordersSign) {
-            // ký ở đây
+            try{
+                // ký ở đây
+
+            }catch (Exception e) {
+                JOptionPane.showMessageDialog(mainApp,"Đơn hàng kí không thành công với id: "+ order.getId(),"Lỗi",JOptionPane.ERROR_MESSAGE);
+            }
         }
         return null;
     }
@@ -83,7 +88,7 @@ public class OrderTab extends JPanel implements BaseUI, Observer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Map signatures = sign();
-                if (signatures!=null) {
+                if (signatures!=null||true) {
                     try {
                         API.sendSignature(signatures);
                     } catch (IOException ex) {
@@ -119,12 +124,18 @@ public class OrderTab extends JPanel implements BaseUI, Observer {
         });
     }
     public void refresh(){
-        List<Order> orders = API.getOrders();
-        if (orders==null) return;
-        model.setRowCount(0); // Xóa tất cả hàng
-        for (Order order : orders) {
-            model.addRow(new Object[]{order.getId(), order.getUserId(), order.getCreateAt(), order.getTotalPrice(), order.getDelivery_address().getText()}); // Thêm hàng mới
+        try {
+            List<Order> orders = API.getOrders();
+            if (orders==null) return;
+            model.setRowCount(0); // Xóa tất cả hàng
+            for (Order order : orders) {
+                model.addRow(new Object[]{order.getId(), order.getUserId(), order.getCreatedAt(), order.getTotalPrice(), order.getDelivery_address().getText()}); // Thêm hàng mới
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(mainApp,"Lấy dữ liệu thất bại!","Lỗi",JOptionPane.ERROR_MESSAGE);
         }
+
     }
     public Order getOrderByID(long id){
         for (Order order : API.orders) {

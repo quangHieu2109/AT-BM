@@ -68,10 +68,8 @@ public class Main {
             signatureUtils.genKey();
             publicKey = signatureUtils.getPublicKeyBase64();
             System.out.println(signatureUtils.getPrivateKeyBase64());
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchProviderException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e){
+            throw e;
         }
         AuthenticatorDAO authDAO  = new AuthenticatorDAO();
         Timestamp timeNow = Timestamp.from(Instant.now(Clock.systemDefaultZone()));

@@ -63,6 +63,7 @@ public class OrderSwingServlet extends HttpServlet {
         resp.setContentType("application/json; charset=UTF-8"); // Thiết lập mã hóa cho phản hồi
         resp.setCharacterEncoding("UTF-8");
         String orderSignatures = req.getParameter("orderSignatures");
+        System.out.println(orderSignatures);
         JSONArray jsonArray = new JSONArray(orderSignatures);
         SignatureUtils signatureUtils = new SignatureUtils();
         Authenticator authenticator;
