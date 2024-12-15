@@ -137,6 +137,7 @@ public class Order extends AbsModel<Order> {
         jsonObject.addProperty("id", this.id);
         jsonObject.addProperty("userId", this.userId);
         jsonObject.addProperty("createdAt", this.createdAt.toString());
+        jsonObject.addProperty("totalPrice", this.totalPrice);
         jsonObject.add("delivery_address", address.getInfo());
 
         JsonArray jsonArray = new JsonArray();
@@ -154,8 +155,10 @@ public class Order extends AbsModel<Order> {
     }
 
     public static void main(String[] args) {
-        Order order = new OrderDAO().selectPrevalue(1733907700536l);
-        System.out.println(order.getInfo());
+       for(Order order: new OrderDAO().getUnconfirmOrdersByUsername("user1")){
+           System.out.println(order.getInfo());
+//           break;
+       }
     }
 
 }

@@ -17,21 +17,17 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.sql.Timestamp;
 import java.util.Random;
 
-@WebServlet(name = "CreateAuthenticatorServlet", value = "/createAuthenticator")
+@WebServlet(name = "CreateAuthenticatorServlet", value = "/createAuthenticatorSwing")
 @MultipartConfig
-public class createAuthenticatorServlet extends HttpServlet {
+public class createAuthenticatorSwingServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        HttpSession session = req.getSession();
-//        OTPDAO otpdao = new OTPDAO();
-//        User user = (User) session.getAttribute("currentUser");
-//        OTP otp = otpdao.getByUserId(user.getId());
-//        if(otp ==null || otp.getExpireAt().before(new Timestamp(System.currentTimeMillis()))) {
-//            sendOTP(req, resp);
-//        }
+        req.setCharacterEncoding("UTF-8"); // Thiết lập mã hóa cho yêu cầu
+        resp.setContentType("application/json; charset=UTF-8"); // Thiết lập mã hóa cho phản hồi
+        resp.setCharacterEncoding("UTF-8");
+
         req.getRequestDispatcher("/WEB-INF/views/createAuthenticatorView.jsp").forward(req, resp);
     }
 

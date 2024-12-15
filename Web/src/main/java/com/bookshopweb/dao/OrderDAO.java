@@ -69,13 +69,21 @@
 package com.bookshopweb.dao;
 
 import com.bookshopweb.beans.Order;
+import com.bookshopweb.beans.OrderDetail;
+import com.bookshopweb.beans.OrderItem;
+import com.bookshopweb.beans.User;
 import com.bookshopweb.jdbiInterface.OrderJDBI;
+import com.bookshopweb.utils.HashUtils;
 import com.bookshopweb.utils.JDBCUtils;
 import com.bookshopweb.utils.JDBIUltis;
+import com.google.gson.Gson;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class OrderDAO extends AbsDAO<Order> {
@@ -89,6 +97,19 @@ public class OrderDAO extends AbsDAO<Order> {
     }
     public List<Order> getByStatusLimit(int status, int start, int length){
         return orderJDBI.getByStatusLimit(status, start, length);
+    }
+    public List<Order> getUnconfirmOrdersByUsername(String username){
+        User user = new UserDAO().selectByUserName(username);
+        OrderItemDAO orderItemDAO = new OrderItemDAO();
+        OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
+        if(user ==null) return null;
+        List<Order> orders = orderJDBI.getUnconfirmOrdersByUserId(user.getId());
+        for(Order order:orders){
+            OrderDetail orderDetail = orderDetailDAO.getByOrderId(order.getId());
+            if(orderDetail != null) order.setTotalPrice(orderDetail.getTotalPrice());
+            order.setOrderItems(orderItemDAO.getByOrderId(order.getId()));
+        }
+        return orders;
     }
     public int updateStatus(int status, long id){
         return orderJDBI.updateStatus(status, id);
@@ -130,6 +151,8 @@ public class OrderDAO extends AbsDAO<Order> {
                 Timestamp createdAt = rs.getTimestamp("createdAt");
                 Timestamp updatedAt = rs.getTimestamp("updatedAt");
                 result = new Order(id, userId, status, deliveryMethod, deliveryPrice, createdAt, updatedAt);
+                OrderDetail orderDetail = new OrderDetailDAO().getByOrderId(id);
+                if(orderDetail != null) result.setTotalPrice(orderDetail.getTotalPrice());
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -399,5 +422,12 @@ public class OrderDAO extends AbsDAO<Order> {
 
 
         return order;
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Info: "+new OrderDAO().selectPrevalue(1734238184620l).getInfo());
+        String hashOrder = HashUtils.hash(new OrderDAO().selectPrevalue(1734238184620l).getInfo());
+        System.out.println("Hash: "+hashOrder);
+//        System.out.println("{\"id\":1734238184620,\"userId\":1,\"createdAt\":\"2024-12-15 11:49:44.0\",\"totalPrice\":611432.2000000001,\"delivery_address\":{\"id\":33,\"province\":\"Hà Giang\",\"district\":\"HUY?N Đ?NG VĂN\",\"ward\":\"X? T? L?NG\",\"houseNumber\":\"123\"},\"OrderItems\":[{\"id\":102,\"productId\":41,\"quantity\":1,\"price\":387298.0,\"discount\":20.0},{\"id\":103,\"productId\":31,\"quantity\":1,\"price\":231331.0,\"discount\":20.0},{\"id\":104,\"productId\":22,\"quantity\":1,\"price\":116529.0,\"discount\":0.0}]}".equals("{\"id\":1734238184620,\"userId\":1,\"createdAt\":\"2024-12-15 11:49:44.0\",\"totalPrice\":611432.2000000001,\"delivery_address\":{\"id\":33,\"province\":\"Hà Giang\",\"district\":\"HUYỆN ĐỒNG VĂN\",\"ward\":\"XÃ TẢ LỦNG\",\"houseNumber\":\"123\"},\"OrderItems\":[{\"id\":102,\"productId\":41,\"quantity\":1,\"price\":387298.0,\"discount\":20.0},{\"id\":103,\"productId\":31,\"quantity\":1,\"price\":231331.0,\"discount\":20.0},{\"id\":104,\"productId\":22,\"quantity\":1,\"price\":116529.0,\"discount\":0.0}]}"));
     }
 }

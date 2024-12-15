@@ -68,9 +68,11 @@ CREATE TABLE IF NOT EXISTS `authenticator` (
   PRIMARY KEY (`id`),
   KEY `FK__user` (`userId`),
   CONSTRAINT `FK__user` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table bookshopdb.authenticator: ~0 rows (approximately)
+-- Dumping data for table bookshopdb.authenticator: ~1 rows (approximately)
+INSERT INTO `authenticator` (`id`, `userId`, `publicKey`, `createdAt`, `status`, `updatedAt`) VALUES
+	(6, 1, 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAitnQrchz1jZP28opOQka5JnWeKHtIOnZY/3AQXJUO3Jl695ZQ27oDpXVivU1gHcT3GMZJQ78XwFAl9ObBceU91U3JIAQ4mvUbfCcDRe+cdkNtC4FHqgKYouI0aXztYrzc3Eu5HS8FyHg2GwVx/SEaiBATSBIoUK1cJAkUS3tWdJVQy9F3eU9EctpGO28m9h6fAsD0bO6u6F993jnFAY9ZA1+HnVGkeQDwjGJC4pFc73TILs4seyF8hoqKocZjnS7r8iXZueDuIZEs/LNoEwxN5K2PqVnJYfN8YUH63pF2dUMfaGADUZbRTR43UrZnbTdV/MGGz+CnVc/alPHMysHjwIDAQAB', '2024-12-15 08:03:12', b'1', '2024-12-15 08:03:12');
 
 -- Dumping structure for table bookshopdb.cart
 CREATE TABLE IF NOT EXISTS `cart` (
@@ -107,9 +109,9 @@ CREATE TABLE IF NOT EXISTS `cart_item` (
   KEY `idx_cart_item_product` (`productId`),
   CONSTRAINT `fk_cart_item_cart` FOREIGN KEY (`cartId`) REFERENCES `cart` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_cart_item_product` FOREIGN KEY (`productId`) REFERENCES `product` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table bookshopdb.cart_item: ~9 rows (approximately)
+-- Dumping data for table bookshopdb.cart_item: ~10 rows (approximately)
 INSERT INTO `cart_item` (`id`, `cartId`, `productId`, `quantity`, `createdAt`, `updatedAt`) VALUES
 	(1, 2, 55, 3, '2021-07-13 03:21:51', NULL),
 	(2, 2, 36, 2, '2021-07-05 00:21:45', NULL),
@@ -119,7 +121,7 @@ INSERT INTO `cart_item` (`id`, `cartId`, `productId`, `quantity`, `createdAt`, `
 	(14, 1, 73, 1, '2024-04-04 15:40:17', NULL),
 	(16, 1, 99, 1, '2024-04-05 09:41:52', NULL),
 	(27, 14, 99, 1, '2024-05-21 04:32:43', NULL),
-	(31, 8, 37, 5, '2024-06-04 08:20:24', NULL);
+	(31, 8, 37, 1, '2024-12-12 14:48:09', NULL);
 
 -- Dumping structure for table bookshopdb.category
 CREATE TABLE IF NOT EXISTS `category` (
@@ -199,7 +201,7 @@ CREATE TABLE IF NOT EXISTS `log` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table bookshopdb.log: ~121 rows (approximately)
+-- Dumping data for table bookshopdb.log: ~144 rows (approximately)
 INSERT INTO `log` (`id`, `ip`, `levelLog`, `res`, `preValue`, `curValue`, `createAt`, `updateAt`) VALUES
 	(1719986696178, '42.112.79.162', 2, 'Insert on table User', 'null', '{"id":0,"username":"user13333","password":"16DEDE70EF3D625C8A073E422784DCA9","fullname":"Hiếu Ngô Quang Hiếu","email":"hiu@123.com","phoneNumber":"0361235351","gender":0,"role":"CUSTOMER","createAt":"Jul 3, 2024, 1:04:10 PM","googleUser":false,"accuracy":true}', '2024-07-03 06:04:10', '2024-07-03 06:04:12'),
 	(1720018401685, '42.112.79.162', 3, 'Update on table CartItem', '{"id":41,"cartId":8,"productId":93,"quantity":1,"createdAt":"Jun 5, 2024, 2:50:19 PM"}', '{"id":41,"cartId":8,"productId":93,"quantity":1111,"createdAt":"Jun 5, 2024, 2:50:19 PM"}', '2024-06-05 07:50:19', '2024-07-03 14:51:53'),
@@ -321,7 +323,59 @@ INSERT INTO `log` (`id`, `ip`, `levelLog`, `res`, `preValue`, `curValue`, `creat
 	(1733906781658, '42.118.115.134', 3, 'Update on table CartItem', '{"id":45,"cartId":8,"productId":22,"quantity":1,"createdAt":"Dec 11, 2024, 3:42:29 PM"}', '{"id":45,"cartId":8,"productId":22,"quantity":3,"createdAt":"Dec 11, 2024, 3:42:29 PM"}', '2024-12-11 08:42:29', '2024-12-11 08:45:38'),
 	(1733907755956, '42.118.115.134', 2, 'Insert on table Order', 'null', '{"id":1733907700536,"userId":1,"status":0,"deliveryMethod":1,"deliveryPrice":38001.0,"createdAt":"Dec 11, 2024, 4:01:40 PM","totalPrice":0.0}', '2024-12-11 09:01:40', '2024-12-11 09:01:40'),
 	(1733907766513, '42.118.115.134', 4, 'Delete on table CartItem', '{"id":45,"cartId":8,"productId":22,"quantity":3,"createdAt":"Dec 11, 2024, 3:45:38 PM"}', 'null', '2024-12-11 08:45:38', '2024-12-11 09:01:41'),
-	(1733907784088, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":1733907700536,"productId":22,"price":116529.0,"discount":0.0,"quantity":3,"createdAt":"Dec 11, 2024, 4:01:40 PM"}', '2024-12-11 09:01:40', '2024-12-11 09:01:41');
+	(1733907784088, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":1733907700536,"productId":22,"price":116529.0,"discount":0.0,"quantity":3,"createdAt":"Dec 11, 2024, 4:01:40 PM"}', '2024-12-11 09:01:40', '2024-12-11 09:01:41'),
+	(1734014490450, '42.118.115.134', 2, 'Insert on table CartItem', 'null', '{"id":0,"cartId":8,"productId":22,"quantity":4,"createdAt":"Dec 12, 2024, 9:40:55 PM"}', '2024-12-12 14:40:55', '2024-12-12 14:40:55'),
+	(1734014504690, '42.118.115.134', 2, 'Insert on table Order', 'null', '{"id":1734014497290,"userId":1,"status":0,"deliveryMethod":1,"deliveryPrice":38001.0,"createdAt":"Dec 12, 2024, 9:41:37 PM","totalPrice":0.0}', '2024-12-12 14:41:37', '2024-12-12 14:41:37'),
+	(1734014512132, '42.118.115.134', 4, 'Delete on table CartItem', '{"id":46,"cartId":8,"productId":22,"quantity":4,"createdAt":"Dec 12, 2024, 9:40:55 PM"}', 'null', '2024-12-12 14:40:55', '2024-12-12 14:41:38'),
+	(1734014586704, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":1734014497290,"productId":22,"price":116529.0,"discount":0.0,"quantity":4,"createdAt":"Dec 12, 2024, 9:41:37 PM"}', '2024-12-12 14:41:37', '2024-12-12 14:41:37'),
+	(1734014619634, '42.118.115.134', 3, 'Update on table CartItem', '{"id":47,"cartId":8,"productId":93,"quantity":1,"createdAt":"Dec 12, 2024, 9:43:31 PM"}', '{"id":47,"cartId":8,"productId":93,"quantity":2,"createdAt":"Dec 12, 2024, 9:43:31 PM","updatedAt":"Dec 12, 2024, 9:43:32 PM","product":{"id":93,"name":"Sách Plasto","price":215800.0,"discount":20.0,"quantity":34,"totalBuy":85,"author":"Santiago Levine","pages":267,"publisher":"NXB Đại học Quốc gia Hà Nội","yearPublishing":2001,"description":"Amet aliquip sunt in commodo excepteur esse ea aliqua laboris in. Lorem consequat tempor reprehenderit amet occaecat proident deserunt voluptate elit elit excepteur nisi in. Lorem commodo aliquip proident fugiat proident Lorem qui incididunt consectetur nostrud cupidatat quis deserunt. Nulla deserunt commodo nostrud nostrud veniam id proident laborum in in. Qui laboris consectetur cupidatat tempor amet in in in. Laborum ipsum consectetur laboris dolore magna laborum laboris deserunt proident nulla. Elit proident amet minim adipisicing.\\r\\nSit dolore ullamco mollit veniam ullamco consectetur reprehenderit occaecat. Est incididunt ea laborum labore enim aute aliquip laboris aute. Pariatur exercitation aute in magna. Exercitation est nulla ex fugiat. Magna nostrud proident reprehenderit et laboris. Dolore reprehenderit nulla deserunt quis proident do exercitation do reprehenderit. Qui proident excepteur commodo nostrud minim commodo exercitation.\\r\\n","imageName":"temp-13064240004351430671.jpg","shop":1,"createdAt":"Jan 27, 2022, 9:49:53 PM"}}', '2024-12-12 14:43:31', '2024-12-12 14:43:32'),
+	(1734014641760, '42.118.115.134', 4, 'Delete on table CartItem', '{"id":47,"cartId":8,"productId":93,"quantity":2,"createdAt":"Dec 12, 2024, 9:43:32 PM","updatedAt":"Dec 12, 2024, 9:43:32 PM"}', 'null', '2024-12-12 14:43:32', '2024-12-12 14:43:51'),
+	(1734014646348, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":1734014630809,"productId":93,"price":215800.0,"discount":20.0,"quantity":2,"createdAt":"Dec 12, 2024, 9:43:50 PM"}', '2024-12-12 14:43:50', '2024-12-12 14:43:51'),
+	(1734014701078, '42.118.115.134', 2, 'Insert on table CartItem', 'null', '{"id":0,"cartId":8,"productId":93,"quantity":1,"createdAt":"Dec 12, 2024, 9:43:31 PM"}', '2024-12-12 14:43:31', '2024-12-12 14:43:32'),
+	(1734014712339, '42.118.115.134', 2, 'Insert on table Order', 'null', '{"id":1734014630809,"userId":1,"status":0,"deliveryMethod":1,"deliveryPrice":45500.0,"createdAt":"Dec 12, 2024, 9:43:50 PM","totalPrice":0.0}', '2024-12-12 14:43:50', '2024-12-12 14:43:51'),
+	(1734014905649, '42.118.115.134', 2, 'Insert on table CartItem', 'null', '{"id":0,"cartId":8,"productId":31,"quantity":1,"createdAt":"Dec 12, 2024, 9:48:18 PM"}', '2024-12-12 14:48:18', '2024-12-12 14:48:18'),
+	(1734014917802, '42.118.115.134', 3, 'Update on table CartItem', '{"id":31,"cartId":8,"productId":37,"quantity":5,"createdAt":"Jun 4, 2024, 3:20:24 PM"}', '{"id":31,"cartId":8,"productId":37,"quantity":1,"createdAt":"Jun 4, 2024, 3:20:24 PM"}', '2024-06-04 08:20:24', '2024-12-12 14:48:09'),
+	(1734014934519, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":1734014908108,"productId":31,"price":231331.0,"discount":20.0,"quantity":1,"createdAt":"Dec 12, 2024, 9:48:28 PM"}', '2024-12-12 14:48:28', '2024-12-12 14:48:28'),
+	(1734014940506, '42.118.115.134', 2, 'Insert on table Order', 'null', '{"id":1734014908108,"userId":1,"status":0,"deliveryMethod":1,"deliveryPrice":45500.0,"createdAt":"Dec 12, 2024, 9:48:28 PM","totalPrice":0.0}', '2024-12-12 14:48:28', '2024-12-12 14:48:28'),
+	(1734014955947, '42.118.115.134', 4, 'Delete on table CartItem', '{"id":48,"cartId":8,"productId":31,"quantity":1,"createdAt":"Dec 12, 2024, 9:48:18 PM"}', 'null', '2024-12-12 14:48:18', '2024-12-12 14:48:28'),
+	(1734015175733, '42.118.115.134', 2, 'Insert on table CartItem', 'null', '{"id":0,"cartId":8,"productId":77,"quantity":1,"createdAt":"Dec 12, 2024, 9:52:07 PM"}', '2024-12-12 14:52:07', '2024-12-12 14:52:07'),
+	(1734015191028, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":1734015138615,"productId":77,"price":364658.0,"discount":0.0,"quantity":2,"createdAt":"Dec 12, 2024, 9:52:18 PM"}', '2024-12-12 14:52:18', '2024-12-12 14:52:19'),
+	(1734015206018, '42.118.115.134', 2, 'Insert on table Order', 'null', '{"id":1734015138615,"userId":1,"status":0,"deliveryMethod":1,"deliveryPrice":36001.0,"createdAt":"Dec 12, 2024, 9:52:18 PM","totalPrice":0.0}', '2024-12-12 14:52:18', '2024-12-12 14:52:19'),
+	(1734015206199, '42.118.115.134', 3, 'Update on table CartItem', '{"id":49,"cartId":8,"productId":77,"quantity":1,"createdAt":"Dec 12, 2024, 9:52:07 PM"}', '{"id":49,"cartId":8,"productId":77,"quantity":2,"createdAt":"Dec 12, 2024, 9:52:07 PM","updatedAt":"Dec 12, 2024, 9:52:09 PM","product":{"id":77,"name":"Sách Enerforce","price":364658.0,"discount":0.0,"quantity":477,"totalBuy":207,"author":"Spencer Marshall","pages":475,"publisher":"NXB Đại học Sư phạm TP.HCM","yearPublishing":1999,"description":"Id laborum aute duis id excepteur exercitation nostrud ad qui sit. Occaecat non veniam qui non velit cupidatat. Non Lorem culpa cillum enim et amet pariatur id pariatur ea sint ea. Pariatur voluptate quis culpa occaecat dolor id consequat quis commodo aliquip deserunt. Consequat elit consequat labore veniam est laboris esse esse. Duis commodo sint voluptate sint mollit esse labore officia reprehenderit laborum irure id.\\r\\nSunt eu enim labore anim mollit sint ipsum labore cillum consequat cupidatat velit. Culpa commodo irure enim consequat velit reprehenderit nostrud reprehenderit sunt. Exercitation nisi sit id amet duis ullamco officia dolor ea consequat adipisicing minim enim. Cupidatat Lorem cupidatat officia aute et mollit ad irure elit ut.\\r\\n","imageName":"temp-7329036107498680084.jpg","shop":0,"createdAt":"Jan 4, 2022, 7:49:25 PM"}}', '2024-12-12 14:52:07', '2024-12-12 14:52:10'),
+	(1734015206482, '42.118.115.134', 4, 'Delete on table CartItem', '{"id":49,"cartId":8,"productId":77,"quantity":2,"createdAt":"Dec 12, 2024, 9:52:10 PM","updatedAt":"Dec 12, 2024, 9:52:09 PM"}', 'null', '2024-12-12 14:52:10', '2024-12-12 14:52:19'),
+	(1734015647091, '42.118.115.134', 3, 'Update on table CartItem', '{"id":50,"cartId":8,"productId":77,"quantity":1,"createdAt":"Dec 12, 2024, 10:00:06 PM"}', '{"id":50,"cartId":8,"productId":77,"quantity":2,"createdAt":"Dec 12, 2024, 10:00:06 PM","updatedAt":"Dec 12, 2024, 10:00:09 PM","product":{"id":77,"name":"Sách Enerforce","price":364658.0,"discount":0.0,"quantity":475,"totalBuy":207,"author":"Spencer Marshall","pages":475,"publisher":"NXB Đại học Sư phạm TP.HCM","yearPublishing":1999,"description":"Id laborum aute duis id excepteur exercitation nostrud ad qui sit. Occaecat non veniam qui non velit cupidatat. Non Lorem culpa cillum enim et amet pariatur id pariatur ea sint ea. Pariatur voluptate quis culpa occaecat dolor id consequat quis commodo aliquip deserunt. Consequat elit consequat labore veniam est laboris esse esse. Duis commodo sint voluptate sint mollit esse labore officia reprehenderit laborum irure id.\\r\\nSunt eu enim labore anim mollit sint ipsum labore cillum consequat cupidatat velit. Culpa commodo irure enim consequat velit reprehenderit nostrud reprehenderit sunt. Exercitation nisi sit id amet duis ullamco officia dolor ea consequat adipisicing minim enim. Cupidatat Lorem cupidatat officia aute et mollit ad irure elit ut.\\r\\n","imageName":"temp-7329036107498680084.jpg","shop":0,"createdAt":"Jan 4, 2022, 7:49:25 PM"}}', '2024-12-12 15:00:06', '2024-12-12 15:00:10'),
+	(1734015669694, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":1734015627273,"productId":77,"price":364658.0,"discount":0.0,"quantity":2,"createdAt":"Dec 12, 2024, 10:00:27 PM"}', '2024-12-12 15:00:27', '2024-12-12 15:00:27'),
+	(1734015682005, '42.118.115.134', 2, 'Insert on table CartItem', 'null', '{"id":0,"cartId":8,"productId":17,"quantity":1,"createdAt":"Dec 12, 2024, 10:00:12 PM"}', '2024-12-12 15:00:12', '2024-12-12 15:00:13'),
+	(1734015691687, '42.118.115.134', 2, 'Insert on table Order', 'null', '{"id":1734015627273,"userId":1,"status":0,"deliveryMethod":1,"deliveryPrice":38001.0,"createdAt":"Dec 12, 2024, 10:00:27 PM","totalPrice":0.0}', '2024-12-12 15:00:27', '2024-12-12 15:00:27'),
+	(1734015705339, '42.118.115.134', 2, 'Insert on table CartItem', 'null', '{"id":0,"cartId":8,"productId":77,"quantity":1,"createdAt":"Dec 12, 2024, 10:00:06 PM"}', '2024-12-12 15:00:06', '2024-12-12 15:00:07'),
+	(1734015720123, '42.118.115.134', 4, 'Delete on table CartItem', '{"id":50,"cartId":8,"productId":77,"quantity":2,"createdAt":"Dec 12, 2024, 10:00:10 PM","updatedAt":"Dec 12, 2024, 10:00:09 PM"}', 'null', '2024-12-12 15:00:10', '2024-12-12 15:00:28'),
+	(1734238093855, '42.118.115.134', 2, 'Insert on table CartItem', 'null', '{"id":0,"cartId":8,"productId":22,"quantity":1,"createdAt":"Dec 15, 2024, 11:48:12 AM"}', '2024-12-15 04:48:12', '2024-12-15 04:48:12'),
+	(1734238128576, '42.118.115.134', 2, 'Insert on table CartItem', 'null', '{"id":0,"cartId":8,"productId":41,"quantity":1,"createdAt":"Dec 15, 2024, 11:48:19 AM"}', '2024-12-15 04:48:19', '2024-12-15 04:48:19'),
+	(1734238156322, '42.118.115.134', 2, 'Insert on table CartItem', 'null', '{"id":0,"cartId":8,"productId":31,"quantity":1,"createdAt":"Dec 15, 2024, 11:48:15 AM"}', '2024-12-15 04:48:15', '2024-12-15 04:48:16'),
+	(1734238211058, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":1734238184620,"productId":31,"price":231331.0,"discount":20.0,"quantity":1,"createdAt":"Dec 15, 2024, 11:49:44 AM"}', '2024-12-15 04:49:44', '2024-12-15 04:49:45'),
+	(1734238223048, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":1734238184620,"productId":41,"price":387298.0,"discount":20.0,"quantity":1,"createdAt":"Dec 15, 2024, 11:49:44 AM"}', '2024-12-15 04:49:44', '2024-12-15 04:49:45'),
+	(1734238257069, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":1734238184620,"productId":22,"price":116529.0,"discount":0.0,"quantity":1,"createdAt":"Dec 15, 2024, 11:49:44 AM"}', '2024-12-15 04:49:44', '2024-12-15 04:49:45'),
+	(1734238262344, '42.118.115.134', 4, 'Delete on table CartItem', '{"id":52,"cartId":8,"productId":22,"quantity":1,"createdAt":"Dec 15, 2024, 11:48:12 AM"}', 'null', '2024-12-15 04:48:12', '2024-12-15 04:49:46'),
+	(1734238262932, '42.118.115.134', 4, 'Delete on table CartItem', '{"id":53,"cartId":8,"productId":31,"quantity":1,"createdAt":"Dec 15, 2024, 11:48:15 AM"}', 'null', '2024-12-15 04:48:15', '2024-12-15 04:49:45'),
+	(1734238276507, '42.118.115.134', 4, 'Delete on table CartItem', '{"id":54,"cartId":8,"productId":41,"quantity":1,"createdAt":"Dec 15, 2024, 11:48:19 AM"}', 'null', '2024-12-15 04:48:19', '2024-12-15 04:49:45'),
+	(1734238277037, '42.118.115.134', 2, 'Insert on table Order', 'null', '{"id":1734238184620,"userId":1,"status":-1,"deliveryMethod":1,"deliveryPrice":45500.0,"createdAt":"Dec 15, 2024, 11:49:44 AM","totalPrice":0.0}', '2024-12-15 04:49:44', '2024-12-15 04:49:45'),
+	(1734263930331, '42.118.115.134', 3, 'Update on table CartItem', '{"id":55,"cartId":8,"productId":46,"quantity":1,"createdAt":"Dec 15, 2024, 6:58:37 PM"}', '{"id":55,"cartId":8,"productId":46,"quantity":2,"createdAt":"Dec 15, 2024, 6:58:37 PM","updatedAt":"Dec 15, 2024, 6:58:39 PM","product":{"id":46,"name":"Sách Dognosis","price":384754.0,"discount":20.0,"quantity":349,"totalBuy":484,"author":"Alisa Waters","pages":129,"publisher":"NXB Đại học Sư phạm TP.HCM","yearPublishing":1997,"description":"Do qui cillum sint in aute tempor. Nisi velit amet do incididunt consequat proident qui nisi exercitation eiusmod excepteur aliqua deserunt. Esse exercitation cupidatat officia id sint irure dolore nisi. Deserunt ex velit id aliqua consectetur. Magna aute ad laboris aliquip irure esse velit ipsum nostrud est sint in voluptate aliqua.\\r\\nIn exercitation culpa dolore in duis laboris cillum eiusmod enim ullamco incididunt Lorem. Anim amet ut ea anim minim magna ad dolor proident ut cupidatat in exercitation ex. Exercitation nisi irure nisi mollit irure exercitation magna reprehenderit mollit dolore irure reprehenderit nisi deserunt. Consectetur do excepteur enim sunt anim nulla culpa incididunt ipsum. Lorem in proident quis irure sunt adipisicing amet ullamco excepteur consectetur laboris id sunt. Elit nulla veniam id ea ipsum qui consequat incididunt labore qui veniam.\\r\\n","imageName":"temp-8262627340495498759.jpg","shop":0,"createdAt":"Jan 13, 2022, 8:55:09 PM"}}', '2024-12-15 11:58:37', '2024-12-15 11:58:40'),
+	(1734263985030, '42.118.115.134', 2, 'Insert on table CartItem', 'null', '{"id":0,"cartId":8,"productId":61,"quantity":1,"createdAt":"Dec 15, 2024, 6:58:42 PM"}', '2024-12-15 11:58:42', '2024-12-15 11:58:43'),
+	(1734264005016, '42.118.115.134', 2, 'Insert on table CartItem', 'null', '{"id":0,"cartId":8,"productId":46,"quantity":1,"createdAt":"Dec 15, 2024, 6:58:37 PM"}', '2024-12-15 11:58:37', '2024-12-15 11:58:38'),
+	(1734264469092, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":1734264461556,"productId":61,"price":422493.0,"discount":20.0,"quantity":1,"createdAt":"Dec 15, 2024, 7:07:41 PM"}', '2024-12-15 12:07:41', '2024-12-15 12:07:42'),
+	(1734264483551, '42.118.115.134', 4, 'Delete on table CartItem', '{"id":56,"cartId":8,"productId":61,"quantity":1,"createdAt":"Dec 15, 2024, 6:58:42 PM"}', 'null', '2024-12-15 11:58:42', '2024-12-15 12:07:42'),
+	(1734264506398, '42.118.115.134', 4, 'Delete on table CartItem', '{"id":51,"cartId":8,"productId":17,"quantity":1,"createdAt":"Dec 12, 2024, 10:00:12 PM"}', 'null', '2024-12-12 15:00:12', '2024-12-15 12:07:43'),
+	(1734264525188, '42.118.115.134', 2, 'Insert on table CartItem', 'null', '{"id":0,"cartId":8,"productId":60,"quantity":1,"createdAt":"Dec 15, 2024, 7:08:37 PM"}', '2024-12-15 12:08:37', '2024-12-15 12:08:38'),
+	(1734264528130, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":1734264526724,"productId":60,"price":262167.0,"discount":20.0,"quantity":1,"createdAt":"Dec 15, 2024, 7:08:46 PM"}', '2024-12-15 12:08:46', '2024-12-15 12:08:47'),
+	(1734264530142, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":1734264526724,"productId":41,"price":387298.0,"discount":20.0,"quantity":1,"createdAt":"Dec 15, 2024, 7:08:46 PM"}', '2024-12-15 12:08:46', '2024-12-15 12:08:47'),
+	(1734264544103, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":1734264461556,"productId":46,"price":384754.0,"discount":20.0,"quantity":2,"createdAt":"Dec 15, 2024, 7:07:41 PM"}', '2024-12-15 12:07:41', '2024-12-15 12:07:42'),
+	(1734264545984, '42.118.115.134', 4, 'Delete on table CartItem', '{"id":55,"cartId":8,"productId":46,"quantity":2,"createdAt":"Dec 15, 2024, 6:58:40 PM","updatedAt":"Dec 15, 2024, 6:58:39 PM"}', 'null', '2024-12-15 11:58:40', '2024-12-15 12:07:42'),
+	(1734264552116, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":1734264461556,"productId":17,"price":90044.0,"discount":20.0,"quantity":1,"createdAt":"Dec 15, 2024, 7:07:41 PM"}', '2024-12-15 12:07:41', '2024-12-15 12:07:42'),
+	(1734264553994, '42.118.115.134', 2, 'Insert on table Order', 'null', '{"id":1734264461556,"userId":1,"status":-1,"deliveryMethod":1,"deliveryPrice":38001.0,"createdAt":"Dec 15, 2024, 7:07:41 PM","totalPrice":0.0}', '2024-12-15 12:07:41', '2024-12-15 12:07:41'),
+	(1734264571976, '42.118.115.134', 4, 'Delete on table CartItem', '{"id":57,"cartId":8,"productId":41,"quantity":1,"createdAt":"Dec 15, 2024, 7:08:34 PM"}', 'null', '2024-12-15 12:08:34', '2024-12-15 12:08:47'),
+	(1734264599116, '42.118.115.134', 2, 'Insert on table Order', 'null', '{"id":1734264526724,"userId":1,"status":-1,"deliveryMethod":1,"deliveryPrice":36001.0,"createdAt":"Dec 15, 2024, 7:08:46 PM","totalPrice":0.0}', '2024-12-15 12:08:46', '2024-12-15 12:08:47'),
+	(1734264600563, '42.118.115.134', 4, 'Delete on table CartItem', '{"id":58,"cartId":8,"productId":60,"quantity":1,"createdAt":"Dec 15, 2024, 7:08:37 PM"}', 'null', '2024-12-15 12:08:37', '2024-12-15 12:08:47'),
+	(1734264611401, '42.118.115.134', 2, 'Insert on table CartItem', 'null', '{"id":0,"cartId":8,"productId":41,"quantity":1,"createdAt":"Dec 15, 2024, 7:08:34 PM"}', '2024-12-15 12:08:34', '2024-12-15 12:08:35');
 
 -- Dumping structure for table bookshopdb.orders
 CREATE TABLE IF NOT EXISTS `orders` (
@@ -330,14 +384,14 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `status` tinyint(4) NOT NULL,
   `deliveryMethod` tinyint(4) NOT NULL,
   `deliveryPrice` double NOT NULL DEFAULT 0,
-  `createdAt` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
   `updatedAt` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_orders_user` (`userId`),
   CONSTRAINT `fk_orders_user` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=1733907700539 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1734264526725 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table bookshopdb.orders: ~37 rows (approximately)
+-- Dumping data for table bookshopdb.orders: ~44 rows (approximately)
 INSERT INTO `orders` (`id`, `userId`, `status`, `deliveryMethod`, `deliveryPrice`, `createdAt`, `updatedAt`) VALUES
 	(1, 4, 4, 1, 10000, '2024-12-11 10:25:07', '2024-07-09 13:04:16'),
 	(2, 5, 2, 2, 50000, '2024-12-11 10:25:08', '2024-07-09 13:02:44'),
@@ -375,7 +429,15 @@ INSERT INTO `orders` (`id`, `userId`, `status`, `deliveryMethod`, `deliveryPrice
 	(1721011564682, 6, 0, 1, 22000, '2024-12-11 10:33:32', NULL),
 	(1733904490987, 1, 0, 1, 36001, '2024-12-11 10:25:23', NULL),
 	(1733906443276, 1, 0, 1, 38001, '2024-12-11 10:25:23', NULL),
-	(1733907700536, 1, 0, 1, 38001, '2024-12-11 10:25:24', NULL);
+	(1733907700536, 1, 0, 1, 38001, '2024-12-11 10:25:24', NULL),
+	(1734014497290, 1, 0, 1, 38001, '2024-12-12 14:41:37', NULL),
+	(1734014630809, 1, 0, 1, 45500, '2024-12-12 14:43:50', NULL),
+	(1734014908108, 1, -1, 1, 45500, '2024-12-15 04:29:22', NULL),
+	(1734015138615, 1, -1, 1, 36001, '2024-12-15 04:29:19', NULL),
+	(1734015627273, 1, -1, 1, 38001, '2024-12-15 04:29:17', NULL),
+	(1734238184620, 1, 0, 1, 45500, '2024-12-15 10:16:16', NULL),
+	(1734264461556, 1, -1, 1, 38001, '2024-12-15 12:07:41', NULL),
+	(1734264526724, 1, -1, 1, 36001, '2024-12-15 12:08:46', NULL);
 
 -- Dumping structure for table bookshopdb.order_detail
 CREATE TABLE IF NOT EXISTS `order_detail` (
@@ -394,9 +456,9 @@ CREATE TABLE IF NOT EXISTS `order_detail` (
   CONSTRAINT `FK__orders` FOREIGN KEY (`orderId`) REFERENCES `orders` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_order_detail_voucher` FOREIGN KEY (`shipVoucherId`) REFERENCES `voucher` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_order_detail_voucher_2` FOREIGN KEY (`productVoucherId`) REFERENCES `voucher` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=1733907700537 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1734264526725 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table bookshopdb.order_detail: ~9 rows (approximately)
+-- Dumping data for table bookshopdb.order_detail: ~15 rows (approximately)
 INSERT INTO `order_detail` (`orderId`, `addressId`, `shipVoucherId`, `shipVoucherDecrease`, `productVoucherId`, `productVoucherDecrease`, `totalPrice`) VALUES
 	(1717525929835, 33, NULL, 0, NULL, 0, 2152767.4),
 	(1717526036853, 33, 9, -19000.5, 11, 0, 868828.5000000002),
@@ -406,7 +468,15 @@ INSERT INTO `order_detail` (`orderId`, `addressId`, `shipVoucherId`, `shipVouche
 	(1721011564682, 41, 10, 0, 12, -52202.5, 52202.5),
 	(1733904490987, 33, NULL, 0, NULL, 0, 1007880),
 	(1733906443276, 35, NULL, 0, NULL, 0, 799052),
-	(1733907700536, 33, NULL, 0, NULL, 0, 349587);
+	(1733907700536, 33, NULL, 0, NULL, 0, 349587),
+	(1734014497290, 33, NULL, 0, NULL, 0, 466116),
+	(1734014630809, 33, NULL, 0, NULL, 0, 345280),
+	(1734014908108, 33, NULL, 0, NULL, 0, 185064.80000000002),
+	(1734015138615, 33, NULL, 0, NULL, 0, 729316),
+	(1734015627273, 33, NULL, 0, NULL, 0, 729316),
+	(1734238184620, 33, NULL, 0, NULL, 0, 611432.2000000001),
+	(1734264461556, 33, NULL, 0, NULL, 0, 1025636),
+	(1734264526724, 33, NULL, 0, NULL, 0, 519572);
 
 -- Dumping structure for table bookshopdb.order_item
 CREATE TABLE IF NOT EXISTS `order_item` (
@@ -423,9 +493,9 @@ CREATE TABLE IF NOT EXISTS `order_item` (
   KEY `idx_order_item_product` (`productId`),
   CONSTRAINT `fk_order_item_orders` FOREIGN KEY (`orderId`) REFERENCES `orders` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_order_item_product` FOREIGN KEY (`productId`) REFERENCES `product` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=97 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table bookshopdb.order_item: ~75 rows (approximately)
+-- Dumping data for table bookshopdb.order_item: ~74 rows (approximately)
 INSERT INTO `order_item` (`id`, `orderId`, `productId`, `price`, `discount`, `quantity`, `createdAt`, `updatedAt`) VALUES
 	(1, 1, 78, 286587, 0, 4, '2021-06-26 20:11:05', NULL),
 	(2, 2, 21, 29619, 0, 2, '2021-03-26 03:39:47', NULL),
@@ -511,20 +581,44 @@ INSERT INTO `order_item` (`id`, `orderId`, `productId`, `price`, `discount`, `qu
 	(93, 1733904490987, 78, 104405, 0, 8, '2024-12-11 08:08:10', NULL),
 	(94, 1733904490987, 93, 215800, 20, 1, '2024-12-11 08:08:10', NULL),
 	(95, 1733906443276, 99, 199763, 20, 5, '2024-12-11 08:40:43', NULL),
-	(96, 1733907700536, 22, 116529, 0, 3, '2024-12-11 09:01:40', NULL);
+	(96, 1733907700536, 22, 116529, 0, 3, '2024-12-11 09:01:40', NULL),
+	(97, 1734014497290, 22, 116529, 0, 4, '2024-12-12 14:41:37', NULL),
+	(98, 1734014630809, 93, 215800, 20, 2, '2024-12-12 14:43:50', NULL),
+	(99, 1734014908108, 31, 231331, 20, 1, '2024-12-12 14:48:28', NULL),
+	(100, 1734015138615, 77, 364658, 0, 2, '2024-12-12 14:52:18', NULL),
+	(101, 1734015627273, 77, 364658, 0, 2, '2024-12-12 15:00:27', NULL),
+	(102, 1734238184620, 41, 387298, 20, 1, '2024-12-15 04:49:44', NULL),
+	(103, 1734238184620, 31, 231331, 20, 1, '2024-12-15 04:49:44', NULL),
+	(104, 1734238184620, 22, 116529, 0, 1, '2024-12-15 04:49:44', NULL),
+	(105, 1734264461556, 61, 422493, 20, 1, '2024-12-15 12:07:41', NULL),
+	(106, 1734264461556, 46, 384754, 20, 2, '2024-12-15 12:07:41', NULL),
+	(107, 1734264461556, 17, 90044, 20, 1, '2024-12-15 12:07:41', NULL),
+	(108, 1734264526724, 60, 262167, 20, 1, '2024-12-15 12:08:46', NULL),
+	(109, 1734264526724, 41, 387298, 20, 1, '2024-12-15 12:08:46', NULL);
 
 -- Dumping structure for table bookshopdb.order_signature
 CREATE TABLE IF NOT EXISTS `order_signature` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `orderId` bigint(20) DEFAULT NULL,
+  `authId` bigint(20) DEFAULT NULL,
   `signature` varchar(500) DEFAULT NULL,
+  `hashOrderInfo` varchar(500) DEFAULT NULL,
   `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updatedAt` date DEFAULT NULL,
+  `updatedAt` timestamp NULL DEFAULT NULL,
   `status` bit(1) NOT NULL DEFAULT b'1',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  PRIMARY KEY (`id`),
+  KEY `FK_order_signature_orders` (`orderId`),
+  KEY `FK_order_signature_authenticator` (`authId`),
+  CONSTRAINT `FK_order_signature_authenticator` FOREIGN KEY (`authId`) REFERENCES `authenticator` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_order_signature_orders` FOREIGN KEY (`orderId`) REFERENCES `orders` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table bookshopdb.order_signature: ~0 rows (approximately)
+-- Dumping data for table bookshopdb.order_signature: ~3 rows (approximately)
+INSERT INTO `order_signature` (`id`, `orderId`, `authId`, `signature`, `hashOrderInfo`, `createdAt`, `updatedAt`, `status`) VALUES
+	(2, 1734238184620, NULL, 'OGXFgPXoH654VjuXr15Dxqhe1shqxVU2GAOecWWnlp8JQYNllyeCA2FwmtzeTq+LdhkcVRpxsWTqIEQXsASEgIDloOJ8Tb1wPE33w7hd4Q+pV83/r8YFntTW2FK5T8PX0O8Hr/W1p273I+papfHLCzz6S8gq18bWl1Tp68YyvQrQv8lJrYj8aWnU8E03qvJFBiVl+6k2Fmr6LEg78HwblHv67ZgFzFS6NhXdiIP3fDUEzX0d7WaYNB7ONFz7QmypEaUO0DKrQkVkhHlN3sw+sxou253lvckManO9ykEka2DEuI5lNFrGRjlYwkr871b5DkAyj3nfTCWFLW9lse0m/g==', NULL, '2024-12-15 07:40:28', '2024-12-15 07:40:28', b'1'),
+	(3, 1734015627273, NULL, '456456', NULL, '2024-12-15 07:40:28', '2024-12-15 07:51:09', b'1'),
+	(4, 1734264461556, NULL, NULL, NULL, '2024-12-15 12:07:43', NULL, b'1'),
+	(5, 1734264526724, NULL, NULL, NULL, '2024-12-15 12:08:48', NULL, b'1');
 
 -- Dumping structure for table bookshopdb.otp
 CREATE TABLE IF NOT EXISTS `otp` (
@@ -535,9 +629,11 @@ CREATE TABLE IF NOT EXISTS `otp` (
   PRIMARY KEY (`id`),
   KEY `FK__user2` (`userId`),
   CONSTRAINT `FK__user2` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Dumping data for table bookshopdb.otp: ~0 rows (approximately)
+INSERT INTO `otp` (`id`, `userId`, `otp`, `expireAt`) VALUES
+	(1, 1, '804649', '2024-12-15 03:59:04');
 
 -- Dumping structure for table bookshopdb.product
 CREATE TABLE IF NOT EXISTS `product` (
@@ -1092,9 +1188,9 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `uq_phoneNumber` (`phoneNumber`)
 ) ENGINE=InnoDB AUTO_INCREMENT=133620766698527085 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table bookshopdb.user: ~12 rows (approximately)
+-- Dumping data for table bookshopdb.user: ~13 rows (approximately)
 INSERT INTO `user` (`id`, `username`, `password`, `fullname`, `email`, `phoneNumber`, `gender`, `role`, `createAt`) VALUES
-	(1, 'user1', '202CB962AC59075B964B07152D234B70', 'Dunn Mcpherson', 'dunnmcpherson@recrisys.com', '0989894900', b'0', 'ADMIN', '2024-04-26 07:43:42'),
+	(1, 'user1', '202CB962AC59075B964B07152D234B70', 'Dunn Mcpherson', '21130356@st.hcmuaf.edu.vn', '0989894900', b'0', 'ADMIN', '2024-12-13 16:29:47'),
 	(2, 'user2', '202CB962AC59075B964B07152D234B70', 'Foreman Carter', 'foremancarter@recrisys.com', '0993194154', b'0', 'EMPLOYEE', '2024-03-27 14:08:39'),
 	(3, 'user3', '202CB962AC59075B964B07152D234B70', 'Felecia Cabrera', 'feleciacabrera@recrisys.com', '0930174351', b'1', 'EMPLOYEE', '2024-03-27 14:08:39'),
 	(4, 'user4', '202CB962AC59075B964B07152D234B70', 'Juliette Mcdowell', 'juliettemcdowell@recrisys.com', '0911925643', b'1', 'CUSTOMER', '2024-03-27 14:08:39'),
@@ -1106,7 +1202,7 @@ INSERT INTO `user` (`id`, `username`, `password`, `fullname`, `email`, `phoneNum
 	(1720625491113, NULL, NULL, 'Hiếu Ngô Quang', 'hieu8a52016@gmail.com', NULL, b'0', 'CUSTOMER', '2024-07-10 15:30:22'),
 	(133620766698527070, 'user122', '123', 'Quang Hiu Ne', 'hiu@1g.com', NULL, b'0', 'CUSTOMER', '2024-06-05 15:57:49'),
 	(133620766698527078, 'user12211', 'F58CA236DBC252D47D100636E72F2CBD', 'Hiếu Ngô Quang Hiếu', 'hao@ASD.VVV', '0366123135', b'0', 'CUSTOMER', '2024-07-03 05:46:40'),
-	(133620766698527084, 'hieu2109', 'F0F2BEDDD5B2CDDC7B898DC01862181F', 'Hiếu Ngô Quang Hiếu', '21130356@st.hcmuaf.edu.vn', '03661111535', b'0', 'CUSTOMER', '2024-07-15 02:43:51');
+	(133620766698527084, 'hieu2109', 'F0F2BEDDD5B2CDDC7B898DC01862181F', 'Hiếu Ngô Quang Hiếu', '21130356@st.hcmuaf.edu.vnnn', '03661111535', b'0', 'CUSTOMER', '2024-12-13 16:29:42');
 
 -- Dumping structure for table bookshopdb.voucher
 CREATE TABLE IF NOT EXISTS `voucher` (

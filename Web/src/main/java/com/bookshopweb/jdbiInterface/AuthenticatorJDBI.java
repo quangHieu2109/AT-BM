@@ -25,6 +25,9 @@ public interface AuthenticatorJDBI {
     @SqlUpdate("UPDATE authenticator SET status=:status " +
             "WHERE id = :id ")
     int updateStatus(@BindBean Authenticator authenticator);
+    @SqlUpdate("UPDATE authenticator SET status=0 " +
+            "WHERE userId = :userId AND status =1 ")
+    int expireAll(@Bind("userId") long userId);
 
     @SqlUpdate("INSERT INTO authenticator (userId, publicKey, createdAt, status)\n" +
             "VALUES (:userId, :publicKey, :createdAt, :status)")
