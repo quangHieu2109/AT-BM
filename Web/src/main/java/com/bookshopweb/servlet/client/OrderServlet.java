@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
@@ -161,7 +163,7 @@ public class OrderServlet extends HttpServlet {
             orderDetail.setShipVoucherDecrease(shipVoucherDecrease);
             orderDetail.setProductVoucherDecrease(productVoucherDecrease);
             orderDetail.setAddressId(addressId);
-            orderDetail.setTotalPrice(totalPrice);
+            orderDetail.setTotalPrice(Math.round(totalPrice));
 //            System.out.println(orderDetail);
             orderDetailDAO.addOrderDetailNoVoucher(orderDetail);
             if(shipVoucherId > 0){

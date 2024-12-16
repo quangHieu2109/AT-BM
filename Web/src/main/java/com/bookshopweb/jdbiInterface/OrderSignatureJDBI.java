@@ -27,4 +27,7 @@ public interface OrderSignatureJDBI {
     @SqlUpdate("UPDATE order_signature SET authId:=authId, signature =:signature, hashOrderInfo=:hashOrderInfo, updatedAt = :updatedAt, status=:status " +
             "WHERE id = :id")
     int updateOrderSignature(@BindBean OrderSignature orderSignature);
+    @SqlUpdate("UPDATE order_signature SET hashOrderInfo=:hashOrderInfo " +
+            "WHERE id = :id")
+    int updateHashOrderInfo(@BindBean OrderSignature orderSignature);
 }

@@ -13,6 +13,19 @@ function getUnconfirmOrders(username){
         }
     })
 }
+function getOrderDetail(){
+    $.ajax({
+        url: '/orderSwing?type=getOrderDetail&orderId=1734328121273',
+        type: 'GET',
+
+        success: function (repsonse) {
+            console.log(repsonse)
+        },
+        error: function (response) {
+            console.log(response)
+        }
+    })
+}
 //getUnconfirmOrders('user1')
 function signOrders(orderSignatures){
     $.ajax({
@@ -110,6 +123,23 @@ function getAuthenticator(){
         data: {
             'username':'user1'
 
+        },
+        success: function (repsonse) {
+            console.log(repsonse)
+        },
+        error: function (response) {
+            console.log(response)
+        }
+    })
+}
+function reportKey(){
+    $.ajax({
+        url: '/authenticatorSwing',
+        type: 'POST',
+        data: {
+            'username':'user1',
+            'password':'202CB962AC59075B964B07152D234B70',// password sau khi dùng HashingUtils.hash(password)
+            'type':'reportKey'
         },
         success: function (repsonse) {
             console.log(repsonse)
