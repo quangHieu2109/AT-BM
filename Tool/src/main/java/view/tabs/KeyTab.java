@@ -6,14 +6,18 @@ import model.Order;
 import model.PublicKeyItem;
 import view.BaseUI;
 import view.MainApp;
+import view.tabs.dialog.GenKeyDialog;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 public class KeyTab extends JPanel implements BaseUI {
     MainApp mainApp;
+    GenKeyDialog genKeyDialog;
     final String[] columnNames = {"ID", "Khóa công khai", "Ngày tạo", "Trạng thái", "Số đơn hàng xác thực"};
     Object[][] data = {};
     DefaultTableModel model;
@@ -27,6 +31,7 @@ public class KeyTab extends JPanel implements BaseUI {
     }
     @Override
     public void init() {
+        genKeyDialog = new GenKeyDialog(mainApp);
         this.setLayout(new BorderLayout());
         model = new DefaultTableModel(data, columnNames) {
             @Override
@@ -76,7 +81,12 @@ public class KeyTab extends JPanel implements BaseUI {
 
     @Override
     public void setOnClick() {
-
+        btnGenKey.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                genKeyDialog.setVisible(true);
+            }
+        });
     }
     private void setSizeCol(){
         //"ID", "khóa công khai", "Ngày tạo", "trạng thía", "số đơn"
