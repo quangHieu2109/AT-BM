@@ -3,6 +3,7 @@ package api;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import model.Order;
+import model.PublicKeyItem;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -18,6 +19,7 @@ public class API {
     private static final OkHttpClient client = new OkHttpClient();
     private static final MediaType JSON = MediaType.parse("application/json");
     public static List<Order> orders;
+    public static List<PublicKeyItem> publicKeyItems;
     public static Response sendSignature(Map<Long,String> oSign) throws IOException {
         JSONArray data = new JSONArray();
         for (Long id : oSign.keySet()) {
@@ -64,6 +66,24 @@ public class API {
             Type listOrderType = new TypeToken<List<Order>>(){}.getType();
             orders = gson.fromJson(json,listOrderType);
             return orders;
+        } catch (IOException e) {
+            throw new ConnectException();
+        }
+    }
+    public static List<PublicKeyItem> getPublicKeys(String username) throws ConnectException {
+        if (username==null) {
+            return null;
+        }
+        Request request = new Request.Builder()
+                .url(URl+"/authenticatorSwing?username="+username)
+                .build();
+        Response response = null;
+        try {
+            response = client.newCall(request).execute();
+            String json = response.body().string();
+            Type listPublicKeyType = new TypeToken<List<PublicKeyItem>>(){}.getType();
+            publicKeyItems = gson.fromJson(json,listPublicKeyType);
+            return publicKeyItems;
         } catch (IOException e) {
             throw new ConnectException();
         }
