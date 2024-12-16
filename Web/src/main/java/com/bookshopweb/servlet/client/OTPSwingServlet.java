@@ -6,7 +6,9 @@ import com.bookshopweb.service.SendMail;
 import com.bookshopweb.utils.HashUtils;
 import com.bookshopweb.utils.HashingUtils;
 import com.bookshopweb.utils.SignatureUtils;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -39,6 +41,23 @@ public class OTPSwingServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
+        String username = request.getParameter("username");
+        User user = userDAO.selectByUserName(username);
+        if (user == null) {
+            response.setStatus(400);
+            response.getWriter().write("Username is incorrect!");
+        } else {
+            AuthenticatorDAO authenticatorDAO = new AuthenticatorDAO();
+            JsonArray jsonArray = new JsonArray();
+            for(Authenticator authenticator: authenticatorDAO.getAllByUserId(user.getId())){
+                JsonObject jsonObject = (JsonObject) JsonParser.parseString(new Gson().toJson(authenticator));
+                jsonObject.addProperty("countOrderSignature", authenticatorDAO.getCountSignature(authenticator.getId()));
+                jsonArray.add(jsonObject);
+            }
+            response.getWriter().write(jsonArray.toString());
+            response.setStatus(200);
+        }
+
 
     }
 

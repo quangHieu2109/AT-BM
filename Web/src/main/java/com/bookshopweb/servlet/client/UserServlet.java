@@ -62,14 +62,8 @@ public class UserServlet extends HttpServlet {
         }else{
             if(user.getPassword().equals(password)){
                 response.setStatus(200);
-                AuthenticatorDAO authenticatorDAO = new AuthenticatorDAO();
-                JsonArray jsonArray = new JsonArray();
-                for(Authenticator authenticator: authenticatorDAO.getAllByUserId(user.getId())){
-                    JsonObject jsonObject = (JsonObject) JsonParser.parseString(new Gson().toJson(authenticator));
-                    jsonObject.addProperty("countOrderSignature", authenticatorDAO.getCountSignature(authenticator.getId()));
-                    jsonArray.add(jsonObject);
-                }
-                response.getWriter().write(jsonArray.toString());
+
+                response.getWriter().write("Login success!");
             }else{
                 response.setStatus(400);
                 response.getWriter().write("Password is incorrect!");
