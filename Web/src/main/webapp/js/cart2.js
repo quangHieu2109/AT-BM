@@ -184,14 +184,41 @@ $('#confirmAuthKeyBtn').on('click', function() {
         return;
     }
     // Thực hiện xử lý mã xác thực tại đây
-    alert(`Mã xác thực bạn nhập: ${authKey}`);
+    let formData = new FormData()
+    formData.append('privateKey', authKey);
+    $.ajax({
+        url: '/verify',
+        type: 'Post',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (repsonse) {
+           const status = repsonse.status
+            if (status == 2) { // xác thực thành công
+                createOrder()
+            }else if (status == 1 ){// xác thực không thành công
+                alert(`Xác thực thất bại với: ${authKey}`);
+                $('#authKeyInput').val('');
+                $('#authKeyModal').css('display', 'none');
+            }else {// private key không đúng format
+                alert(`Private key không hợp lệ: ${authKey}`);
+                $('#authKeyInput').val('');
+                $('#authKeyModal').css('display', 'none');
+            }
+
+        },
+        error: function (response) {
+            console.log(response)
+        }
+    })
+    // alert(`Mã xác thực bạn nhập: ${authKey}`);
     $('#authKeyInput').val('');
-    $('#authKeyModal').css('display', 'none');  // Đóng modal sau khi xác nhận
+    $('#authKeyModal').css('display', 'none');
+    // Đóng modal sau khi xác nhận
 });
 
 
 function createOrder() {
-
     let ship = $('#delivery-price').attr('data-value');
     let addressId = $('input[name="address"]:checked').attr('id');
     if (ship > 0 && addressId > 0) {
@@ -210,6 +237,8 @@ function createOrder() {
         })
 
         let formData = new FormData()
+        const authKey = $('#authKeyInput').val().trim();
+        formData.append('privateKey', authKey)
         formData.append('cartItemIds', cartItemIds)
         let shipVoucherId = $("input[name='0']").val()
         shipVoucherId = shipVoucherId > 0 ? shipVoucherId : 0

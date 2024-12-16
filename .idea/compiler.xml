@@ -12,6 +12,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="ATVBM_Web" target="21" />
+      <module name="Tool" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>
