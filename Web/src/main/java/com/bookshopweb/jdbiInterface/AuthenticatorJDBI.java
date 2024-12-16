@@ -13,6 +13,8 @@ import java.util.List;
 public interface AuthenticatorJDBI {
     @SqlQuery("SELECT * FROM authenticator")
     List<Authenticator> getAll();
+    @SqlQuery("SELECT * FROM authenticator WHERE userId=:userId")
+    List<Authenticator> getAllByUserId(@Bind("userId") long userId);
 
     @SqlQuery("SELECT * FROM authenticator WHERE id = :id")
     Authenticator getById(@Bind("id") long id);
@@ -33,6 +35,7 @@ public interface AuthenticatorJDBI {
             "VALUES (:userId, :publicKey, :createdAt, :status)")
     int addAuthenticator(@BindBean Authenticator authenticator);
 
-
+    @SqlQuery("SELECT COUNT(*) FROM order_signature WHERE authId=:authId")
+    int getCountSignature(@Bind("authId") long authId);
 
 }

@@ -3,9 +3,14 @@ package com.bookshopweb.servlet.client;
 import com.bookshopweb.beans.Authenticator;
 import com.bookshopweb.beans.OTP;
 import com.bookshopweb.beans.User;
+import com.bookshopweb.dao.AuthenticatorDAO;
 import com.bookshopweb.dao.OTPDAO;
 import com.bookshopweb.service.SendMail;
 import com.bookshopweb.utils.SignatureUtils;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -28,7 +33,6 @@ public class createAuthenticatorSwingServlet extends HttpServlet {
         resp.setContentType("application/json; charset=UTF-8"); // Thiết lập mã hóa cho phản hồi
         resp.setCharacterEncoding("UTF-8");
 
-        req.getRequestDispatcher("/WEB-INF/views/createAuthenticatorView.jsp").forward(req, resp);
     }
 
     @Override

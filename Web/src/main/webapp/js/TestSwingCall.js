@@ -103,3 +103,19 @@ function savePublicKey(){
         }
     })
 }
+function getAuthenticator(){
+    $.ajax({
+        url: '/authenticatorSwing',
+        type: 'GET',
+        data: {
+            'username':'user1'
+
+        },
+        success: function (repsonse) {
+            console.log(repsonse)
+        },
+        error: function (response) {
+            console.log(response)
+        }
+    })
+}
