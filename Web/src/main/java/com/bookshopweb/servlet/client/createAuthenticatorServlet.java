@@ -88,7 +88,7 @@ public class createAuthenticatorServlet extends HttpServlet {
         User user = (User) session.getAttribute("currentUser");
         String otp = req.getParameter("otp");
         OTP userOTP = otpdao.getByUserId(user.getId());
-        if(userOTP == null || userOTP.getExpireAt().getTime() >  System.currentTimeMillis()){
+        if(userOTP == null || userOTP.getExpireAt().getTime() <  System.currentTimeMillis()){
             resp.setStatus(400);
             resp.setCharacterEncoding("UTF-8");
             resp.setContentType("application/json");

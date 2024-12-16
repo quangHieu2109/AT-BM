@@ -7,6 +7,7 @@ public class OTP {
     private long userId;
     private String otp;
     private Timestamp expireAt;
+    private int status;
 
     public OTP(long id, long userId, String otp, Timestamp expireAt) {
         this.id = id;
@@ -54,6 +55,14 @@ public class OTP {
 
     public void setExpireAt(Timestamp expireAt) {
         this.expireAt = expireAt;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     @Override

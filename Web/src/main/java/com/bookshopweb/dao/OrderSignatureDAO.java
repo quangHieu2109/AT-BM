@@ -35,8 +35,8 @@ public class OrderSignatureDAO {
             return updateOrderSignature(signature);
         } else {
             return JDBIUltis.getJDBI().withHandle(handle ->
-                    handle.createUpdate("INSERT INTO order_signature (orderId, signature, createdAt, status)\n" +
-                                    "VALUES (:orderId, :signature, :createdAt, :status)")
+                    handle.createUpdate("INSERT INTO order_signature (orderId, signature, hashOrderInfo, createdAt, status)\n" +
+                                    "VALUES (:orderId, :signature, :hashOrderInfo, :createdAt, :status)")
                             .bindBean(orderSignature)
                             .executeAndReturnGeneratedKeys("id") // Lấy ID
                             .mapTo(Long.class) // Chuyển đổi thành Long
