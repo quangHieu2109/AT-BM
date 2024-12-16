@@ -29,7 +29,9 @@ public class AESUtils {
         key = keyGen.generateKey();
         return key;
     }
-
+    public static SecretKey getKey(){
+        return key;
+    }
     public static byte[] generateIV() {
         iv = new byte[ivSize];
         SecureRandom secureRandom = new SecureRandom();
