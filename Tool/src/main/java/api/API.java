@@ -39,7 +39,16 @@ public class API {
         return response;
     }
     public static Response login(String username,String password) throws IOException{
-        return null;
+        RequestBody body = new FormBody.Builder()
+                .add("username",username)
+                .add("password",password)
+                .build();
+        Request request = new Request.Builder()
+                .url(URl+"/user")
+                .post(body)
+                .build();
+        Response response = client.newCall(request).execute();
+        return response;
     }
     public static List<Order> getOrders(String username) throws ConnectException {
         if (username==null) {

@@ -1,17 +1,21 @@
 package view;
 import api.API;
+import model.PublicKeyItem;
 import okhttp3.Response;
+import utils.HashingUtils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.List;
 
 public class LoginPage extends JPanel implements BaseUI {
     JTextField txtUsername;
     JPasswordField txtPassword;
     JButton btnLogin;
+    List<PublicKeyItem> publicKeyItems;
     MainApp mainApp;
     public LoginPage(MainApp mainApp){
         this.init();
@@ -59,9 +63,9 @@ public class LoginPage extends JPanel implements BaseUI {
                 char[] pass = txtPassword.getPassword();
                 if (!(username.isBlank()||pass.length==0||username.isEmpty())) {
                     try {
-                        Response response = API.login(username,new String(pass));
+                        Response response = API.login(username, HashingUtils.hash(new String(pass)));
                         if (response.isSuccessful()) {
-
+                            mainApp.goToHomePage(username);
                         }else {
                             JOptionPane.showMessageDialog(mainApp,response.body().string(),"Đăng nhập",JOptionPane.ERROR_MESSAGE);
                         }

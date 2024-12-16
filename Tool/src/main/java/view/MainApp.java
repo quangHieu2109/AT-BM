@@ -2,6 +2,7 @@ package view;
 
 import com.formdev.flatlaf.intellijthemes.FlatCyanLightIJTheme;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import view.tabs.KeyTab;
 import view.tabs.OrderTab;
 
 
@@ -12,6 +13,7 @@ import java.security.Security;
 public class MainApp extends JFrame implements BaseUI, DefaultPropertyUI {
     JTabbedPane tabbedPane;
     OrderTab orderTab;
+    KeyTab keyTab;
     LoginPage loginPage;
     String username;
     public MainApp() {
@@ -49,9 +51,12 @@ public class MainApp extends JFrame implements BaseUI, DefaultPropertyUI {
     }
     public void goToHomePage(String username){
         this.username = username;
+        loginPage.setVisible(false);
+        keyTab = new KeyTab(this);
+        orderTab = new OrderTab(this);
         tabbedPane = new JTabbedPane();
         tabbedPane.addTab("Orders", new ImageIcon(MainApp.class.getResource("/image/package.png")), orderTab);
-        orderTab = new OrderTab(this);
+        tabbedPane.addTab("Keys",new ImageIcon(MainApp.class.getResource("/image/key.png")), keyTab);
         add(tabbedPane, BorderLayout.CENTER);
     }
     public String getUsername(){
