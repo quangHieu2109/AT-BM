@@ -64,6 +64,7 @@ public class OrderTab extends JPanel implements BaseUI, Observer {
         table = new JTable(model);
         table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         table.setShowGrid(true);
+        table.setRowHeight(30);
         table.setGridColor(Color.BLACK);
         table.setIntercellSpacing(new Dimension(1,1));
 
