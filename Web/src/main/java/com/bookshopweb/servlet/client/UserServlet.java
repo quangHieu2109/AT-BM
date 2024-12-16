@@ -1,7 +1,15 @@
 package com.bookshopweb.servlet.client;
 
+import com.bookshopweb.beans.Authenticator;
 import com.bookshopweb.beans.User;
+import com.bookshopweb.dao.AuthenticatorDAO;
 import com.bookshopweb.dao.CartDAO;
+import com.bookshopweb.dao.UserDAO;
+import com.bookshopweb.utils.HashingUtils;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,6 +23,7 @@ import java.io.IOException;
 public class UserServlet extends HttpServlet {
 
     private final CartDAO cartDAO = new CartDAO();
+    private final UserDAO userDAO = new UserDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -39,5 +48,27 @@ public class UserServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {}
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json; charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        User user = userDAO.selectByUserName(username);
+        if (user == null) {
+            response.setStatus(400);
+            response.getWriter().write("Username is incorrect!");
+
+        }else{
+            if(user.getPassword().equals(password)){
+                response.setStatus(200);
+
+                response.getWriter().write("Login success!");
+            }else{
+                response.setStatus(400);
+                response.getWriter().write("Password is incorrect!");
+            }
+        }
+
+    }
 }

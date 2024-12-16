@@ -24,15 +24,19 @@ public class HashUtils {
 		}
 	}
 
-	public static String hash(String data) throws NoSuchAlgorithmException {
-		String algo = "SHA-2";
-		int hashSize = 256;
-		MessageDigest md = MessageDigest.getInstance(getIntance(algo, hashSize));
-		byte[] bytes = data.getBytes();
-		byte[] digest = md.digest(bytes);
-		BigInteger re = new BigInteger(1, digest);
-		return re.toString(16);
-	}
+	public static String hash(String data){
+		try {
+			String algo = "SHA-2";
+			int hashSize = 256;
+			MessageDigest md = MessageDigest.getInstance(getIntance(algo, hashSize));
+			byte[] bytes = data.getBytes("UTF-8");
+			byte[] digest = md.digest(bytes);
+			BigInteger re = new BigInteger(1, digest);
+			return re.toString(16);
+		} catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 	public static String hashFile(String filePath, String algo, int hashSize) throws NoSuchAlgorithmException, IOException {
 		MessageDigest md = MessageDigest.getInstance(getIntance(algo, hashSize));

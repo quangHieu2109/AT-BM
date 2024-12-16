@@ -5,23 +5,36 @@ import java.sql.Timestamp;
 public class OrderSignature {
     private long id;
     private long orderId;
+    private long authId;
     private String signature;
+    private String hashOrderInfo;
     private Timestamp createdAt;
     private Timestamp updatedAt;
     private int status;
 
-    public OrderSignature(long id, long orderId, String signature, Timestamp createdAt, Timestamp updatedAt, int status) {
+    public OrderSignature(long id, long orderId, long authId, String signature, String hashOrderInfo, Timestamp createdAt, Timestamp updatedAt, int status) {
         this.id = id;
         this.orderId = orderId;
+        this.authId = authId;
         this.signature = signature;
+        this.hashOrderInfo = hashOrderInfo;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.status = status;
     }
 
-    public OrderSignature(long orderId, String signature, Timestamp createdAt, Timestamp updatedAt, int status) {
+    public OrderSignature(long orderId, String hashOrderInfo, Timestamp createdAt, int status) {
         this.orderId = orderId;
+        this.hashOrderInfo = hashOrderInfo;
+        this.createdAt = createdAt;
+        this.status = status;
+    }
+
+    public OrderSignature(long orderId, long authId, String signature, String hashOrderInfo, Timestamp createdAt, Timestamp updatedAt, int status) {
+        this.orderId = orderId;
+        this.authId = authId;
         this.signature = signature;
+        this.hashOrderInfo = hashOrderInfo;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.status = status;
@@ -76,6 +89,22 @@ public class OrderSignature {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public long getAuthId() {
+        return authId;
+    }
+
+    public void setAuthId(long authId) {
+        this.authId = authId;
+    }
+
+    public String getHashOrderInfo() {
+        return hashOrderInfo;
+    }
+
+    public void setHashOrderInfo(String hashOrderInfo) {
+        this.hashOrderInfo = hashOrderInfo;
     }
 
     @Override

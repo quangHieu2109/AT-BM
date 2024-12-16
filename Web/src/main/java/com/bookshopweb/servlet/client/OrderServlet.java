@@ -3,6 +3,7 @@ package com.bookshopweb.servlet.client;
 import com.bookshopweb.beans.*;
 import com.bookshopweb.dao.*;
 import com.bookshopweb.dto.OrderResponse;
+import com.bookshopweb.utils.HashUtils;
 import com.bookshopweb.utils.IPUtils;
 import com.bookshopweb.utils.Protector;
 import com.bookshopweb.utils.VoucherUtils;
@@ -29,6 +30,7 @@ public class OrderServlet extends HttpServlet {
     private final ProductDAO productDAO = new ProductDAO();
     private final OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
     private final VoucherDAO voucherDAO = new VoucherDAO();
+    private final OrderSignatureDAO orderSignatureDAO = new OrderSignatureDAO();
 
     private static final int ORDERS_PER_PAGE = 3;
 
@@ -128,12 +130,15 @@ public class OrderServlet extends HttpServlet {
         Order order = new Order();
         order.setId(Calendar.getInstance().getTimeInMillis());
         order.setUserId(user.getId());
-        order.setStatus(0);
+        order.setStatus(-1);
         order.setDeliveryMethod(deliveryMethod);
         order.setDeliveryPrice(ship);
         order.setCreatedAt(new Timestamp(Calendar.getInstance().getTimeInMillis()));
         double totalPrice =0;
-        int rs = orderDAO.insert(order, IPUtils.getIP(req));
+//        int rs = orderDAO.insert(order, IPUtils.getIP(req));
+        int rs = orderDAO.insert(order, "");
+
+
         if(rs > 0){
             for(CartItem cartItem : cartItems){
                 Product product = productDAO.selectPrevalue(cartItem.getProductId());
@@ -157,7 +162,7 @@ public class OrderServlet extends HttpServlet {
             orderDetail.setProductVoucherDecrease(productVoucherDecrease);
             orderDetail.setAddressId(addressId);
             orderDetail.setTotalPrice(totalPrice);
-            System.out.println(orderDetail);
+//            System.out.println(orderDetail);
             orderDetailDAO.addOrderDetailNoVoucher(orderDetail);
             if(shipVoucherId > 0){
                 orderDetailDAO.updateShipVoucherId(shipVoucherId, orderDetail.getOrderId());
@@ -169,8 +174,11 @@ public class OrderServlet extends HttpServlet {
 
             }
             for(CartItem cartItem : cartItems){
-                cartItemDAO.delete(cartItem, IPUtils.getIP(req));
+//                cartItemDAO.delete(cartItem, IPUtils.getIP(req));
+                cartItemDAO.delete(cartItem, "");
             }
+            OrderSignature orderSignature = new OrderSignature(order.getId(), HashUtils.hash(orderDAO.selectPrevalue(order.getId()).getInfo()), new Timestamp(System.currentTimeMillis()), 1);
+            orderSignatureDAO.addOrderSignature(orderSignature);
         }
 
 
