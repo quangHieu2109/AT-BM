@@ -1,9 +1,15 @@
 package com.bookshopweb.servlet.client;
 
+import com.bookshopweb.beans.Authenticator;
 import com.bookshopweb.beans.User;
+import com.bookshopweb.dao.AuthenticatorDAO;
 import com.bookshopweb.dao.CartDAO;
 import com.bookshopweb.dao.UserDAO;
 import com.bookshopweb.utils.HashingUtils;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -56,7 +62,14 @@ public class UserServlet extends HttpServlet {
         }else{
             if(user.getPassword().equals(password)){
                 response.setStatus(200);
-                response.getWriter().write("Login success!");
+                AuthenticatorDAO authenticatorDAO = new AuthenticatorDAO();
+                JsonArray jsonArray = new JsonArray();
+                for(Authenticator authenticator: authenticatorDAO.getAllByUserId(user.getId())){
+                    JsonObject jsonObject = (JsonObject) JsonParser.parseString(new Gson().toJson(authenticator));
+                    jsonObject.addProperty("countOrderSignature", authenticatorDAO.getCountSignature(authenticator.getId()));
+                    jsonArray.add(jsonObject);
+                }
+                response.getWriter().write(jsonArray.toString());
             }else{
                 response.setStatus(400);
                 response.getWriter().write("Password is incorrect!");
