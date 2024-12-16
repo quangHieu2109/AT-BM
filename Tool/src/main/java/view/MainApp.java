@@ -12,6 +12,8 @@ import java.security.Security;
 public class MainApp extends JFrame implements BaseUI, DefaultPropertyUI {
     JTabbedPane tabbedPane;
     OrderTab orderTab;
+    LoginPage loginPage;
+    String username;
     public MainApp() {
         this.setTitle("Tool");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -37,18 +39,23 @@ public class MainApp extends JFrame implements BaseUI, DefaultPropertyUI {
 
     @Override
     public void init() {
-        tabbedPane = new JTabbedPane();
-        orderTab = new OrderTab(this);
-
-        tabbedPane.addTab("Orders", new ImageIcon(MainApp.class.getResource("/image/package.png")), orderTab);
-
-        add(tabbedPane, BorderLayout.CENTER);
-
+        loginPage = new LoginPage(this);
+        add(loginPage,BorderLayout.CENTER);
+        this.setVisible(true);
     }
 
     @Override
     public void setOnClick() {
-
+    }
+    public void goToHomePage(String username){
+        this.username = username;
+        tabbedPane = new JTabbedPane();
+        tabbedPane.addTab("Orders", new ImageIcon(MainApp.class.getResource("/image/package.png")), orderTab);
+        orderTab = new OrderTab(this);
+        add(tabbedPane, BorderLayout.CENTER);
+    }
+    public String getUsername(){
+        return username;
     }
 
 }

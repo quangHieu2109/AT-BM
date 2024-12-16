@@ -63,7 +63,7 @@ public class OrderSwingServlet extends HttpServlet {
         resp.setContentType("application/json; charset=UTF-8"); // Thiết lập mã hóa cho phản hồi
         resp.setCharacterEncoding("UTF-8");
         String orderSignatures = req.getParameter("orderSignatures");
-        System.out.println(orderSignatures);
+//        System.out.println(orderSignatures);
         JSONArray jsonArray = new JSONArray(orderSignatures);
         SignatureUtils signatureUtils = new SignatureUtils();
         Authenticator authenticator;
@@ -89,11 +89,12 @@ public class OrderSwingServlet extends HttpServlet {
                     resp.getWriter().write("You have not created a PrivateKey or your PrivateKey is locked, please create a new Key!");
                     return;
                 }
-                signatureUtils.loadPublicKey(authenticator.getPublicKey());
+//                System.out.println("publicKey: "+authenticator.getPublicKey());
+//                System.out.println(signatureUtils.loadPublicKey(authenticator.getPublicKey()));
                 // Kiểm tra chữ ký có đúng người đặt hàng ký không
                 String hashOrder = HashUtils.hash(new OrderDAO().selectPrevalue(order.getId()).getInfo());
-//                System.out.println(order.getInfo());
-//                System.out.println(hashOrder);
+                System.out.println(order.getInfo());
+                System.out.println(hashOrder);
                 if (!signatureUtils.verify(hashOrder, signature)) {
                     resp.setStatus(400);
                     resp.getWriter().write("You signature is invalid!");
