@@ -18,6 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
@@ -62,8 +63,18 @@ public class OrderSwingServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8"); // Thiết lập mã hóa cho yêu cầu
         resp.setContentType("application/json; charset=UTF-8"); // Thiết lập mã hóa cho phản hồi
         resp.setCharacterEncoding("UTF-8");
+
         String orderSignatures = req.getParameter("orderSignatures");
-//        System.out.println(orderSignatures);
+        System.out.println("orderSignatures "+orderSignatures);
+        StringBuilder payload = new StringBuilder();
+        String line;
+        BufferedReader reader = req.getReader();
+        while ((line = reader.readLine()) != null) {
+            payload.append(line);
+        }
+
+        // In ra payload
+        System.out.println("Payload: " + payload.toString());
         JSONArray jsonArray = new JSONArray(orderSignatures);
         SignatureUtils signatureUtils = new SignatureUtils();
         Authenticator authenticator;
@@ -89,12 +100,11 @@ public class OrderSwingServlet extends HttpServlet {
                     resp.getWriter().write("You have not created a PrivateKey or your PrivateKey is locked, please create a new Key!");
                     return;
                 }
-//                System.out.println("publicKey: "+authenticator.getPublicKey());
-//                System.out.println(signatureUtils.loadPublicKey(authenticator.getPublicKey()));
+                signatureUtils.loadPublicKey(authenticator.getPublicKey());
                 // Kiểm tra chữ ký có đúng người đặt hàng ký không
                 String hashOrder = HashUtils.hash(new OrderDAO().selectPrevalue(order.getId()).getInfo());
-                System.out.println(order.getInfo());
-                System.out.println(hashOrder);
+//                System.out.println(order.getInfo());
+//                System.out.println(hashOrder);
                 if (!signatureUtils.verify(hashOrder, signature)) {
                     resp.setStatus(400);
                     resp.getWriter().write("You signature is invalid!");

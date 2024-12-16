@@ -135,7 +135,8 @@ public class OrderServlet extends HttpServlet {
         order.setDeliveryPrice(ship);
         order.setCreatedAt(new Timestamp(Calendar.getInstance().getTimeInMillis()));
         double totalPrice =0;
-        int rs = orderDAO.insert(order, IPUtils.getIP(req));
+//        int rs = orderDAO.insert(order, IPUtils.getIP(req));
+        int rs = orderDAO.insert(order, "");
 
 
         if(rs > 0){
@@ -173,7 +174,8 @@ public class OrderServlet extends HttpServlet {
 
             }
             for(CartItem cartItem : cartItems){
-                cartItemDAO.delete(cartItem, IPUtils.getIP(req));
+//                cartItemDAO.delete(cartItem, IPUtils.getIP(req));
+                cartItemDAO.delete(cartItem, "");
             }
             OrderSignature orderSignature = new OrderSignature(order.getId(), HashUtils.hash(orderDAO.selectPrevalue(order.getId()).getInfo()), new Timestamp(System.currentTimeMillis()), 1);
             orderSignatureDAO.addOrderSignature(orderSignature);

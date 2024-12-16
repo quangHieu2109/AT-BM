@@ -1,14 +1,11 @@
 package com.bookshopweb.utils;
 
-import com.bookshopweb.beans.Authenticator;
-import com.bookshopweb.dao.AuthenticatorDAO;
 import com.bookshopweb.dao.OrderDAO;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.io.*;
 import java.security.*;
 import java.security.spec.*;
-import java.sql.Timestamp;
 import java.util.Base64;
 import java.util.UUID;
 
@@ -103,15 +100,20 @@ public class SignatureUtils {
     }
 
 
-    public boolean saveKey(String desFile) throws IOException {
-        if (publicKey == null || privateKey == null) {
+    public boolean saveKey(String desFile) {
+        if (privateKey == null) {
             return false;
         }
-        PrintWriter printWriter = new PrintWriter(new FileWriter(desFile));
-        String keyString = Base64.getEncoder().encodeToString(privateKey.getEncoded());
-        printWriter.write(keyString);
-        printWriter.close();
-        return true;
+        try {
+            PrintWriter printWriter = new PrintWriter(new FileWriter(desFile));
+            String keyString = Base64.getEncoder().encodeToString(privateKey.getEncoded());
+            printWriter.write(keyString);
+            printWriter.close();
+            return true;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
 
     }
     // Load publicKey String từ database
@@ -191,22 +193,19 @@ public class SignatureUtils {
     public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchProviderException, SignatureException, InvalidKeyException, IOException, InvalidKeySpecException, ClassNotFoundException {
         SignatureUtils signatureUtils = new SignatureUtils();
         signatureUtils.genKey();
-        AuthenticatorDAO authenticatorDAO = new AuthenticatorDAO();
-        Authenticator authenticator = authenticatorDAO.getByUserId(1);
-//        authenticator.setStatus(1);
-//        authenticator.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-//        authenticator.setUserId(1);
-//        authenticator.setPublicKey(signatureUtils.getPublicKeyBase64());
-//        authenticatorDAO.addAuthenticator(authenticator);
-        System.out.println(signatureUtils.loadPublicKey(authenticator.getPublicKey()));
-//        System.out.println(signatureUtils.loadPublicKey("MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1GkeeO9HHxBa23kzWnCrjuqV20/MrYbYrl/wbm40r0yhcdpvGFIoJNtPc8tnlz7qDPWC1sWpZaqk6a2FWdX4wdlvE2ClLyAEBgo1hQBclHWgtQt/PqcHcjhRRaV9ffhsn5IsnKMrrDz3NqDCxT3qUHTTZZUJ6lSGClsx9TLuAa7ZLyrftW2AD17V916MrWf5ArardJDABCvO7/2WYuYrn1MR0e/T4btyzTtE8bSIaDAu2AUkpWx6WyZG89p1gARSLM/Uh92ClKsWuHbPqcmqhti/EPFQ3mbGV5BawFkpvfbCmtNezhrx0ZlZU/ADopoctImhH10iJgWH9ye5tF1xmQIDAQAB"));
-//        System.out.println(signatureUtils.loadPrivateKey("MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDUaR5470cfEFrbeTNacKuO6pXbT8ythtiuX/BubjSvTKFx2m8YUigk209zy2eXPuoM9YLWxallqqTprYVZ1fjB2W8TYKUvIAQGCjWFAFyUdaC1C38+pwdyOFFFpX19+GyfkiycoyusPPc2oMLFPepQdNNllQnqVIYKWzH1Mu4BrtkvKt+1bYAPXtX3XoytZ/kCtqt0kMAEK87v/ZZi5iufUxHR79Phu3LNO0TxtIhoMC7YBSSlbHpbJkbz2nWABFIsz9SH3YKUqxa4ds+pyaqG2L8Q8VDeZsZXkFrAWSm99sKa017OGvHRmVlT8AOimhy0iaEfXSImBYf3J7m0XXGZAgMBAAECggEAJyH+tTUQG07+DjU0GtNrJ/dcCH2ZLdcMEIQoXY/8MNejXsBpe0eXkcK9zo2I1jqHEEAjDMJ5xPs9SrfnO3fKTpxqdF130UjKtPoohgpdBBTvuKsXlElde9OYVYZ5qj2cdYGOqoT9RMwul2fiukf/5TbAw5RDsWJFF59Zgt0RMEnaKtH3XSz/n71+z01tyd93faISK0IFIuakhBvFnVdeQ5PcTwCma3mTNxdj8T+5ijGXR+R68NSfb4nZ/UPHntKhwErATyHG2hp3B2VynjXiRc24xe7AOZWe9Sw5q4rjAEHVWBxzJJNqMOcD0cq5xA3u2+zw/1Ej8Resf6ZIBG/76QKBgQD40vfzzt0jkdCwlkHcdzjRnJU67CRJnM1mGcv4TGTb2r4CoRLmbV6bPQA2BVrREX3DAWsFbrB9GrAgb/P2GSMqNuoNd4puxxdGCripml+l5aC8XeA6wjf90srHKMVHjx6RLMFNQL/MRtP9n0EXCnzMX+LwmzRSe+REJEWrBckqWwKBgQDaiVCvnmHz/Qs6xuv763COYLZJMfSd/Z1vmwhSHdzfaqNlCwRrRJ1TX1MfXOacoAivOyZWkTGdlRMv0hm0T40jqHSAKjCaMAOn7iVnqxKnN8HbhkErpRHk1BY2mjzFk+DaKUs0QqBV623cbkd3B9DsNw56USSg+LcBmeqWfY8OGwKBgQCDNMvm1kgpv3QqCbGFDaD6dvUB8w9XecWddzDlJ3NvszLKtCEBPN7MQShhVAWFhRGpyI+kd6+86FvDXwVn2e1/DyHwI/7tVzJgjrq9RFf3ZNSTP3VDxrI7t/GRf2A30bIun0j28ZOxpg+XB2kNO0x/gHhso4q9i/LcM7xA6HYhTQKBgDfJefl6+xJn9Gfqw+8paTBPa/k/cWyrg3csInGkAfBerptqtpQTjf3shbGp64zsJYtmFCFhK0NI/P7mKX2oGSWTKTpWitWxkB1cY9wVBcv+JdS+bwCPQQQjSBBkS0M8vteyVupeX8PPN9pfpIq0Shci7uU2tZ0KIN2dxw7nuo8lAoGAUHBR7YXxkpcNzWV7j6XQ7aiAhHzi30Bnar8XbvLLFlYxJpxuvLJ4Egnr0epd7vbg4W1h5JFUkE1mMQzrDLGQXqZ7/aGdX/AljVbrLGELsoylSmU1j16fsicb/AKuyuw+QPJkMjLrRQAGPVkPdAPLZzkyf4u3pBYC18okCafvxr8="));
-        System.out.println(signatureUtils.loadPrivateKey("MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCfu8zLtruREVRKcQ6s4Dc2JNwQhILLZqVMS3UKp5gnu/mfu63I9UuohH3rjp/N1kpN026svdUDldH86Srwdm0zf/5AYYbSyx7jUjEITMo4X1VuUJtvn8PlsFcTcxbRiDmYyuxMkvP56yaaer/YWy1O19cRXoMnup/Ta/UeuiD9It9214u0YW1NsLCrzQqbqzCDgwuTAMx6yBS4onYtrkVQ+UFbja6LkT2vop1uypEQBPhWyShRsKMvNxgNZAXAbEo/lf4MW8O/C8fCAtWTIiYBXGCOB0qN1DBvRM2GO7SMEO1X1pLLCgnqEh7yy/eKV7WgKVTZ5K4yvIM1OoozFrC3AgMBAAECggEAJF5Ecy9wRkfNSsOyBS9psrSyvDoHc5sz0Iqvo9Tjwkw8uh8nosUizEQaTWskPF/pfA3DOaZhHRdb/7rw8V3tYBfowizSXyUrK7O3gT3Gnw4pq9vDgCc+mYnMUZvXGq7q+jxdj9O3o/PjzrFbA75CsxxWldhQgVeu8xq17SCQyUFuwe0gY5u2n54N6snXShXMGvgwrdGqCuAr7I1Ta0kYg9e39p9yNN3EUqsG60ZOO3oY5FNXDlWlHK7kEcWHvbCa1YfS/OiCQmUWBLNTbMHFfbn4vqgzTBEONphwS45b5LdinDVH/SHakBWrmSvVaTYy8wJ2CNKf3+g2Eud3LXUPTQKBgQDQm6RS80Yaf1Ski6MjuC3LhF2Gh6MBRJUg126xOk0uzGolf2IAtSNGlWAwav82+HKvMt+Q9EHNWYx2KcPSwFj0cEeUbF5qTRFvINPm07XQC/r5rp8nLTpXvSwQ2TnuSEocK5cVFWDpU5qNWibO1+3V6ahKTFjTzXIPqBd9LWOrmwKBgQDEBbClqNHsl0IxJubYNmn+8g0WHFHUXS7zNyBDUIwPSZRnqPObKoFU5eRY0QZIwlu2mYqs2+godorje+wBOcRJU3554HAbJKo+hWsUuw/kfo43Cc0jllQ0IN+MQHbIR4MPhsAKfQV1wOHkiITt3d51MYjWi/2smJHqugR8OR8nFQKBgHklqmyx80h4IgPdRET+NTo4CMiUBMo7tg94jURHg4NmG07jh1q5116qaU41FTorVw8AEG3yLDTBiJ0m7B58rixm+Grt9HbvguxyuB0ZXkEQdBSEoNDzpypFJk4ymT4UpVVuyzLnU3ytnNfyPw9ovyq3o5BifkOi0FbfW6TKs1N5AoGAOgppRJPZHJGo8r7PCWQLPIbVIx/dhuDUfwVqkyPtZLVnsM3Q27fZNZcgZr/1eWO7HjUWX5p5gkmfVD4kIjTFjuSfBV1UNGVF119P1oKQ8Rob5+YKDKh9ZDX7mx6XTTQHdXhzsmdUT4p+GFnn6jqQnOi+2K/4u7stMXBE1bdgJwUCgYAnXohZycSFum0f+dABFjDSoyP5vFkceH9kHmOZz7poiqgd5b3jH+eTGV6P4p5YkFKMsnB+3rsdJvsO20rC3GMTwONxc6Cqb5+FubLEXZBMmeP2QPB8sX3pLd0DcTTmWA+YurbiRLtE9Fag+WtT/OESSgzleHtW3kXbO7Jj18kXCw=="));
-//        System.out.println("Private: "+ signatureUtils.getPrivateKeyBase64());
-//        System.out.println("\n");
-//        System.out.println("Public: "+ signatureUtils.getPublicKeyBase64());
-        System.out.println(signatureUtils.authenticate());
+        System.out.println("Private: "+ signatureUtils.getPrivateKeyBase64());
+        System.out.println("\n");
+        System.out.println("Public: "+ signatureUtils.getPublicKeyBase64());
 
+//        System.out.println(signatureUtils.loadPrivateKey("MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCK2dCtyHPWNk/byik5CRrkmdZ4oe0g6dlj/cBBclQ7cmXr3llDbugOldWK9TWAdxPcYxklDvxfAUCX05sFx5T3VTckgBDia9Rt8JwNF75x2Q20LgUeqApii4jRpfO1ivNzcS7kdLwXIeDYbBXH9IRqIEBNIEihQrVwkCRRLe1Z0lVDL0Xd5T0Ry2kY7byb2Hp8CwPRs7q7oX33eOcUBj1kDX4edUaR5APCMYkLikVzvdMguzix7IXyGioqhxmOdLuvyJdm54O4hkSz8s2gTDE3krY+pWclh83xhQfrekXZ1Qx9oYANRltFNHjdStmdtN1X8wYbP4KdVz9qU8czKwePAgMBAAECggEADAT/8KiQsniVdXrCEnBh1hZ6ajXmNOUEDwj+dWE5aRiljwNP6dZLcJvIK6pqB7qxyvBUfbtBiH3aGBUsGcDQTzrJYQz+/oKuwGzwLUf4EfCOpEwe4FZT6STtYpdBigkYZaQPbEet/TikYfJf+Ppcjg1IU6+EP1rAIcQwiKB3p+s8aNpiX6qEXK7pXxk4eqdNEuqEa80KFaRXIG/oMfx7aU4YvMbe3CxOfeq5qHZtE0f4b3jb/tU4mY9n91oTtqXoEQkiHGzNpF0FUD7ekL5C1rjiL/0Ekl78P/+YiwupSid+rFD0/w5ggMc10K9aQZ/lwiH+AaGjZ3oCoFDUdFqp+QKBgQDCFIgrU39X/bmI+hjD+xqw7Pyi6DCStsaTt7J/s6oVoKkm4T75XFS6eN4s06jWMVjKbfKlB3brffp9bcxs1dasTdHfcSQ+xB0Vmn6mzkKPT91Fte3N37akfPB1qO6hCgUeM4/dUnvsK7vZpiI8fD9X+3h0Qe07EXRULM+5C8OE1wKBgQC3Jm8vFcsOPuNqx9t+6OAnkukD34qjHGnjWPnDygLw3RUlHmjdfGm8LcwaYWBiPTIbxg+en1tA5+2yrK2KWya16RaT2Z+1QzqXnmm2u627diRzUKP1kLbGCAZYCQCTriLobJNuKKUiv78BN00uuBX/SW6wKNy6XlwDkgOK/4gECQKBgQCxqAfJ2UHtcuVeXMlExNv27siH+xFTi5oU6AeuW/EqoQmV/IQf0QQCOdfuosWfZEaJ7sE5ja6u/H/KRzLkwY4j5YxjA/eQuQaCmwyqdo55DztWr6WCWfGfenrGyZ++rCRpM/vSNcoYMyRepHQceAOn7xqhGSQmeODKmMaA9iLAuwKBgQCY17ZJsQI37TuUTR1cF7OY0v0qgk8MOBYV6JbnUZqKr7WJuIsC62TB6eY+zazFzxQWIX+/fHWHAQZY6coZgGAZx19UG3Uwq94l0cme+ZjOrJVWtqFduVsOgHvq0/hrRhNTq+iNMdY93Y7k0OXUa0PQO9PnpvIthbl8MUpLoVw9IQKBgHdUtACumZz9ZpORP50ydN1ZhF3Dxn3nlGFI08vWy+3Wxzds9DaDsskAyNDIonlO/ve8QEue6LZr+5wm3jJlN7RZJj9jFwtubiN39L6HD0UslP1VhTryApQA+pG7MXvWnCjZAHZ9y+TvXJmQLF5yQDvs+KWDV9SXpt7vZtEO/dae"));
+//        String mes = (HashUtils.hash(new OrderDAO().selectPrevalue(1734238184620l).getInfo()));
+//        System.out.println(mes);
+//        String sign = signatureUtils.sign(mes);
+//        System.out.println(sign);
+//        String sign2="bsslUFbd2q/7mKV0fRSlLLx4FFQMigdbl67wBS08cJqcSvJ+xMwhBBHrJNEiAxaWSqqOqh6OqyTA5p5yHfMVRoPfa7R1aKwhaDrbx3xigFP4FF9TJ5V0hz716IdjnG1LAH5qdXXMBHGEQSrIe7GzzwbFgbOdmX3nBig8qiLObUeuQOkcdzn0S1kjr15cfgEDRjTixZENfkDt4KVOCPiYcLNAoS0JfXz3sirsvY09LQ3ILd3StWfNm3DgiipHHw2U+Nlr1zxLxIg8wkRwBzWsiYEQGmb3UfVuDNeM6ao0IA5W60Tjl9nry/qavvfS02Xysjs9Un5N9kIvoIJFDObiXQ==";
+//        System.out.println(signatureUtils.loadPublicKey("MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAitnQrchz1jZP28opOQka5JnWeKHtIOnZY/3AQXJUO3Jl695ZQ27oDpXVivU1gHcT3GMZJQ78XwFAl9ObBceU91U3JIAQ4mvUbfCcDRe+cdkNtC4FHqgKYouI0aXztYrzc3Eu5HS8FyHg2GwVx/SEaiBATSBIoUK1cJAkUS3tWdJVQy9F3eU9EctpGO28m9h6fAsD0bO6u6F993jnFAY9ZA1+HnVGkeQDwjGJC4pFc73TILs4seyF8hoqKocZjnS7r8iXZueDuIZEs/LNoEwxN5K2PqVnJYfN8YUH63pF2dUMfaGADUZbRTR43UrZnbTdV/MGGz+CnVc/alPHMysHjwIDAQAB"));
+//        System.out.println(signatureUtils.verify(mes, sign2));
+//        System.out.println(signatureUtils.authenticate());
     }
 
 }
