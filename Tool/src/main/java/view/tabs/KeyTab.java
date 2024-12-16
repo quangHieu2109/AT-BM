@@ -75,7 +75,7 @@ public class KeyTab extends JPanel implements BaseUI {
         if (orders == null) return;
         model.setRowCount(0); // Xóa tất cả hàng
         for (PublicKeyItem publicKeyItem : orders) {
-            model.addRow(new Object[]{publicKeyItem.getId(), publicKeyItem.getPublicKey(), publicKeyItem.getCreatedAt(), publicKeyItem.getStatus(), publicKeyItem.getCountOrderSignature()}); // Thêm hàng mới
+            model.addRow(new Object[]{publicKeyItem.getId(), publicKeyItem.getPublicKey(), publicKeyItem.getCreatedAt(), publicKeyItem.getStatus()==0?"Đã dừng":"Đang sử dụng", publicKeyItem.getCountOrderSignature()}); // Thêm hàng mới
         }
     }
 
