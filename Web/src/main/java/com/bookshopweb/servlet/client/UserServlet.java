@@ -57,16 +57,16 @@ public class UserServlet extends HttpServlet {
         User user = userDAO.selectByUserName(username);
         if (user == null) {
             response.setStatus(400);
-            response.getWriter().write("Username is incorrect!");
+            response.getWriter().write("Tên đăng nhập không chính xác!");
 
         }else{
             if(user.getPassword().equals(password)){
                 response.setStatus(200);
 
-                response.getWriter().write("Login success!");
+                response.getWriter().write("Đăng nhập thành công!");
             }else{
                 response.setStatus(400);
-                response.getWriter().write("Password is incorrect!");
+                response.getWriter().write("Mật khẩu không chính xác!");
             }
         }
 
