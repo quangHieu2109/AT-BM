@@ -63,9 +63,10 @@ public class LoginPage extends JPanel implements BaseUI {
                 char[] pass = txtPassword.getPassword();
                 if (!(username.isBlank()||pass.length==0||username.isEmpty())) {
                     try {
-                        Response response = API.login(username, HashingUtils.hash(new String(pass)));
+                        String password = HashingUtils.hash(new String(pass));
+                        Response response = API.login(username,password );
                         if (response.isSuccessful()) {
-                            mainApp.goToHomePage(username);
+                            mainApp.goToHomePage(username,password);
                         }else {
                             JOptionPane.showMessageDialog(mainApp,response.body().string(),"Đăng nhập",JOptionPane.ERROR_MESSAGE);
                         }

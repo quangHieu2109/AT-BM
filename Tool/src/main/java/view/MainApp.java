@@ -16,6 +16,7 @@ public class MainApp extends JFrame implements BaseUI, DefaultPropertyUI {
     KeyTab keyTab;
     LoginPage loginPage;
     String username;
+    String pass;
     public MainApp() {
         this.setTitle("Tool");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,8 +50,9 @@ public class MainApp extends JFrame implements BaseUI, DefaultPropertyUI {
     @Override
     public void setOnClick() {
     }
-    public void goToHomePage(String username){
+    public void goToHomePage(String username,String pass){
         this.username = username;
+        this.pass = pass;
         loginPage.setVisible(false);
         keyTab = new KeyTab(this);
         orderTab = new OrderTab(this);
@@ -61,6 +63,9 @@ public class MainApp extends JFrame implements BaseUI, DefaultPropertyUI {
     }
     public String getUsername(){
         return username;
+    }
+    public String getPass(){
+        return pass;
     }
 
 }

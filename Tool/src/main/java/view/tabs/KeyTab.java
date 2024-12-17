@@ -90,7 +90,8 @@ public class KeyTab extends JPanel implements BaseUI {
         btnGenKey.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                genKeyDialog.setVisible(true);
+
+                genKeyDialog.setEnable(true);
             }
         });
     }
