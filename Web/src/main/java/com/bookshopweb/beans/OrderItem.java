@@ -1,7 +1,10 @@
 package com.bookshopweb.beans;
 
 import com.bookshopweb.dao.OrderItemDAO;
+import com.bookshopweb.dao.ProductDAO;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.jdbi.v3.core.mapper.Nested;
 import org.jetbrains.annotations.Nullable;
 
@@ -119,12 +122,14 @@ public class OrderItem extends AbsModel<OrderItem>{
     }
 
     public JsonObject getInfo() {
+        ProductDAO productDAO = new ProductDAO();
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("id", this.id);
         jsonObject.addProperty("productId", this.productId);
         jsonObject.addProperty("quantity", this.quantity);
         jsonObject.addProperty("price", this.price);
         jsonObject.addProperty("discount", this.discount);
+        jsonObject.add("product", JsonParser.parseString(new Gson().toJson(productDAO.getByIdProduct(this.productId))));
 
         return jsonObject;
     }

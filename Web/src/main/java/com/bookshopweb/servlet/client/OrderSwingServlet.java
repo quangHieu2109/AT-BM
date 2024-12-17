@@ -56,7 +56,7 @@ public class OrderSwingServlet extends HttpServlet {
                 for(Order order: orders){
                     jsonArray.add(JsonParser.parseString(order.getInfo()));
                 }
-                response.getWriter().write(new Gson().toJson(orders));
+                response.getWriter().write(jsonArray.toString());
                 response.setStatus(200);
             }
         }else{
