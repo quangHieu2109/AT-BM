@@ -52,6 +52,48 @@ public class API {
         Response response = client.newCall(request).execute();
         return response;
     }
+    public static Response verifyOTP(String username,String password,String otp) throws IOException{
+        RequestBody body = new FormBody.Builder()
+                .add("username",username)
+                .add("password",password)
+                .add("type","verifyOTP")
+                .add("otp",otp)
+                .build();
+        Request request = new Request.Builder()
+                .url(URl+"/authenticatorSwing")
+                .post(body)
+                .build();
+        Response response = client.newCall(request).execute();
+        return response;
+    }
+    public static Response sendOTP(String username,String password) throws IOException{
+        RequestBody body = new FormBody.Builder()
+                .add("username",username)
+                .add("password",password)
+                .add("type","sendOTP")
+                .build();
+        Request request = new Request.Builder()
+                .url(URl+"/authenticatorSwing")
+                .post(body)
+                .build();
+        Response response = client.newCall(request).execute();
+        return response;
+    }
+    public static Response savePublicKey(String username,String password,String publicKey) throws IOException{
+        System.out.println(publicKey);
+        RequestBody body = new FormBody.Builder()
+                .add("username",username)
+                .add("password",password)
+                .add("type","savePublicKey")
+                .add("publicKey",publicKey)
+                .build();
+        Request request = new Request.Builder()
+                .url(URl+"/authenticatorSwing")
+                .post(body)
+                .build();
+        Response response = client.newCall(request).execute();
+        return response;
+    }
     public static List<Order> getOrders(String username) throws ConnectException {
         if (username==null) {
             return null;
