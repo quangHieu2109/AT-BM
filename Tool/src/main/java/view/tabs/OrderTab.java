@@ -288,11 +288,6 @@ public class OrderTab extends JPanel implements BaseUI, Observer {
                     long orderId = (long) table.getModel().getValueAt(row, 0);
                     Order order = getOrderByID(orderId);
                     if (order != null) {
-                        //Dử dụng jdiaglog
-                        JDialog dialog = new JDialog(mainApp, "Chi tiết đơn hàng", true);
-                        dialog.setLocationRelativeTo(null);
-                        dialog.setSize(new Dimension(250, 500));
-                        dialog.setVisible(true);
 
                         try {
                             orderDialog = new OrderDialog(mainApp);
@@ -303,8 +298,6 @@ public class OrderTab extends JPanel implements BaseUI, Observer {
                         } catch (ConnectException ex) {
                             throw new RuntimeException(ex);
                         }
-
-
 
 
                     } else {
