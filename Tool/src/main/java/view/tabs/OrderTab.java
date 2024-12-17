@@ -7,6 +7,7 @@ import controller.Observer;
 import model.Order;
 import okhttp3.Response;
 import utils.HashUtils;
+
 import utils.SignatureUtils;
 import view.BaseUI;
 import view.MainApp;
@@ -14,6 +15,7 @@ import view.MainApp;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.ColorUIResource;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -34,6 +36,7 @@ public class OrderTab extends JPanel implements BaseUI, Observer {
     Gson gson;
     SignatureUtils signatureUtils;
     Object[][] data = {};
+    OrderDialog orderDialog;
     DefaultTableModel model;
     JTable table;
     JTextField txtPrivateKey;
@@ -286,11 +289,18 @@ public class OrderTab extends JPanel implements BaseUI, Observer {
                     long orderId = (long) table.getModel().getValueAt(row, 0);
                     Order order = getOrderByID(orderId);
                     if (order != null) {
-                        //Dử dụng jdiaglog
-                        JDialog dialog = new JDialog(mainApp, "Chi tiết đơn hàng", true);
-                        dialog.setLocationRelativeTo(null);
-                        dialog.setSize(new Dimension(250, 500));
-                        dialog.setVisible(true);
+
+                        try {
+                            orderDialog = new OrderDialog(mainApp);
+                            orderDialog.setOrderTab(OrderTab.this);  // Gán OrderTab vào OrderDialog
+                            orderDialog.setOrderId(orderId);
+                            orderDialog.init();
+                            orderDialog.setVisible(true);
+                        } catch (ConnectException ex) {
+                            throw new RuntimeException(ex);
+                        }
+
+
 
 
                     } else {
@@ -351,6 +361,8 @@ public class OrderTab extends JPanel implements BaseUI, Observer {
             return super.stopCellEditing();
         }
     }
+
+
 
 
 }

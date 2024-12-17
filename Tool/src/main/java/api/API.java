@@ -19,15 +19,14 @@ public class API {
     private static final MediaType JSON = MediaType.parse("application/json");
     public static List<Order> orders;
     public static List<PublicKeyItem> publicKeyItems;
-    private static Gson gson = new Gson();
 
     public static Response sendSignature(Map<Long, String> oSign) throws IOException {
         JSONArray data = new JSONArray();
         for (Long id : oSign.keySet()) {
             String signature = oSign.get(id);
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", id);
-            jsonObject.put("signature", signature);
+            jsonObject.put("id",id);
+            jsonObject.put("signature",signature);
             data.put(jsonObject);
         }
         RequestBody body = new FormBody.Builder()
@@ -35,20 +34,19 @@ public class API {
                 .build();
 
         Request request = new Request.Builder()
-                .url(URl + "/orderSwing")
+                .url(URl+"/orderSwing")
                 .post(body)
                 .build();
         Response response = client.newCall(request).execute();
         return response;
     }
-
-    public static Response login(String username, String password) throws IOException {
+    public static Response login(String username,String password) throws IOException{
         RequestBody body = new FormBody.Builder()
-                .add("username", username)
-                .add("password", password)
+                .add("username",username)
+                .add("password",password)
                 .build();
         Request request = new Request.Builder()
-                .url(URl + "/user")
+                .url(URl+"/user")
                 .post(body)
                 .build();
         Response response = client.newCall(request).execute();
@@ -115,19 +113,18 @@ public class API {
     }
 
     public static List<Order> getOrders(String username) throws ConnectException {
-        if (username == null) {
+        if (username==null) {
             return null;
         }
         Request request = new Request.Builder()
-                .url(URl + "/orderSwing?username=" + username)
+                .url(URl+"/orderSwing?username="+username)
                 .build();
         Response response = null;
         try {
             response = client.newCall(request).execute();
             String json = response.body().string();
-            Type listOrderType = new TypeToken<List<Order>>() {
-            }.getType();
-            orders = gson.fromJson(json, listOrderType);
+            Type listOrderType = new TypeToken<List<Order>>(){}.getType();
+            orders = gson.fromJson(json,listOrderType);
             return orders;
         } catch (IOException e) {
             throw new ConnectException();
@@ -145,9 +142,8 @@ public class API {
         try {
             response = client.newCall(request).execute();
             String json = response.body().string();
-            Type listPublicKeyType = new TypeToken<List<PublicKeyItem>>() {
-            }.getType();
-            publicKeyItems = gson.fromJson(json, listPublicKeyType);
+            Type listPublicKeyType = new TypeToken<List<PublicKeyItem>>(){}.getType();
+            publicKeyItems = gson.fromJson(json,listPublicKeyType);
             return publicKeyItems;
         } catch (IOException e) {
             throw new ConnectException();
