@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    loadTable(0)
+    loadTable(-1)
 
 })
 
