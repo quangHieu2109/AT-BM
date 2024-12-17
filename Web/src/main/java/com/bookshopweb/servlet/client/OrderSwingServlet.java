@@ -49,7 +49,7 @@ public class OrderSwingServlet extends HttpServlet {
             User user = userDAO.selectByUserName(username);
             if (user == null) {
                 response.setStatus(400);
-                response.getWriter().write("Username is incorrect!");
+                response.getWriter().write("Tên đăng nhập không chính xác!");
             } else {
                 List<Order> orders = orderDAO.getUnconfirmOrdersByUsername(username);
                 JsonArray jsonArray = new JsonArray();
@@ -103,7 +103,7 @@ public class OrderSwingServlet extends HttpServlet {
                 // Kiểm tra người dùng đã có privateKey hợp lệ chưa
                 if (authenticator == null | authenticator.getStatus() == 0) {
                     resp.setStatus(400);
-                    resp.getWriter().write("You have not created a PrivateKey or your PrivateKey is locked, please create a new Key!");
+                    resp.getWriter().write("Bạn chưa có public key hoặc đã bị khóa, vui lòng tạo key mới!");
                     return;
                 }
                 signatureUtils.loadPublicKey(authenticator.getPublicKey());
@@ -113,7 +113,7 @@ public class OrderSwingServlet extends HttpServlet {
 //                System.out.println(hashOrder);
                 if (!signatureUtils.verify(hashOrder, signature)) {
                     resp.setStatus(400);
-                    resp.getWriter().write("You signature is invalid!");
+                    resp.getWriter().write("Chữ ký không hợp lệ!");
                     return;
                 }
                 OrderSignature orderSignature = orderSignatureDAO.getByOrderId(order.getId());
@@ -134,7 +134,7 @@ public class OrderSwingServlet extends HttpServlet {
         }
 
         resp.setStatus(200);
-        resp.getWriter().write("Orders signed successfully!");
+        resp.getWriter().write("Ký đơn hàng thành công!");
 
     }
 
@@ -151,7 +151,7 @@ public class OrderSwingServlet extends HttpServlet {
         ProductDAO productDAO = new ProductDAO();
         if(order == null){
             resp.setStatus(400);
-            resp.getWriter().write("OrderId is invalid!");
+            resp.getWriter().write("OrderId không chính xác!");
         }else{
             List<OrderItem> orderItems = orderItemDAO.getByOrderId(orderId);
             for(OrderItem orderItem: orderItems){

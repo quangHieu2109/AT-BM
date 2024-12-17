@@ -73,12 +73,12 @@ public class OTPSwingServlet extends HttpServlet {
         User user = userDAO.selectByUserName(username);
         if (user == null) {
             response.setStatus(400);
-            response.getWriter().write("Username is incorrect!");
+            response.getWriter().write("Tên đăng nhập không chính xác!");
 
         } else {
             if (!user.getPassword().equals(password)) {
                 response.setStatus(400);
-                response.getWriter().write("Password is incorrect!");
+                response.getWriter().write("Mật khẩu không chính xác!");
 
             } else {
 //                response.setStatus(200);
@@ -116,7 +116,7 @@ public class OTPSwingServlet extends HttpServlet {
         SendMail.sendEmailOtpAuth(user.getEmail(), otp);
         OTP otpObj = new OTP(user.getId(), otp);
         otpdao.addOtpWithoutId(otpObj);
-        resp.getWriter().write("OTP has been sent to your email!");
+        resp.getWriter().write("OTP đã được gửi đến email của bạn!");
 
     }
 
@@ -126,17 +126,17 @@ public class OTPSwingServlet extends HttpServlet {
         OTP userOTP = otpdao.getByUserId(user.getId());
         if (userOTP == null || userOTP.getExpireAt().getTime() < System.currentTimeMillis()) {
             resp.setStatus(400);
-            resp.getWriter().write("Your account does not have OTP or OTP has expired, please select the system's OTP sending function!");
+            resp.getWriter().write("Tài khoản của bạn chưa có OTP hoặc OTP đã hết hạn, vui lòng thực hiện yêu cầu gửi OTP mới!");
         } else {
             if (userOTP.getOtp().equals(otp)) {
                 userOTP.setStatus(1);
                 otpdao.updateByOTP(userOTP);
                 resp.setStatus(200);
-                resp.getWriter().write("Verify OTP success!");
+                resp.getWriter().write("Xác thực OTP thành công!");
 
             } else {
                 resp.setStatus(400);
-                resp.getWriter().write("OTP is incorrect!");
+                resp.getWriter().write("OTP không chính xác!");
             }
         }
     }
@@ -148,19 +148,19 @@ public class OTPSwingServlet extends HttpServlet {
         // Kiểm tra người dùng đã có otp trong db chưa
         if (userOTP == null) {
             resp.setStatus(400);
-            resp.getWriter().write("Please perform the OTP sending and OTP authentication functions!");
+            resp.getWriter().write("Bạn chưa yêu cầu gửi OTP, vui lòng yêu cầu gửi OTP trước!");
         } else {
             // Kiểm tra OTP đã được xác thực chưa
             if (userOTP.getStatus() == 0) {
                 resp.setStatus(400);
-                resp.getWriter().write("Please verify OTP!");
+                resp.getWriter().write("Bạn chưa xác thực OTP!");
             } else {
                 String publicKey = req.getParameter("publicKey");
                 SignatureUtils signatureUtils = new SignatureUtils();
                 // Kiểm tra public key có hợp lệ không
                 if (!signatureUtils.loadPublicKey(publicKey)) {
                     resp.setStatus(400);
-                    resp.getWriter().write("Public key is invalid!");
+                    resp.getWriter().write("Public key Không chính xác!");
                 } else {
                     Authenticator authenticator = new Authenticator();
                     authenticator.setUserId(user.getId());
@@ -170,7 +170,7 @@ public class OTPSwingServlet extends HttpServlet {
                     authenticatorDAO.addAuthenticator(authenticator);
                     otpdao.removeByUserId(user.getId());
                     resp.setStatus(200);
-                    resp.getWriter().write("Save public key success!");
+                    resp.getWriter().write("Lưu public key thành công!");
                 }
             }
         }
@@ -181,16 +181,16 @@ public class OTPSwingServlet extends HttpServlet {
         Authenticator authenticator = authenticatorDAO.getByUserId(user.getId());
         if(authenticator == null){
             resp.setStatus(400);
-            resp.getWriter().write("You don't have any keys!");
+            resp.getWriter().write("Bạn không có key nào, không thể báo cáo!");
         }else{
             if(authenticator.getStatus() == 0){
                 resp.setStatus(400);
-                resp.getWriter().write("Your key has been reported before!");
+                resp.getWriter().write("Key của bạn đã được báo cáo trước đó!");
             }else{
                 authenticator.setStatus(0);
                 authenticatorDAO.updateStatus(authenticator);
                 resp.setStatus(200);
-                resp.getWriter().write("Your key has been reported!");
+                resp.getWriter().write("Báo cáo key thành công!");
             }
         }
     }
