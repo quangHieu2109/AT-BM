@@ -20,7 +20,7 @@ public interface AuthenticatorJDBI {
     Authenticator getById(@Bind("id") long id);
 
     @SqlQuery("SELECT * FROM authenticator WHERE userId = :userId\n" +
-            "ORDER BY createdAt DESC \n" +
+            "status DESC, createdAt DESC \n" +
             "LIMIT 1")
     Authenticator getByUserId(@Bind("userId") long userId);
 
