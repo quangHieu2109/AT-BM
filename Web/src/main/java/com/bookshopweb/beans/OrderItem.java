@@ -129,7 +129,19 @@ public class OrderItem extends AbsModel<OrderItem>{
         jsonObject.addProperty("quantity", this.quantity);
         jsonObject.addProperty("price", this.price);
         jsonObject.addProperty("discount", this.discount);
-        jsonObject.add("product", JsonParser.parseString(new Gson().toJson(productDAO.getByIdProduct(this.productId))));
+//        jsonObject.add("product", JsonParser.parseString(new Gson().toJson(productDAO.getByIdProduct2(this.productId))));
+
+        return jsonObject;
+    }
+    public JsonObject getInfoForSwing() {
+        ProductDAO productDAO = new ProductDAO();
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", this.id);
+        jsonObject.addProperty("productId", this.productId);
+        jsonObject.addProperty("quantity", this.quantity);
+        jsonObject.addProperty("price", this.price);
+        jsonObject.addProperty("discount", this.discount);
+        jsonObject.add("product", JsonParser.parseString(new Gson().toJson(productDAO.getByIdProduct2(this.productId))));
 
         return jsonObject;
     }

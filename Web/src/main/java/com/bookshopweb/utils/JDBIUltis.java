@@ -16,4 +16,17 @@ public class JDBIUltis {
         }
         return jdbi;
     }
+
+    public static Jdbi getJDBI2(){
+        Jdbi reuslt = null;
+        try {
+            if(reuslt == null){
+                reuslt = Jdbi.create("jdbc:mysql://localhost:3306/bookshopdb2", JDBCUtils.username, JDBCUtils.password);
+                reuslt.installPlugin(new SqlObjectPlugin()); // Cần thiết để sử dụng @SqlQuery và @SqlUpdate
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return reuslt;
+    }
 }
