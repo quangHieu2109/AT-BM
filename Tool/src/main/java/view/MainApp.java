@@ -5,7 +5,6 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import view.tabs.KeyTab;
 import view.tabs.OrderTab;
 
-
 import javax.swing.*;
 import java.awt.*;
 import java.security.Security;
@@ -17,6 +16,7 @@ public class MainApp extends JFrame implements BaseUI, DefaultPropertyUI {
     LoginPage loginPage;
     String username;
     String pass;
+
     public MainApp() {
         this.setTitle("Tool");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -43,14 +43,15 @@ public class MainApp extends JFrame implements BaseUI, DefaultPropertyUI {
     @Override
     public void init() {
         loginPage = new LoginPage(this);
-        add(loginPage,BorderLayout.CENTER);
+        add(loginPage, BorderLayout.CENTER);
         this.setVisible(true);
     }
 
     @Override
     public void setOnClick() {
     }
-    public void goToHomePage(String username,String pass){
+
+    public void goToHomePage(String username, String pass) {
         this.username = username;
         this.pass = pass;
         loginPage.setVisible(false);
@@ -58,13 +59,15 @@ public class MainApp extends JFrame implements BaseUI, DefaultPropertyUI {
         orderTab = new OrderTab(this);
         tabbedPane = new JTabbedPane();
         tabbedPane.addTab("Orders", new ImageIcon(MainApp.class.getResource("/image/package.png")), orderTab);
-        tabbedPane.addTab("Keys",new ImageIcon(MainApp.class.getResource("/image/key.png")), keyTab);
+        tabbedPane.addTab("Keys", new ImageIcon(MainApp.class.getResource("/image/key.png")), keyTab);
         add(tabbedPane, BorderLayout.CENTER);
     }
-    public String getUsername(){
+
+    public String getUsername() {
         return username;
     }
-    public String getPass(){
+
+    public String getPass() {
         return pass;
     }
 
