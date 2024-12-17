@@ -3,6 +3,7 @@ package api;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import model.Order;
+import model.OrderItem;
 import model.PublicKeyItem;
 import okhttp3.*;
 import org.json.JSONArray;
@@ -14,11 +15,13 @@ import java.util.List;
 import java.util.Map;
 
 public class API {
+    private static Gson gson = new Gson();
     private static final String URl = "http://localhost:8080";
     private static final OkHttpClient client = new OkHttpClient();
     private static final MediaType JSON = MediaType.parse("application/json");
     public static List<Order> orders;
     public static List<PublicKeyItem> publicKeyItems;
+    public static List<OrderItem> orderItems;
 
     public static Response sendSignature(Map<Long, String> oSign) throws IOException {
         JSONArray data = new JSONArray();
@@ -95,7 +98,21 @@ public class API {
         Response response = client.newCall(request).execute();
         return response;
     }
-
+    public static List<OrderItem> getListOrderItem(long orderId) throws ConnectException{
+        Request request = new Request.Builder()
+                .url(URl+"/orderSwing?type=getOrderDetail&orderId="+orderId)
+                .build();
+        Response response = null;
+        try {
+            response = client.newCall(request).execute();
+            String json = response.body().string();
+            Order order = gson.fromJson(json, Order.class);
+            orderItems = order.getOrderItems();
+            return orderItems;
+        } catch (IOException e) {
+            throw new ConnectException();
+        }
+    }
     public static Response savePublicKey(String username, String password, String publicKey) throws IOException {
         System.out.println(publicKey);
         RequestBody body = new FormBody.Builder()

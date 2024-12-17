@@ -7,15 +7,14 @@ import controller.Observer;
 import model.Order;
 import okhttp3.Response;
 import utils.HashUtils;
-
 import utils.SignatureUtils;
 import view.BaseUI;
 import view.MainApp;
+import view.tabs.dialog.OrderDialog;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.plaf.ColorUIResource;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -301,8 +300,6 @@ public class OrderTab extends JPanel implements BaseUI, Observer {
                         }
 
 
-
-
                     } else {
                         JOptionPane.showMessageDialog(null, "Không tìm thấy đơn hàng!");
                     }
@@ -361,8 +358,6 @@ public class OrderTab extends JPanel implements BaseUI, Observer {
             return super.stopCellEditing();
         }
     }
-
-
 
 
 }

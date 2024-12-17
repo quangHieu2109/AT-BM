@@ -112,9 +112,9 @@ public class OrderDialog extends JDialog {
 
         return panel;
     }
-public void setOrderTab(OrderTab orderTab){
+    public void setOrderTab(OrderTab orderTab){
         this.orderTab = orderTab;
-}
+    }
 //    public static void main(String[] args) {
 //        FlatCyanLightIJTheme.setup();
 //        SwingUtilities.invokeLater(() -> {
