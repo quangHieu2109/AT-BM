@@ -127,6 +127,7 @@ public class API {
         try {
             response = client.newCall(request).execute();
             String json = response.body().string();
+
             Type listOrderType = new TypeToken<List<Order>>() {
             }.getType();
             orders = gson.fromJson(json, listOrderType);
