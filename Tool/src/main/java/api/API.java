@@ -3,6 +3,7 @@ package api;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import model.Order;
+import model.OrderItem;
 import model.PublicKeyItem;
 import okhttp3.*;
 import org.json.JSONArray;
@@ -20,6 +21,7 @@ public class API {
     private static final MediaType JSON = MediaType.parse("application/json");
     public static List<Order> orders;
     public static List<PublicKeyItem> publicKeyItems;
+    public static List<OrderItem> orderItems;
     public static Response sendSignature(Map<Long,String> oSign) throws IOException {
         JSONArray data = new JSONArray();
         for (Long id : oSign.keySet()) {
@@ -88,8 +90,34 @@ public class API {
             throw new ConnectException();
         }
     }
-
+    public static List<OrderItem> getListOrderItem(long orderId) throws ConnectException{
+        Request request = new Request.Builder()
+                .url(URl+"/orderSwing?type=getOrderDetail&orderId="+orderId)
+                .build();
+        Response response = null;
+        try {
+            response = client.newCall(request).execute();
+            String json = response.body().string();
+            Order order = gson.fromJson(json, Order.class);
+            orderItems = order.getOrderItems();
+            return orderItems;
+        } catch (IOException e) {
+            throw new ConnectException();
+        }
+    }
+    public static void printOrderItems(List<OrderItem> orderItems) {
+        for (OrderItem item : orderItems) {
+            System.out.println("ID: " + item.getId());
+            System.out.println("Product ID: " + item.getProductId());
+            System.out.println("Quantity: " + item.getQuantity());
+            System.out.println("Price: " + item.getPrice());
+            System.out.println("Discount: " + item.getDiscount());
+            System.out.println("Name product:" +item.getProductName());
+            System.out.println("----------------------------------------");
+        }
+    }
     public static void main(String[] args) throws Exception {
-        sendSignature(null);
+        printOrderItems( getListOrderItem(Long.parseLong("8L")));
+
     }
 }

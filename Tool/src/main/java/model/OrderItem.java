@@ -6,52 +6,47 @@ public class OrderItem {
     private long quantity;
     private double price;
     private double discount;
+    private Product product;  // Đây là đối tượng Product chứa thông tin về sản phẩm
 
-    public OrderItem(long id, long productId, long quantity, double price, double discount) {
+    // Constructor
+    public OrderItem(long id, long productId, long quantity, double price, double discount, Product product) {
         this.id = id;
         this.productId = productId;
         this.quantity = quantity;
         this.price = price;
         this.discount = discount;
+        this.product = product;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public String getProductName() {
+        return product != null ? product.getName() : "Unknown Product";
     }
 
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public long getProductId() {
         return productId;
-    }
-
-    public void setProductId(long productId) {
-        this.productId = productId;
     }
 
     public long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(long quantity) {
-        this.quantity = quantity;
-    }
-
     public double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
     public double getDiscount() {
         return discount;
-    }
-
-    public void setDiscount(double discount) {
-        this.discount = discount;
     }
 }

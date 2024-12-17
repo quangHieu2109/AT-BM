@@ -11,6 +11,7 @@ import utils.HashUtils;
 import utils.SignatureUtils;
 import view.BaseUI;
 import view.MainApp;
+import view.tabs.dialog.OrderDialog;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -34,6 +35,7 @@ public class OrderTab extends JPanel implements BaseUI, Observer {
     SignatureUtils signatureUtils;
     final String[] columnNames = {"ID", "ID người dùng", "Ngày tạo", "Tổng giá", "Địa chỉ giao hàng", "Hành động"};
     Object[][] data = {};
+    OrderDialog orderDialog;
     DefaultTableModel model;
     JTable table;
     JTextField txtPrivateKey;
@@ -278,7 +280,18 @@ public class OrderTab extends JPanel implements BaseUI, Observer {
                     long orderId = (long) table.getModel().getValueAt(row, 0);
                     Order order = getOrderByID(orderId);
                     if (order != null) {
-                        //Dử dụng jdiaglog
+
+                        try {
+                            orderDialog = new OrderDialog(mainApp);
+                            orderDialog.setOrderTab(OrderTab.this);  // Gán OrderTab vào OrderDialog
+                            orderDialog.setOrderId(orderId);
+                            orderDialog.init();
+                            orderDialog.setVisible(true);
+                        } catch (ConnectException ex) {
+                            throw new RuntimeException(ex);
+                        }
+
+
 
 
                     } else {
