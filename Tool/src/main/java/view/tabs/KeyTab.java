@@ -94,6 +94,7 @@ public class KeyTab extends JPanel implements BaseUI {
             }
         });
     }
+
     private void setSizeCol(){
         //"ID", "khóa công khai", "Ngày tạo", "trạng thía", "số đơn"
         table.getColumnModel().getColumn(0).setPreferredWidth(50);
