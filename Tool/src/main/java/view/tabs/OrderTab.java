@@ -279,6 +279,10 @@ public class OrderTab extends JPanel implements BaseUI, Observer {
                     Order order = getOrderByID(orderId);
                     if (order != null) {
                         //Dử dụng jdiaglog
+                        JDialog dialog = new JDialog(mainApp,"Chi tiết đơn hàng",true);
+                        dialog.setLocationRelativeTo(null);
+                        dialog.setSize(new Dimension(250,500));
+                        dialog.setVisible(true);
 
 
                     } else {
