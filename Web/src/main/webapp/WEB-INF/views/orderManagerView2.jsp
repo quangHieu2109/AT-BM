@@ -51,8 +51,12 @@
 <jsp:include page="_headerAdmin.jsp"/>
 <div class="row justify-content-around">
     <div class="w-auto">
-        <input type="radio" name="category" value="0" id="0" checked hidden>
-        <label for="0" class="btn p-3 pt-1 pb-1 mt-2" onclick="loadTable(0)"><fmt:message key="dat_hang_thanh_cong"/></label>
+        <input type="radio" name="category" value="-1" id="-1" checked hidden="">
+        <label for="-1" class="btn p-3 pt-1 pb-1 mt-2" onclick="loadTable(-1)"><fmt:message key="chua_xac_thuc"/></label>
+    </div>
+    <div class="w-auto">
+        <input type="radio" name="category" value="0" id="0" hidden>
+        <label for="0" class="btn p-3 pt-1 pb-1 mt-2" onclick="loadTable(0)"><fmt:message key="da_xac_thuc"/></label>
     </div>
     <div class="w-auto">
         <input type="radio" name="category" value="1" id="1" hidden>

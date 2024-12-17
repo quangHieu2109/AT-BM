@@ -1,7 +1,9 @@
 package com.bookshopweb.dao;
 
+import com.bookshopweb.beans.Order;
 import com.bookshopweb.beans.OrderSignature;
 import com.bookshopweb.jdbiInterface.OrderSignatureJDBI;
+import com.bookshopweb.utils.HashUtils;
 import com.bookshopweb.utils.JDBIUltis;
 
 import java.sql.Timestamp;
@@ -51,7 +53,15 @@ public class OrderSignatureDAO {
     }
 
     public static void main(String[] args) {
-//        OrderSignatureDAO orderSignatureDAO = new OrderSignatureDAO()   ;
+        OrderSignatureJDBI orderSignatureJDBI = JDBIUltis.getJDBI().onDemand(OrderSignatureJDBI.class);
+        OrderSignatureDAO orderSignatureDAO = new OrderSignatureDAO()   ;
+        OrderDAO orderDAO = new OrderDAO();
+        List<OrderSignature> signatures = orderSignatureDAO.getAll();
+        for(OrderSignature orderSignature: signatures){
+            Order order = orderDAO.selectPrevalue(orderSignature.getOrderId());
+            orderSignature.setHashOrderInfo(HashUtils.hash(order.getInfo()));
+            orderSignatureJDBI.updateHashOrderInfo(orderSignature);
+        }
 //        OrderSignature signature = new OrderSignature(2, 1734238184620L, "123456678", new Timestamp(System.currentTimeMillis()), null, 1);
 //        System.out.println(orderSignatureDAO.updateOrderSignature(signature));
     }

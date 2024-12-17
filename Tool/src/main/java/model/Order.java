@@ -10,7 +10,6 @@ public class Order {
     private String createdAt;
     private double totalPrice;
     private Address delivery_address;
-    @SerializedName("OrderItems")
     private List<OrderItem> orderItems;
 
     public Order(long id, long userId, String createdAt, double totalPrice, Address delivery_address, List<OrderItem> orderItems) {

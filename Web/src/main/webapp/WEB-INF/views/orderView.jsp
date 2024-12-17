@@ -55,9 +55,13 @@
                     <td>${order.name}</td>
                     <td><fmt:formatNumber pattern="#,##0" value="${order.total}"/>₫</td>
                     <td>
+
                       <c:choose>
+                        <c:when test="${order.status == -1}">
+                          <span class="badge bg-danger"><fmt:message key="chua_xac_thuc"/></span>
+                        </c:when>
                         <c:when test="${order.status == 0}">
-                          <span class="badge bg-info text-dark"><fmt:message key="dat_hang_thanh_cong"/></span>
+                          <span class="badge bg-info text-dark"><fmt:message key="da_xac_thuc"/></span>
                         </c:when>
                         <c:when test="${order.status == 1}">
                           <span class="badge bg-warning text-dark"><fmt:message key="dang_giao_hang"/></span>

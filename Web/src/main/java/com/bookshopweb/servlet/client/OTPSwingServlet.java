@@ -34,6 +34,7 @@ public class OTPSwingServlet extends HttpServlet {
     private final OrderDAO orderDAO = new OrderDAO();
     private final OrderSignatureDAO orderSignatureDAO = new OrderSignatureDAO();
     private final UserDAO userDAO = new UserDAO();
+    private final AuthenticatorDAO authenticatorDAO = new AuthenticatorDAO();
 
 
     @Override
@@ -49,7 +50,7 @@ public class OTPSwingServlet extends HttpServlet {
         } else {
             AuthenticatorDAO authenticatorDAO = new AuthenticatorDAO();
             JsonArray jsonArray = new JsonArray();
-            for(Authenticator authenticator: authenticatorDAO.getAllByUserId(user.getId())){
+            for (Authenticator authenticator : authenticatorDAO.getAllByUserId(user.getId())) {
                 JsonObject jsonObject = (JsonObject) JsonParser.parseString(new Gson().toJson(authenticator));
                 jsonObject.addProperty("countOrderSignature", authenticatorDAO.getCountSignature(authenticator.getId()));
                 jsonArray.add(jsonObject);
@@ -74,24 +75,28 @@ public class OTPSwingServlet extends HttpServlet {
             response.setStatus(400);
             response.getWriter().write("Username is incorrect!");
 
-        }else{
-            if(!user.getPassword().equals(password)){
+        } else {
+            if (!user.getPassword().equals(password)) {
                 response.setStatus(400);
                 response.getWriter().write("Password is incorrect!");
 
-            }else{
+            } else {
 //                response.setStatus(200);
-                switch (type){
-                    case "sendOTP":{
+                switch (type) {
+                    case "sendOTP": {
                         sendOTP(request, response, user);
                         break;
                     }
-                    case "verifyOTP":{
-                        verifyOTP(request, response,user);
+                    case "verifyOTP": {
+                        verifyOTP(request, response, user);
                         break;
                     }
-                    case "savePublicKey":{
+                    case "savePublicKey": {
                         savePublicKey(request, response, user);
+                        break;
+                    }
+                    case "reportKey": {
+                        reportKey(request, response, user);
                         break;
                     }
                 }
@@ -103,9 +108,9 @@ public class OTPSwingServlet extends HttpServlet {
 
     protected void sendOTP(HttpServletRequest req, HttpServletResponse resp, User user) throws ServletException, IOException {
         OTPDAO otpdao = new OTPDAO();
-        String otp ="";
+        String otp = "";
         Random rd = new Random();
-        for(int i=0; i<6; i++){
+        for (int i = 0; i < 6; i++) {
             otp += rd.nextInt(10);
         }
         SendMail.sendEmailOtpAuth(user.getEmail(), otp);
@@ -114,21 +119,22 @@ public class OTPSwingServlet extends HttpServlet {
         resp.getWriter().write("OTP has been sent to your email!");
 
     }
+
     protected void verifyOTP(HttpServletRequest req, HttpServletResponse resp, User user) throws ServletException, IOException {
         OTPDAO otpdao = new OTPDAO();
         String otp = req.getParameter("otp");
         OTP userOTP = otpdao.getByUserId(user.getId());
-        if(userOTP == null || userOTP.getExpireAt().getTime() <  System.currentTimeMillis()){
+        if (userOTP == null || userOTP.getExpireAt().getTime() < System.currentTimeMillis()) {
             resp.setStatus(400);
             resp.getWriter().write("Your account does not have OTP or OTP has expired, please select the system's OTP sending function!");
-        }else{
-            if(userOTP.getOtp().equals(otp)){
+        } else {
+            if (userOTP.getOtp().equals(otp)) {
                 userOTP.setStatus(1);
                 otpdao.updateByOTP(userOTP);
                 resp.setStatus(200);
                 resp.getWriter().write("Verify OTP success!");
 
-            }else{
+            } else {
                 resp.setStatus(400);
                 resp.getWriter().write("OTP is incorrect!");
             }
@@ -140,22 +146,22 @@ public class OTPSwingServlet extends HttpServlet {
         AuthenticatorDAO authenticatorDAO = new AuthenticatorDAO();
         OTP userOTP = otpdao.getByUserId(user.getId());
         // Kiểm tra người dùng đã có otp trong db chưa
-        if(userOTP == null){
+        if (userOTP == null) {
             resp.setStatus(400);
             resp.getWriter().write("Please perform the OTP sending and OTP authentication functions!");
-        }else{
+        } else {
             // Kiểm tra OTP đã được xác thực chưa
-            if(userOTP.getStatus() ==0){
+            if (userOTP.getStatus() == 0) {
                 resp.setStatus(400);
                 resp.getWriter().write("Please verify OTP!");
-            }else{
+            } else {
                 String publicKey = req.getParameter("publicKey");
                 SignatureUtils signatureUtils = new SignatureUtils();
                 // Kiểm tra public key có hợp lệ không
-                if(!signatureUtils.loadPublicKey(publicKey)){
+                if (!signatureUtils.loadPublicKey(publicKey)) {
                     resp.setStatus(400);
                     resp.getWriter().write("Public key is invalid!");
-                }else{
+                } else {
                     Authenticator authenticator = new Authenticator();
                     authenticator.setUserId(user.getId());
                     authenticator.setStatus(1);
@@ -170,6 +176,22 @@ public class OTPSwingServlet extends HttpServlet {
         }
 
 
-
+    }
+    protected void reportKey(HttpServletRequest req, HttpServletResponse resp, User user) throws ServletException, IOException {
+        Authenticator authenticator = authenticatorDAO.getByUserId(user.getId());
+        if(authenticator == null){
+            resp.setStatus(400);
+            resp.getWriter().write("You don't have any keys!");
+        }else{
+            if(authenticator.getStatus() == 0){
+                resp.setStatus(400);
+                resp.getWriter().write("Your key has been reported before!");
+            }else{
+                authenticator.setStatus(0);
+                authenticatorDAO.updateStatus(authenticator);
+                resp.setStatus(200);
+                resp.getWriter().write("Your key has been reported!");
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.bookshopweb.utils;
+package utils;
 
 import java.io.BufferedOutputStream;
 import java.io.File;

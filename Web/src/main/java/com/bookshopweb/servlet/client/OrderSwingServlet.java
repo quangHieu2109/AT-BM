@@ -32,6 +32,7 @@ import java.util.List;
 public class OrderSwingServlet extends HttpServlet {
 
     private final OrderDAO orderDAO = new OrderDAO();
+    private final OrderItemDAO orderItemDAO = new OrderItemDAO();
     private final OrderSignatureDAO orderSignatureDAO = new OrderSignatureDAO();
     private final UserDAO userDAO = new UserDAO();
 
@@ -42,19 +43,24 @@ public class OrderSwingServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
-        String username = request.getParameter("username");
-        User user = userDAO.selectByUserName(username);
-        if (user == null) {
-            response.setStatus(400);
-            response.getWriter().write("Username is incorrect!");
-        } else {
-            List<Order> orders = orderDAO.getUnconfirmOrdersByUsername(username);
-            JsonArray jsonArray = new JsonArray();
-            for(Order order: orders){
-                jsonArray.add(JsonParser.parseString(order.getInfo()));
+        String type = request.getParameter("type");
+        if(type == null){
+            String username = request.getParameter("username");
+            User user = userDAO.selectByUserName(username);
+            if (user == null) {
+                response.setStatus(400);
+                response.getWriter().write("Username is incorrect!");
+            } else {
+                List<Order> orders = orderDAO.getUnconfirmOrdersByUsername(username);
+                JsonArray jsonArray = new JsonArray();
+                for(Order order: orders){
+                    jsonArray.add(JsonParser.parseString(order.getInfo()));
+                }
+                response.getWriter().write(jsonArray.toString());
+                response.setStatus(200);
             }
-            response.getWriter().write(jsonArray.toString());
-            response.setStatus(200);
+        }else{
+            getOrderDetail(request, response);
         }
     }
 
@@ -139,6 +145,22 @@ public class OrderSwingServlet extends HttpServlet {
 
         return list.get(0) + " và " + (list.size() - 1) + " sản phẩm khác";
     }
-
+    protected void getOrderDetail(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        long orderId = Long.parseLong(req.getParameter("orderId"));
+        Order order = orderDAO.selectPrevalue(orderId);
+        ProductDAO productDAO = new ProductDAO();
+        if(order == null){
+            resp.setStatus(400);
+            resp.getWriter().write("OrderId is invalid!");
+        }else{
+            List<OrderItem> orderItems = orderItemDAO.getByOrderId(orderId);
+            for(OrderItem orderItem: orderItems){
+                orderItem.setProduct(productDAO.selectPrevalue(orderItem.getProductId()));
+            }
+            order.setOrderItems(orderItems);
+            resp.setStatus(200);
+            resp.getWriter().write(new Gson().toJson(order));
+        }
+    }
 
 }
