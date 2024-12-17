@@ -89,8 +89,11 @@ public class OrderManagerServlet2 extends HttpServlet {
         JsonObject jsonResopne = new JsonObject();
         String status = "";
         switch (order.getStatus()) {
+            case -1:
+                status = "chua_xac_thuc";
+                break;
             case 0:
-                status = "dat_hang_thanh_cong";
+                status = "da_xac_thuc";
                 break;
             case 1:
                 status = "dang_giao_hang";
@@ -160,10 +163,17 @@ public class OrderManagerServlet2 extends HttpServlet {
             String deliveryMethod = (order.getDeliveryMethod() == 1) ? "Giao hàng nhanh" : "Giao hàng tiết kiệm";
             String updateStatus = "";
             switch (status) {
+                case -1:
+                    updateStatus = "<select class=\"form-select\" onchange=\"changeStatus(" + order.getId() + ", this.value)\" " +
+                            "id=\"sl" + order.getId() + "\">" +
+                            "<option value=\"-1\" selected>Chưa xác thực</option>" +
+                            "<option value=\"3\" >Đã hủy</option>" +
+                            "</select>";
+                    break;
                 case 0:
                     updateStatus = "<select class=\"form-select\" onchange=\"changeStatus(" + order.getId() + ", this.value)\" " +
                             "id=\"sl" + order.getId() + "\">" +
-                            "<option value=\"0\" selected>Đặt hành thành công</option>" +
+                            "<option value=\"0\" selected>Đã xác thực</option>" +
                             "<option value=\"1\" >Đang giao</option>" +
                             "<option value=\"3\" >Đã hủy</option>" +
                             "</select>";

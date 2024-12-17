@@ -39,9 +39,13 @@
               <header class="card-header">
                 <strong class="d-inline-block me-4"><fmt:message key="ma_don_hang"/>: ${requestScope.order.id}</strong>
                 <span><fmt:message key="ngay_mua"/>: ${requestScope.createdAt}</span>
+
                 <c:choose>
-                  <c:when test="${requestScope.order.status == 0}">
-                    <span class="badge bg-warning text-dark float-end"><fmt:message key="dat_hang_thanh_cong"/></span>
+                  <c:when test="${order.status == -1}">
+                    <span class="badge bg-danger  float-end"><fmt:message key="chua_xac_thuc"/></span>
+                  </c:when>
+                  <c:when test="${order.status == 0}">
+                    <span class="badge bg-info text-dark  float-end"><fmt:message key="da_xac_thuc"/></span>
                   </c:when>
                   <c:when test="${requestScope.order.status == 1}">
                     <span class="badge bg-warning text-dark float-end"><fmt:message key="dang_giao_hang"/></span>
@@ -164,10 +168,10 @@
 
               <form action="${pageContext.request.contextPath}/orderDetail" method="post">
                 <div class="card-footer py-3">
-                  <a href="#" class="btn btn-primary me-2"><fmt:message key="theo_doi_don_hang"/></a>
+                  <a href="#" class="btn btn-primary me-2 "><fmt:message key="theo_doi_don_hang"/></a>
                   <input type="hidden" name="id" value="${requestScope.order.id}">
                   <button type="submit"
-                          class="btn btn-danger ${requestScope.order.status !=0 ? "disabled" : ""}"
+                          class="btn btn-danger ${requestScope.order.status ==0 || requestScope.order.status ==-1 ? "" : "disabled"}"
                           onclick="return confirm('<fmt:message key="ban_co_muon_huy_don_hang"/>?')">
                     <fmt:message key="huy_don_hang"/>
                   </button>

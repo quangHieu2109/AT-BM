@@ -10,6 +10,7 @@ import utils.HashUtils;
 import utils.SignatureUtils;
 import view.BaseUI;
 import view.MainApp;
+import view.tabs.dialog.OrderDialog;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -34,6 +35,7 @@ public class OrderTab extends JPanel implements BaseUI, Observer {
     Gson gson;
     SignatureUtils signatureUtils;
     Object[][] data = {};
+    OrderDialog orderDialog;
     DefaultTableModel model;
     JTable table;
     JTextField txtPrivateKey;
@@ -291,6 +293,18 @@ public class OrderTab extends JPanel implements BaseUI, Observer {
                         dialog.setLocationRelativeTo(null);
                         dialog.setSize(new Dimension(250, 500));
                         dialog.setVisible(true);
+
+                        try {
+                            orderDialog = new OrderDialog(mainApp);
+                            orderDialog.setOrderTab(OrderTab.this);  // Gán OrderTab vào OrderDialog
+                            orderDialog.setOrderId(orderId);
+                            orderDialog.init();
+                            orderDialog.setVisible(true);
+                        } catch (ConnectException ex) {
+                            throw new RuntimeException(ex);
+                        }
+
+
 
 
                     } else {
