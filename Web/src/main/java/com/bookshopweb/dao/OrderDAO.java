@@ -102,12 +102,18 @@ public class OrderDAO extends AbsDAO<Order> {
         User user = new UserDAO().selectByUserName(username);
         OrderItemDAO orderItemDAO = new OrderItemDAO();
         OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
+        ProductDAO productDAO = new ProductDAO();
         if(user ==null) return null;
         List<Order> orders = orderJDBI.getUnconfirmOrdersByUserId(user.getId());
         for(Order order:orders){
             OrderDetail orderDetail = orderDetailDAO.getByOrderId(order.getId());
             if(orderDetail != null) order.setTotalPrice(orderDetail.getTotalPrice());
-            order.setOrderItems(orderItemDAO.getByOrderId(order.getId()));
+            List<OrderItem> orderItems = orderItemDAO.getByOrderId(order.getId());
+            for(OrderItem orderItem: orderItems){
+                orderItem.setProduct(productDAO.selectPrevalue(orderItem.getProductId()));
+            }
+            order.setOrderItems(orderItems);
+//            order.setOrderItems(orderItemDAO.getByOrderId(order.getId()));
         }
         return orders;
     }

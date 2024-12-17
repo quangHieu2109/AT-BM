@@ -47,8 +47,9 @@ public class AuthenticatorDAO {
     }
 
     public static void main(String[] args) {
-        for(Authenticator authenticator: new AuthenticatorDAO().getAllByUserId(1)){
-            System.out.println(new AuthenticatorDAO().getCountSignature(authenticator.getId()));
-        }
+//        for(Authenticator authenticator: new AuthenticatorDAO().getAllByUserId(1)){
+//            System.out.println(new AuthenticatorDAO().getCountSignature(authenticator.getId()));
+//        }
+        System.out.println(new AuthenticatorDAO().getByUserId(1));
     }
 }
