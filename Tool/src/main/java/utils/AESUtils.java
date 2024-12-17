@@ -1,5 +1,7 @@
 package utils;
 
+import javax.crypto.*;
+import javax.crypto.spec.IvParameterSpec;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -9,14 +11,6 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
 
 public class AESUtils {
     private static SecretKey key;
@@ -29,9 +23,11 @@ public class AESUtils {
         key = keyGen.generateKey();
         return key;
     }
-    public static SecretKey getKey(){
+
+    public static SecretKey getKey() {
         return key;
     }
+
     public static byte[] generateIV() {
         iv = new byte[ivSize];
         SecureRandom secureRandom = new SecureRandom();
