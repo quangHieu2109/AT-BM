@@ -98,21 +98,7 @@ public class API {
         Response response = client.newCall(request).execute();
         return response;
     }
-    public static List<OrderItem> getListOrderItem(long orderId) throws ConnectException{
-        Request request = new Request.Builder()
-                .url(URl+"/orderSwing?type=getOrderDetail&orderId="+orderId)
-                .build();
-        Response response = null;
-        try {
-            response = client.newCall(request).execute();
-            String json = response.body().string();
-            Order order = gson.fromJson(json, Order.class);
-            orderItems = order.getOrderItems();
-            return orderItems;
-        } catch (IOException e) {
-            throw new ConnectException();
-        }
-    }
+
     public static Response savePublicKey(String username, String password, String publicKey) throws IOException {
         System.out.println(publicKey);
         RequestBody body = new FormBody.Builder()
@@ -167,7 +153,5 @@ public class API {
         }
     }
 
-    public static void main(String[] args) throws Exception {
-        sendSignature(null);
-    }
+
 }
