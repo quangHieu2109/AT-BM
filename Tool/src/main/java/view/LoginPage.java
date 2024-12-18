@@ -4,6 +4,7 @@ import api.API;
 import model.PublicKeyItem;
 import okhttp3.Response;
 import utils.HashingUtils;
+import view.custom.ui.ProgressCircle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +16,8 @@ import java.util.List;
 public class LoginPage extends JPanel implements BaseUI {
     JTextField txtUsername;
     JPasswordField txtPassword;
+    String username;
+    String password;
     JButton btnLogin;
     List<PublicKeyItem> publicKeyItems;
     MainApp mainApp;
@@ -62,25 +65,44 @@ public class LoginPage extends JPanel implements BaseUI {
         btnLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String username = txtUsername.getText();
+                username = txtUsername.getText();
                 char[] pass = txtPassword.getPassword();
                 if (!(username.isBlank() || pass.length == 0 || username.isEmpty())) {
-                    try {
-                        String password = HashingUtils.hash(new String(pass));
-                        Response response = API.login(username, password);
-                        if (response.isSuccessful()) {
-                            mainApp.goToHomePage(username, password);
-                        } else {
-                            JOptionPane.showMessageDialog(mainApp, response.body().string(), "Đăng nhập", JOptionPane.ERROR_MESSAGE);
-                        }
-
-                    } catch (IOException ex) {
-                        JOptionPane.showMessageDialog(mainApp, "Không thể kết nối đến server!", "Đăng nhập", JOptionPane.ERROR_MESSAGE);
-                    }
+                    password = HashingUtils.hash(new String(pass));
+                   callAPILogin(username,password);
                 } else {
                     JOptionPane.showMessageDialog(mainApp, "Vui lòng nhập đầy đủ tài khoản và mật khẩu", "Đăng nhập", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
+    }
+
+    private void callAPILogin(String username,String password){
+
+       ProgressCircle progressCircle = new ProgressCircle(mainApp) {
+            @Override
+            protected Response doInBackground() throws Exception {
+                return API.login(username, password);
+            }
+
+            @Override
+            protected void done() {
+                super.done();
+                try {
+                    Response response = get();
+                    if (response.isSuccessful()) {
+                        mainApp.goToHomePage(username, password);
+                    } else {
+                        JOptionPane.showMessageDialog(mainApp, response.body().string(), "Đăng nhập", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(mainApp, "Không thể kết nối đến server!", "Đăng nhập", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        };
+        progressCircle.execute();
+        progressCircle.progressCircleDialog.showProgress(true);
+
     }
 }
