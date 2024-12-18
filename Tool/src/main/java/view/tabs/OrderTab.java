@@ -290,14 +290,13 @@ public class OrderTab extends JPanel implements BaseUI, Observer {
                     if (order != null) {
 
                         try {
-                            orderDialog = new OrderDialog(mainApp);
-                            orderDialog.setOrderTab(OrderTab.this);  // Gán OrderTab vào OrderDialog
-                            orderDialog.setOrderId(orderId);
-                            orderDialog.init();
-                            orderDialog.setVisible(true);
+                            orderDialog = new OrderDialog(mainApp,order);
+
                         } catch (ConnectException ex) {
                             throw new RuntimeException(ex);
                         }
+
+
 
 
                     } else {
