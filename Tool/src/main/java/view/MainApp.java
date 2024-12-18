@@ -2,6 +2,7 @@ package view;
 
 import com.formdev.flatlaf.intellijthemes.FlatCyanLightIJTheme;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import view.custom.ui.ProgressCircle;
 import view.tabs.KeyTab;
 import view.tabs.OrderTab;
 
@@ -20,7 +21,7 @@ public class MainApp extends JFrame implements BaseUI, DefaultPropertyUI {
     String pass;
     JButton btnLogOut;
     JPanel header;
-
+    ProgressCircle progressCircle;
     public MainApp() {
         this.setTitle("Tool");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -30,7 +31,9 @@ public class MainApp extends JFrame implements BaseUI, DefaultPropertyUI {
         init();
         setOnClick();
     }
+    public void displayProgress(){
 
+    }
     public static void main(String[] args) {
         FlatCyanLightIJTheme.setup();
         UIManager.put("Button.arc", 12);
@@ -88,8 +91,8 @@ public class MainApp extends JFrame implements BaseUI, DefaultPropertyUI {
         this.username = null;
         this.pass = null;
         header.setVisible(false);
-       this.removeC(tabbedPane);
-       add(loginPage, BorderLayout.CENTER);
+        this.removeC(tabbedPane);
+        add(loginPage, BorderLayout.CENTER);
     }
     private void removeC(Component component){
         this.remove(component);

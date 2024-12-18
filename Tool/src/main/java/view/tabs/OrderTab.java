@@ -2,10 +2,13 @@ package view.tabs;
 
 import api.API;
 import api.ConnectException;
-import com.google.gson.Gson;
+import com.google.gson.*;
 import controller.Observer;
 import model.Order;
+import model.OrderItem;
 import okhttp3.Response;
+
+import org.json.JSONArray;
 import utils.HashUtils;
 import utils.SignatureUtils;
 import view.BaseUI;
@@ -112,8 +115,14 @@ public class OrderTab extends JPanel implements BaseUI, Observer {
         }
 
         for (Order order : ordersSign) {
+            String jsonO = gson.toJson(order);
+            JsonObject jsonObject = JsonParser.parseString(jsonO).getAsJsonObject();
+            JsonArray jsonArray =  jsonObject.getAsJsonArray("OrderItems");
+            for (JsonElement element : jsonArray) {
+                element.getAsJsonObject().remove("product");
+            }
             try {
-                String sign = signatureUtils.sign(HashUtils.hash(gson.toJson(order)));
+                String sign = signatureUtils.sign(HashUtils.hash(jsonObject.toString()));
 //                System.out.println(gson.toJson(order));
 //                System.out.println("hash: "+HashingUtils.hash(gson.toJson(order)));
                 signatures.put(order.getId(), sign);
