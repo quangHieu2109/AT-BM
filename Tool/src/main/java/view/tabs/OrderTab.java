@@ -113,7 +113,6 @@ public class OrderTab extends JPanel implements BaseUI, Observer {
             JOptionPane.showMessageDialog(mainApp, "Không thể ký khóa riêng tư không hợp lệ!", "Ký đơn hàng", JOptionPane.ERROR_MESSAGE);
             return null;
         }
-
         for (Order order : ordersSign) {
             String jsonO = gson.toJson(order);
             JsonObject jsonObject = JsonParser.parseString(jsonO).getAsJsonObject();
