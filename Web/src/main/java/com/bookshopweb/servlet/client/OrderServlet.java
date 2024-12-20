@@ -103,11 +103,6 @@ public class OrderServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = (User) req.getSession().getAttribute("currentUser");
-//        System.out.println("unitshipVal "+ req.getParameter("unitshipVal"));
-//        System.out.println("addressId "+ req.getParameter("addressId"));
-//        System.out.println("cartItemIds "+ Arrays.toString(req.getParameterValues("cartItemIds")));
-//        System.out.println("ship "+ req.getParameter("ship"));
-//        System.out.println("unitshipVal "+ req.getParameter("unitshipVal"));
         int deliveryMethod = Integer.parseInt(req.getParameter("unitshipVal"));
         long shipVoucherId = Long.parseLong(req.getParameter("shipVoucherId"));
         long productVoucherId = Long.parseLong(req.getParameter("productVoucherId"));
@@ -141,7 +136,9 @@ public class OrderServlet extends HttpServlet {
         int rs = orderDAO.insert(order, "");
 
 
+
         if(rs > 0){
+            order.setId(rs);
             for(CartItem cartItem : cartItems){
                 Product product = productDAO.selectPrevalue(cartItem.getProductId());
                 OrderItem orderItem = new OrderItem();

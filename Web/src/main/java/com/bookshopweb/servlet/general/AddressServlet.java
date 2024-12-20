@@ -138,7 +138,6 @@ public class AddressServlet extends HttpServlet {
         for (ViettelPostApi.Province prov : provinces) {
             if (prov.getPROVINCE_NAME().contains(province)) {
                 provinceID = prov.getPROVINCE_ID();
-                System.out.println(provinceID);
                 break;
             }
         }
@@ -190,7 +189,6 @@ public class AddressServlet extends HttpServlet {
             jsonResponse.addProperty("error", "Địa chỉ không hợp lệ!");
             resp.getWriter().write(jsonResponse.toString());
         }
-
     }
 
     public static List<ViettelPostApi.Province> getProvinces() {

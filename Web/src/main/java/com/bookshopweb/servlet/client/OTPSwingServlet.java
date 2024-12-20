@@ -107,16 +107,23 @@ public class OTPSwingServlet extends HttpServlet {
     }
 
     protected void sendOTP(HttpServletRequest req, HttpServletResponse resp, User user) throws ServletException, IOException {
-        OTPDAO otpdao = new OTPDAO();
-        String otp = "";
-        Random rd = new Random();
-        for (int i = 0; i < 6; i++) {
-            otp += rd.nextInt(10);
+        Authenticator authenticator = authenticatorDAO.getByUserId(user.getId());
+        if(authenticator != null && authenticator.getStatus() ==1){
+            resp.setStatus(400);
+            resp.getWriter().write("Tài khoản của bạn đang có 1 Key hoạt động, vui lòng báo cáo Key trước khi tạo Key mới!");
+        }else {
+            OTPDAO otpdao = new OTPDAO();
+            String otp = "";
+            Random rd = new Random();
+            for (int i = 0; i < 6; i++) {
+                otp += rd.nextInt(10);
+            }
+            SendMail.sendEmailOtpAuth(user.getEmail(), otp);
+            OTP otpObj = new OTP(user.getId(), otp);
+            otpdao.addOtpWithoutId(otpObj);
+            resp.setStatus(200);
+            resp.getWriter().write("OTP đã được gửi đến email của bạn!");
         }
-        SendMail.sendEmailOtpAuth(user.getEmail(), otp);
-        OTP otpObj = new OTP(user.getId(), otp);
-        otpdao.addOtpWithoutId(otpObj);
-        resp.getWriter().write("OTP đã được gửi đến email của bạn!");
 
     }
 
