@@ -5,6 +5,7 @@ import com.bookshopweb.dao.OrderDAO;
 import com.bookshopweb.dao.OrderItemDAO;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
@@ -148,6 +149,23 @@ public class Order extends AbsModel<Order> {
 
         return jsonObject.toString();
     }
+    public String getInfoForSwing() {
+        Address address = new AddressDAO().selectByOrder(this.id);
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", this.id);
+        jsonObject.addProperty("userId", this.userId);
+        jsonObject.addProperty("createdAt", this.createdAt.toString());
+        jsonObject.addProperty("totalPrice", this.totalPrice);
+        jsonObject.add("delivery_address", address.getInfo());
+
+        JsonArray jsonArray = new JsonArray();
+        for(OrderItem item: new OrderItemDAO().getByOrderId(this.id)){
+            jsonArray.add(item.getInfoForSwing());
+        }
+        jsonObject.add("OrderItems", jsonArray);
+
+        return jsonObject.toString();
+    }
 
     @Override
     public Timestamp getCreateAt() {
@@ -156,8 +174,8 @@ public class Order extends AbsModel<Order> {
 
     public static void main(String[] args) {
        for(Order order: new OrderDAO().getUnconfirmOrdersByUsername("user1")){
-           System.out.println(order.getInfo());
-//           break;
+           System.out.println(JsonParser.parseString(order.getInfo()));
+           break;
        }
     }
 

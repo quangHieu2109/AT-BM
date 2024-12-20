@@ -54,7 +54,7 @@ public class OrderSwingServlet extends HttpServlet {
                 List<Order> orders = orderDAO.getUnconfirmOrdersByUsername(username);
                 JsonArray jsonArray = new JsonArray();
                 for(Order order: orders){
-                    jsonArray.add(JsonParser.parseString(order.getInfo()));
+                    jsonArray.add(JsonParser.parseString(order.getInfoForSwing()));
                 }
                 response.getWriter().write(jsonArray.toString());
                 response.setStatus(200);

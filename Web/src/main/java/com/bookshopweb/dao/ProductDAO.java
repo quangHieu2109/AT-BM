@@ -2,6 +2,7 @@
 package com.bookshopweb.dao;
 
 import com.bookshopweb.beans.Product;
+import com.bookshopweb.jdbiInterface.ProductJDBI;
 import com.bookshopweb.mapper.ProductMapper;
 import com.bookshopweb.utils.JDBCUtils;
 import com.bookshopweb.utils.JDBIUltis;
@@ -20,6 +21,10 @@ public class ProductDAO extends AbsDAO<Product>{
        return JDBIUltis.getJDBI().withHandle(handel ->
                handel.createQuery("select * from product where id="+id)
                        .map(new ProductMapper()).one());
+    }
+    public Product getByIdProduct2(long id){
+
+        return JDBIUltis.getJDBI2().onDemand(ProductJDBI.class).getByProductId(id);
     }
     public long getCategpryId(long productId){
 
@@ -573,7 +578,7 @@ public class ProductDAO extends AbsDAO<Product>{
     }
 
     public static void main(String[] args) {
-        System.out.println(new ProductDAO().getCategpryId(1));
+        System.out.println(new ProductDAO().getByIdProduct2(2));
     }
 }
 
