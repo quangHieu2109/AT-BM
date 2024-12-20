@@ -45,6 +45,10 @@
             justify-content: center;
             margin-top: 20px;
         }
+        .edited{
+            background: #ff000069;
+
+        }
     </style>
 </head>
 <body>

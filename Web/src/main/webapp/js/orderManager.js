@@ -32,7 +32,13 @@ function loadTable(status) {
             {"data": "updateStatus"},
             {"data": "edited"},
             {"data": "operation"}
-        ]
+        ],
+        createdRow: function(row, data, dataIndex) {
+            // Kiểm tra giá trị của cột edited
+            if (data.edited === "Có") {
+                $(row).addClass('edited'); // Thêm lớp CSS vào dòng
+            }
+        }
     })
     $('#my_table').removeClass('dataTable');
     // function
