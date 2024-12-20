@@ -16,7 +16,6 @@ public class OrderDialog extends JDialog {
     long orderId;
     Order order;
     OrderTab orderTab;
-    List<OrderItem> orderItems;
     public OrderDialog(MainApp mainApp) throws ConnectException {
         super(mainApp, "Thông tin đơn hàng", true);
         this.setSize(new Dimension(700, 450));
@@ -29,7 +28,6 @@ public class OrderDialog extends JDialog {
 
     public void init() throws ConnectException {
         order = orderTab.getOrderByID(orderId);
-        orderItems = API.getListOrderItem(orderId);
         this.setLayout(new GridBagLayout());
         JPanel container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
@@ -50,9 +48,9 @@ public class OrderDialog extends JDialog {
 
         String[] columnNames = {"Thông tin Sản phẩm", "Giá", "Số lượng"};
 
-        Object[][] data = new Object[orderItems.size()][3];
-        for (int i = 0; i < orderItems.size(); i++) {
-            OrderItem item = orderItems.get(i);
+        Object[][] data = new Object[order.getOrderItems().size()][3];
+        for (int i = 0; i < order.getOrderItems().size(); i++) {
+            OrderItem item = order.getOrderItems().get(i);
             data[i][0] = createProductInfo(item.getProductName(), item.getProduct().getAuthor(), String.valueOf(item.getProduct().getPages()), String.valueOf(item.getProduct().getYearPublishing()));
 
             data[i][1] = item.getPrice() + "₫";
@@ -112,9 +110,10 @@ public class OrderDialog extends JDialog {
 
         return panel;
     }
-public void setOrderTab(OrderTab orderTab){
+    public void setOrderTab(OrderTab orderTab){
         this.orderTab = orderTab;
-}
+    }
+
 //    public static void main(String[] args) {
 //        FlatCyanLightIJTheme.setup();
 //        SwingUtilities.invokeLater(() -> {

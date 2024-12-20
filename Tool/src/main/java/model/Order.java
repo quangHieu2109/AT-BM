@@ -10,6 +10,7 @@ public class Order {
     private String createdAt;
     private double totalPrice;
     private Address delivery_address;
+    @SerializedName("OrderItems")
     private List<OrderItem> orderItems;
 
     public Order(long id, long userId, String createdAt, double totalPrice, Address delivery_address, List<OrderItem> orderItems) {
@@ -67,5 +68,17 @@ public class Order {
 
     public void setOrderItems(List<OrderItem> orderItems) {
         this.orderItems = orderItems;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", createdAt='" + createdAt + '\'' +
+                ", totalPrice=" + totalPrice +
+                ", delivery_address=" + delivery_address +
+                ", orderItems=" + orderItems +
+                '}';
     }
 }

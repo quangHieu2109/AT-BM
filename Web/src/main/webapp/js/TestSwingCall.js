@@ -26,7 +26,7 @@ function getOrderDetail(){
         }
     })
 }
-getUnconfirmOrders('user1')
+// getUnconfirmOrders('user1')
 function signOrders(orderSignatures){
     $.ajax({
         url: '/orderSwing',
