@@ -2,7 +2,9 @@ package com.bookshopweb.servlet.admin.order;
 
 import com.bookshopweb.beans.*;
 import com.bookshopweb.dao.*;
+import com.bookshopweb.utils.HashUtils;
 import com.bookshopweb.utils.IPUtils;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -28,6 +30,7 @@ public class OrderManagerServlet2 extends HttpServlet {
     OrderItemDAO orderItemDAO = new OrderItemDAO();
     OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
     ProductDAO productDAO = new ProductDAO();
+    OrderSignatureDAO orderSignatureDAO = new OrderSignatureDAO();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -109,6 +112,7 @@ public class OrderManagerServlet2 extends HttpServlet {
                 break;
 
         }
+
         String deliveryMethod = order.getDeliveryMethod() == 0 ? "giao_hang_tieu_chuan" : "giao_hang_nhanh";
         jsonResopne.add("products", jsonArray);
         jsonResopne.addProperty("orderId", resources.getString("ma_don_hang") + " : " + order.getId());
@@ -144,6 +148,7 @@ public class OrderManagerServlet2 extends HttpServlet {
         List<Order> orders = orderDAO.getByStatusLimit(status, start, length);
         JsonArray jsonArray = new JsonArray();
         for (Order order : orders) {
+            order = orderDAO.selectPrevalue(order.getId());
             JsonObject jsonObject = new JsonObject();
             List<OrderItem> orderItems = orderItemDAO.getByOrderId(order.getId());
             int totalPrice = 0;
@@ -210,17 +215,71 @@ public class OrderManagerServlet2 extends HttpServlet {
                             "</select>";
                     break;
             }
-            String saveBtn = "<button style=\"width: 66px\" class=\"btn btn-secondary m-auto\" id=\"p" + order.getId() + "\">Save</button>";
-            String detailBtn = "<button style=\"width: 66px\" class=\"btn btn-primary m-auto\" onclick=\"detail(" + order.getId() + ")\">Detail</button>";
+            Gson gson = new Gson();
+            OrderSignature orderSignature = orderSignatureDAO.getByOrderId(order.getId());
+            boolean eidt = !(orderSignature==null || orderSignature.getHashOrderInfo().equals(HashUtils.hash(order.getInfo())));
+            if(eidt){
+                switch (status) {
+                    case -1:
+                        updateStatus = "<select class=\"form-select\" onchange=\"changeStatus(" + order.getId() + ", this.value)\" " +
+                                "id=\"sl" + order.getId() + "\">" +
+                                "<option value=\"-1\" selected>Chưa xác thực</option>" +
+                                "<option value=\"3\" >Đã hủy</option>" +
+                                "</select>";
+                        break;
+                    case 0:
+                        updateStatus = "<select class=\"form-select\" onchange=\"changeStatus(" + order.getId() + ", this.value)\" " +
+                                "id=\"sl" + order.getId() + "\">" +
+                                "<option value=\"0\" selected>Đã xác thực</option>" +
+                                "<option value=\"3\" >Đã hủy</option>" +
+                                "</select>";
+                        break;
+                    case 1:
+                        updateStatus = "<select class=\"form-select\" onchange=\"changeStatus(" + order.getId() + ", this.value)\" " +
+                                "id=\"sl" + order.getId() + "\">" +
+                                "<option value=\"1\" selected>Đang giao</option>" +
+                                "<option value=\"2\" >Giao thành công</option>" +
+                                "<option value=\"3\" >Đã hủy</option>" +
+                                "</select>";
+                        break;
+                    case 2:
+                        updateStatus = "<select class=\"form-select\" onchange=\"changeStatus(" + order.getId() + ", this.value)\" " +
+                                "id=\"sl" + order.getId() + "\">" +
+
+                                "<option value=\"2\" selected>Giao hàng thành công</option>" +
+                                "<option value=\"4\" >Trả hàng</option>" +
+
+                                "</select>";
+                        break;
+                    case 3:
+                        updateStatus = "<select class=\"form-select\" onchange=\"changeStatus(" + order.getId() + ", this.value)\" " +
+                                "id=\"sl" + order.getId() + "\">" +
+
+                                "<option value=\"3\" selected>Đã hủy</option>" +
+                                "</select>";
+                        break;
+                    case 4:
+                        updateStatus = "<select class=\"form-select\" onchange=\"changeStatus(" + order.getId() + ", this.value)\" " +
+                                "id=\"sl" + order.getId() + "\">" +
+
+                                "<option value=\"4\" selected>Trả hàng</option>" +
+                                "</select>";
+                        break;
+                }
+            }
+            String edited = eidt?"Có":"Không";
+            String saveBtn = "<button style=\"width: fit-content; padding: 0.175rem 0.175rem;\" class=\"btn btn-secondary m-auto\" id=\"p" + order.getId() + "\">Save</button>";
+            String detailBtn = "<button style=\"width: fit-content; padding: 0.175rem 0.175rem\" class=\"btn btn-primary m-auto\" onclick=\"detail(" + order.getId() + ")\">Detail</button>";
             jsonObject.addProperty("id", order.getId());
             jsonObject.addProperty("idUser", order.getUserId());
             jsonObject.addProperty("deliveryMethod", deliveryMethod);
             jsonObject.addProperty("deliveryPrice", formatter.format((int) shipPrice));
             jsonObject.addProperty("productsPrice", formatter.format((int) totalPrice));
             jsonObject.addProperty("totalPrice", formatter.format((int) shipPrice + totalPrice));
-            jsonObject.addProperty("createAt", order.getCreatedAt().toString());
-            jsonObject.addProperty("updateAt", (order.getUpdatedAt() == null) ? "" : order.getUpdatedAt().toString());
+            jsonObject.addProperty("createAt", (order.getCreatedAt().toString()));
+            jsonObject.addProperty("updateAt", (order.getUpdatedAt() == null) ? "" : (order.getUpdatedAt().toString()));
             jsonObject.addProperty("updateStatus", updateStatus);
+            jsonObject.addProperty("edited", edited);
             jsonObject.addProperty("operation", "<div class=\"row\">" + saveBtn + detailBtn + "</div>");
             jsonArray.add(jsonObject);
 //            System.out.println(jsonObject.toString());
@@ -256,18 +315,33 @@ public class OrderManagerServlet2 extends HttpServlet {
 
             resp.getWriter().write(jsonResponse.toString());
         } else {
-            order.setStatus(status);
-            order.setUpdatedAt(new Timestamp(Calendar.getInstance().getTimeInMillis()));
-            if (orderDAO.update(order, IPUtils.getIP(req)) > 0) {
+            if(order.getStatus() >=0 && order.getStatus()<3 && status != 4){
+                OrderSignature orderSignature = orderSignatureDAO.getByOrderId(order.getId());
+                if(orderSignature == null || orderSignature.getHashOrderInfo().equals(HashUtils.hash(order.getInfo()))){
+                    order.setStatus(status);
+                    order.setUpdatedAt(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+                    if (orderDAO.update(order, "") > 0) {
 
-                resp.setStatus(200);
-            } else {
-                jsonResponse.addProperty("error_notifica", "Cập nhật thất bại!");
-                resp.setStatus(400);
-                resp.setContentType("application/json");
+                        resp.setStatus(200);
+                    } else {
+                        jsonResponse.addProperty("error_notifica", "Cập nhật thất bại!");
+                        resp.setStatus(400);
+                        resp.setContentType("application/json");
 
-                resp.getWriter().write(jsonResponse.toString());
+                        resp.getWriter().write(jsonResponse.toString());
+                    }
+                }else{
+                    order.setStatus(3);
+                    order.setUpdatedAt(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+                    orderDAO.update(order, "");
+                    jsonResponse.addProperty("error_notifica", "Đơn hàng "+order.getId()+" đã bị hủy do có sự sai lệch so với lúc đăng ký!");
+                    resp.setStatus(400);
+                    resp.setContentType("application/json");
+
+                    resp.getWriter().write(jsonResponse.toString());
+                }
             }
+
         }
 
     }

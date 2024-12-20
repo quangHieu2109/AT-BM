@@ -237,8 +237,8 @@ function createOrder() {
         })
 
         let formData = new FormData()
-        const authKey = $('#authKeyInput').val().trim();
-        formData.append('privateKey', authKey)
+        // const authKey = $('#authKeyInput').val().trim();
+        // formData.append('privateKey', authKey)
         formData.append('cartItemIds', cartItemIds)
         let shipVoucherId = $("input[name='0']").val()
         shipVoucherId = shipVoucherId > 0 ? shipVoucherId : 0

@@ -187,12 +187,12 @@
 
 <body>
 <jsp:include page="_header.jsp"/>
-<fmt:message key="gio_hang"/>
-<section class="section-pagetop bg-light">
-    <div class="container">
-        <h2 class="title-page"></h2>
-    </div> <!-- container.// -->
-</section> <!-- section-pagetop.// -->
+<%--<fmt:message key="gio_hang"/>--%>
+<%--<section class="section-pagetop bg-light">--%>
+<%--    <div class="container">--%>
+<%--        <h2 class="title-page"></h2>--%>
+<%--    </div> <!-- container.// -->--%>
+<%--</section> <!-- section-pagetop.// -->--%>
 <p id="idCheck" hidden="hidden">${requestScope.idCheck}</p>
 <section class="section-content padding-y position-relative">
     <div class="container">
@@ -209,8 +209,8 @@
                     </c:when>
                     <c:otherwise>
                         <main class="col-lg-9 mb-lg-0 mb-3">
-                            <div class="card" style="height: 600px; overflow: auto">
-                                <div class="table-responsive-xl">
+                            <div class="card" >
+                                <div class="table-responsive-xl" style="height: 500px; overflow: auto">
                                     <table class="cart-table table table-borderless">
                                         <thead class="text-muted">
                                         <tr class="small text-uppercase">
@@ -224,7 +224,7 @@
                                         <tbody id="cart_body"></tbody>
                                     </table>
                                 </div> <!-- table.responsive-md.// -->
-                                <div id="cart-table"></div>
+<%--                                <div id="cart-table"></div>--%>
 
                                 <div class="card-body border-top">
                                     <button type="button" class="btn btn-primary float-end" id="checkoutBtn" disabled>

@@ -65,7 +65,8 @@
               <div class="card-body pb-0">
                 <div class="row">
                   <div class="col-lg-8">
-                    <h6 class="text-muted"><fmt:message key="dia_chi_nguoi_nhan"/></h6>
+                    <h6 class="text-muted"><fmt:message key="dia_chi_nguoi_nhan"/>:
+                        ${requestScope.address}</h6>
                     <p class="lh-lg">
                         ${sessionScope.currentUser.fullname} <br>
                           <fmt:message key="so_dien_thoai"/>: ${sessionScope.currentUser.phoneNumber} <br>

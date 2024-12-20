@@ -78,6 +78,10 @@ public class Address {
         this.houseNumber = houseNumber;
     }
 
+    @Override
+    public String toString() {
+        return String.format("%s-%s-%s-%s", this.houseNumber, this.ward, this.district, this.province).toString();
+    }
 
     public JsonObject getInfo() {
         JsonObject jsonObject = new JsonObject();

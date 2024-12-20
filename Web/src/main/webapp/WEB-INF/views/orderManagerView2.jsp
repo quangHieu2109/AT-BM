@@ -80,21 +80,22 @@
     </div>
 
 </div>
-<div class="container">
+<div class="container ">
     <div id="my_table__content">
-        <table id="my_table" class="table-bordered table-hover">
+        <table id="my_table" class="table table-striped table-bordered">
             <thead>
             <tr>
-                <th>ID Order</th>
-                <th>ID Customer</th>
+                <th>#</th>
+                <th>User id</th>
                 <th>Delivery method</th>
                 <th>Delivery price</th>
                 <th>Products price</th>
                 <th>Total price</th>
-                <th>Create at</th>
+                <th>Order at</th>
                 <th>Update at</th>
                 <th>Update status</th>
-                <th>Operation</th>
+                <th>Edited</th>
+                <th >Operation</th>
             </tr>
 
             </thead>

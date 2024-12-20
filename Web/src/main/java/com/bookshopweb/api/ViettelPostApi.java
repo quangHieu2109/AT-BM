@@ -23,12 +23,8 @@ public class ViettelPostApi {
     public static void main(String[] args) {
         ViettelPostApi viettelPostApi = new ViettelPostApi();
 //        List<Province> provinces = viettelPostApi.getProvinces(null);
-//        System.out.println(provinces);
         List<District> districts = viettelPostApi.getDistricts("2");
-        System.out.println(districts);
         List<Ward> wards = viettelPostApi.getWards("1");
-        System.out.println(wards);
-        System.out.println(viettelPostApi.getInfoShips(500,5000,5000,"1","1","2","32",null));
     }
 
     public List<InfoShip> getInfoShips(int productWeight, int productPrice,int moneyCollection,String senderProvince, String senderDistrict, String receiverProvince, String receiverDistrict, @Nullable String typeVAT) {
@@ -52,7 +48,6 @@ public class ViettelPostApi {
         connection.setRequest(request);
         connection.connect();
         String response = connection.getResponseString();
-        System.out.println(response);
         JSONArray jsonArray = new JSONArray(response);
         return Arrays.asList(new Gson().fromJson(jsonArray.toString(), InfoShip[].class));
 

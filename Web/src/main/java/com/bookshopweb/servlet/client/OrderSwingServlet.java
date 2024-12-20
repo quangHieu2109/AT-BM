@@ -109,6 +109,7 @@ public class OrderSwingServlet extends HttpServlet {
                 signatureUtils.loadPublicKey(authenticator.getPublicKey());
                 // Kiểm tra chữ ký có đúng người đặt hàng ký không
                 String hashOrder = HashUtils.hash(new OrderDAO().selectPrevalue(order.getId()).getInfo());
+//                signatureUtils.sign(hashOrder)
 //                System.out.println(order.getInfo());
 //                System.out.println(hashOrder);
                 if (!signatureUtils.verify(hashOrder, signature)) {
@@ -117,6 +118,13 @@ public class OrderSwingServlet extends HttpServlet {
                     return;
                 }
                 OrderSignature orderSignature = orderSignatureDAO.getByOrderId(order.getId());
+                if(!orderSignature.getHashOrderInfo().equals(hashOrder)){
+                    resp.setStatus(400);
+                    order.setStatus(4);
+                    orderDAO.update(order, "");
+                    resp.getWriter().write("Đơn hàng "+orderSignature.getOrderId()+" đã bị hủy do có sự chỉnh sửa không hợp lệ!");
+                    return;
+                }
                 orderSignature.setAuthId(authenticator.getId());
                 orderSignature.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
                 orderSignature.setSignature(signature);

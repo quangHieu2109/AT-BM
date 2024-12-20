@@ -46,6 +46,7 @@ public class Order extends AbsModel<Order> {
         this.updatedAt = updatedAt;
     }
 
+
     public long getId() {
         return id;
     }

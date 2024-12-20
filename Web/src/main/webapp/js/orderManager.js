@@ -9,6 +9,8 @@ function loadTable(status) {
     }
     $('#my_table__content').css('display', 'block');
     $('#detail_table__content').css('display', 'none')
+
+
     $('#my_table').DataTable({
 
         processing: true,
@@ -28,9 +30,11 @@ function loadTable(status) {
             {"data": "createAt"},
             {"data": "updateAt"},
             {"data": "updateStatus"},
+            {"data": "edited"},
             {"data": "operation"}
         ]
     })
+    $('#my_table').removeClass('dataTable');
     // function
 
 }
@@ -54,6 +58,7 @@ function updateStatus(id) {
         error: function (response) {
             console.log(response)
             alert(response.responseJSON.error_notifica)
+            $('#my_table').DataTable().ajax.reload()
         }
     })
 }
