@@ -7,6 +7,7 @@ import com.bookshopweb.utils.Protector;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import org.apache.commons.math3.analysis.function.Add;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,6 +29,8 @@ public class OrderDetailServlet extends HttpServlet {
     private final OrderDAO orderDAO = new OrderDAO();
     private final OrderItemDAO orderItemDAO = new OrderItemDAO();
     private final ProductDAO productDAO = new ProductDAO();
+    private final OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
+    private final AddressDAO addressDAO = new AddressDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -51,6 +54,12 @@ public class OrderDetailServlet extends HttpServlet {
             }
 
             request.setAttribute("order", order);
+            Address address = addressDAO.selectByOrder(id);
+            if(address == null){
+                request.setAttribute("address", "");
+            }else{
+                request.setAttribute("address", address.toString());
+            }
             Timestamp createdAt = order.getCreatedAt(); // Đây là Timestamp của trường createdAt
             String formattedCreatedAt = formatTimestamp(createdAt);
             request.setAttribute("createdAt", formattedCreatedAt);

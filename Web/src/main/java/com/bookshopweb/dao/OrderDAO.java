@@ -170,24 +170,33 @@ public class OrderDAO extends AbsDAO<Order> {
     public int insert(Order order, String ip) {
 
         int result = 0;
-        try {
-            String sql = "insert into orders (id, userId, status, deliveryMethod, deliveryPrice, createdAt, updatedAt) " +
-                    "values(?,?,?,?,?,?,?)";
-            PreparedStatement st = conn.prepareStatement(sql);
-            st.setLong(1, order.getId());
-            st.setLong(2, order.getUserId());
-            st.setInt(3, order.getStatus());
-            st.setInt(4, order.getDeliveryMethod());
-            st.setDouble(5, order.getDeliveryPrice());
-            st.setTimestamp(6, order.getCreatedAt());
-            st.setTimestamp(7, order.getUpdatedAt());
-            result = st.executeUpdate();
-            st.close();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        super.insert(order, ip);
-        return result;
+//        try {
+//            String sql = "insert into orders (id, userId, status, deliveryMethod, deliveryPrice, createdAt, updatedAt) " +
+//                    "values(?,?,?,?,?,?,?)";
+//            PreparedStatement st = conn.prepareStatement(sql);
+//            st.setLong(1, order.getId());
+//            st.setLong(2, order.getUserId());
+//            st.setInt(3, order.getStatus());
+//            st.setInt(4, order.getDeliveryMethod());
+//            st.setDouble(5, order.getDeliveryPrice());
+//            st.setTimestamp(6, order.getCreatedAt());
+//            st.setTimestamp(7, order.getUpdatedAt());
+//            result = st.executeUpdate();
+//            st.close();
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+        return JDBIUltis.getJDBI().withHandle(handle ->
+                handle.createUpdate("INSERT INTO orders (userId, status, deliveryMethod, deliveryPrice, createdAt) " +
+                                "VALUES (:userId, :status, :deliveryMethod, :deliveryPrice, :createdAt)")
+                        .bindBean(order)
+                        .executeAndReturnGeneratedKeys("id")
+                        .mapTo(Integer.class)
+                        .findOne()
+                        .orElse(0)
+        );
+//        super.insert(order, ip);
+//        return result;
 
     }
 
@@ -431,9 +440,7 @@ public class OrderDAO extends AbsDAO<Order> {
     }
 
     public static void main(String[] args) {
-        System.out.println("Info: "+new OrderDAO().selectPrevalue(1734238184620l).getInfo());
-        String hashOrder = HashUtils.hash(new OrderDAO().selectPrevalue(1734238184620l).getInfo());
-        System.out.println("Hash: "+hashOrder);
-//        System.out.println("{\"id\":1734238184620,\"userId\":1,\"createdAt\":\"2024-12-15 11:49:44.0\",\"totalPrice\":611432.2000000001,\"delivery_address\":{\"id\":33,\"province\":\"Hà Giang\",\"district\":\"HUY?N Đ?NG VĂN\",\"ward\":\"X? T? L?NG\",\"houseNumber\":\"123\"},\"OrderItems\":[{\"id\":102,\"productId\":41,\"quantity\":1,\"price\":387298.0,\"discount\":20.0},{\"id\":103,\"productId\":31,\"quantity\":1,\"price\":231331.0,\"discount\":20.0},{\"id\":104,\"productId\":22,\"quantity\":1,\"price\":116529.0,\"discount\":0.0}]}".equals("{\"id\":1734238184620,\"userId\":1,\"createdAt\":\"2024-12-15 11:49:44.0\",\"totalPrice\":611432.2000000001,\"delivery_address\":{\"id\":33,\"province\":\"Hà Giang\",\"district\":\"HUYỆN ĐỒNG VĂN\",\"ward\":\"XÃ TẢ LỦNG\",\"houseNumber\":\"123\"},\"OrderItems\":[{\"id\":102,\"productId\":41,\"quantity\":1,\"price\":387298.0,\"discount\":20.0},{\"id\":103,\"productId\":31,\"quantity\":1,\"price\":231331.0,\"discount\":20.0},{\"id\":104,\"productId\":22,\"quantity\":1,\"price\":116529.0,\"discount\":0.0}]}"));
+        Order order = new OrderDAO().selectPrevalue(30l);
+        System.out.println(new OrderDAO().insert(order, ""));
     }
 }

@@ -20,7 +20,7 @@
       </div>
       <div class="row align-items-center">
         <div class="col-lg-3 py-3">
-          <a class="text-body" href="${pageContext.request.contextPath}/">
+          <a class="text-body nav-link " href="${pageContext.request.contextPath}/">
             <h3><fmt:message key="shop_ban_sach"/></h3>
           </a>
         </div> <!-- col.// -->
