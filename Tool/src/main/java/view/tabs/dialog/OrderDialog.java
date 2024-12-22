@@ -13,21 +13,20 @@ import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.util.List;
 public class OrderDialog extends JDialog {
-    long orderId;
     Order order;
-    OrderTab orderTab;
-    public OrderDialog(MainApp mainApp) throws ConnectException {
+    List<OrderItem> orderItems;
+    public OrderDialog(MainApp mainApp,Order order) throws ConnectException {
         super(mainApp, "Thông tin đơn hàng", true);
+        this.order = order;
+        this.orderItems = order.getOrderItems();
         this.setSize(new Dimension(700, 450));
         this.setLocationRelativeTo(mainApp);
+        this.init();
+        this.setVisible(true);
     }
 
-    public void setOrderId(long orderId) {
-        this.orderId = orderId;
-    }
 
     public void init() throws ConnectException {
-        order = orderTab.getOrderByID(orderId);
         this.setLayout(new GridBagLayout());
         JPanel container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
@@ -35,7 +34,7 @@ public class OrderDialog extends JDialog {
 
         JPanel containInfo = new JPanel();
         containInfo.setLayout(new BoxLayout(containInfo, BoxLayout.X_AXIS));
-        containInfo.add(new JLabel("Mã đơn hàng: "+orderId));
+        containInfo.add(new JLabel("Mã đơn hàng: "+order.getId()));
         containInfo.add(Box.createHorizontalGlue());
         containInfo.add(new JLabel("Ngày mua: "+order.getCreatedAt()));
         container.add(containInfo);
@@ -48,9 +47,9 @@ public class OrderDialog extends JDialog {
 
         String[] columnNames = {"Thông tin Sản phẩm", "Giá", "Số lượng"};
 
-        Object[][] data = new Object[order.getOrderItems().size()][3];
-        for (int i = 0; i < order.getOrderItems().size(); i++) {
-            OrderItem item = order.getOrderItems().get(i);
+        Object[][] data = new Object[orderItems.size()][3];
+        for (int i = 0; i < orderItems.size(); i++) {
+            OrderItem item = orderItems.get(i);
             data[i][0] = createProductInfo(item.getProductName(), item.getProduct().getAuthor(), String.valueOf(item.getProduct().getPages()), String.valueOf(item.getProduct().getYearPublishing()));
 
             data[i][1] = item.getPrice() + "₫";
@@ -109,9 +108,6 @@ public class OrderDialog extends JDialog {
         panel.add(new JLabel("Năm xuất bản: " + yearPublisher), gbc);
 
         return panel;
-    }
-    public void setOrderTab(OrderTab orderTab){
-        this.orderTab = orderTab;
     }
 
 //    public static void main(String[] args) {
