@@ -1,5 +1,7 @@
 package model;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -68,6 +70,22 @@ public class Order {
 
     public void setOrderItems(List<OrderItem> orderItems) {
         this.orderItems = orderItems;
+    }
+    public String getInfo() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", this.id);
+        jsonObject.addProperty("userId", this.userId);
+        jsonObject.addProperty("createdAt", this.createdAt.toString());
+        jsonObject.addProperty("totalPrice", this.totalPrice);
+        jsonObject.add("delivery_address", delivery_address.getInfo());
+
+        JsonArray jsonArray = new JsonArray();
+        for(OrderItem item: orderItems){
+            jsonArray.add(item.getInfo());
+        }
+        jsonObject.add("OrderItems", jsonArray);
+
+        return jsonObject.toString();
     }
 
     @Override

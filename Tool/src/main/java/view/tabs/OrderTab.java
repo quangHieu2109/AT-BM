@@ -117,8 +117,8 @@ public class OrderTab extends JPanel implements BaseUI, Observer {
 
         for (Order order : ordersSign) {
             try {
-                String sign = signatureUtils.sign(HashUtils.hash(gson.toJson(order)));
-//                System.out.println(gson.toJson(order));
+                String sign = signatureUtils.sign(HashUtils.hash(order.getInfo()));
+                System.out.println(order.getInfo());
 //                System.out.println("hash: "+HashingUtils.hash(gson.toJson(order)));
                 signatures.put(order.getId(), sign);
 
