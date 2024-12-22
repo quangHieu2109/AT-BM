@@ -8,13 +8,15 @@ public class OrderResponse {
     private String name;
     private int status;
     private double total;
+    private boolean edited;
 
-    public OrderResponse(long id, String createdAt, String name, int status, double total) {
+    public OrderResponse(long id, String createdAt, String name, int status, double total,boolean edited) {
         this.id = id;
         this.createdAt = createdAt;
         this.name = name;
         this.status = status;
         this.total = total;
+        this.edited = edited;
     }
 
     public long getId() {
@@ -55,6 +57,14 @@ public class OrderResponse {
 
     public void setTotal(double total) {
         this.total = total;
+    }
+
+    public boolean isEdited() {
+        return edited;
+    }
+
+    public void setEdited(boolean edited) {
+        this.edited = edited;
     }
 
     @Override

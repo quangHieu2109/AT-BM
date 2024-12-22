@@ -4,7 +4,6 @@ import com.bookshopweb.beans.*;
 import com.bookshopweb.dao.*;
 import com.bookshopweb.dto.OrderResponse;
 import com.bookshopweb.utils.HashUtils;
-import com.bookshopweb.utils.IPUtils;
 import com.bookshopweb.utils.Protector;
 import com.bookshopweb.utils.VoucherUtils;
 
@@ -21,6 +20,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+
 
 @WebServlet(name = "OrderServlet", value = "/order")
 @MultipartConfig
@@ -56,7 +56,7 @@ public class OrderServlet extends HttpServlet {
             if (page < 1 || page > totalPages) {
                 page = 1;
             }
-        // Tính mốc truy vấn (offset)
+            // Tính mốc truy vấn (offset)
             int offset = (page - 1) * ORDERS_PER_PAGE;
 
             // Lấy danh sách order, lấy với số lượng là ORDERS_PER_PAGE và tính từ mốc offset
@@ -80,14 +80,11 @@ public class OrderServlet extends HttpServlet {
                 }
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 String formattedDateTime = sdf.format(order.getCreatedAt());
-
-//
-                OrderResponse orderResponse = new OrderResponse(
-                        order.getId(),
-                        formattedDateTime,
-                        check(orderItemDAO.getProductNamesByOrderId(order.getId())),
-                        order.getStatus(),
-                        total + order.getDeliveryPrice());
+                OrderDetail orderDetail = orderDetailDAO.getByOrderId(order.getId());
+                if(orderDetail !=null) order.setTotalPrice(orderDetail.getTotalPrice());
+                OrderSignature orderSignature = orderSignatureDAO.getByOrderId(order.getId());
+                boolean edit = !(orderSignature == null || orderSignature.getHashOrderInfo().equals(HashUtils.hash(order.getInfo())));
+                OrderResponse orderResponse = new OrderResponse(order.getId(), formattedDateTime, check(orderItemDAO.getProductNamesByOrderId(order.getId())), order.getStatus(), total + order.getDeliveryPrice(), edit);
 
                 orderResponses.add(orderResponse);
             }
@@ -106,21 +103,21 @@ public class OrderServlet extends HttpServlet {
         int deliveryMethod = Integer.parseInt(req.getParameter("unitshipVal"));
         long shipVoucherId = Long.parseLong(req.getParameter("shipVoucherId"));
         long productVoucherId = Long.parseLong(req.getParameter("productVoucherId"));
-        long addressId =Long.parseLong(req.getParameter("addressId"));
+        long addressId = Long.parseLong(req.getParameter("addressId"));
 
         String[] cartItemIdsString = req.getParameterValues("cartItemIds");
         List<Long> cartItemIds = VoucherUtils.convertToListLong(cartItemIdsString);
         List<CartItem> cartItems = new ArrayList<>();
-        for(long id : cartItemIds){
+        for (long id : cartItemIds) {
             cartItems.add(cartItemDAO.selectPrevalue(id));
         }
 
         double ship = Double.parseDouble(req.getParameter("ship"));
-        double shipVoucherDecrease =0, productVoucherDecrease=0;
-        if(shipVoucherId>0){
+        double shipVoucherDecrease = 0, productVoucherDecrease = 0;
+        if (shipVoucherId > 0) {
             shipVoucherDecrease = -VoucherUtils.getDecrease(shipVoucherId, cartItemIdsString, ship);
         }
-        if(productVoucherId>0){
+        if (productVoucherId > 0) {
             productVoucherDecrease = -VoucherUtils.getDecrease(productVoucherId, cartItemIdsString, ship);
         }
 
@@ -131,15 +128,14 @@ public class OrderServlet extends HttpServlet {
         order.setDeliveryMethod(deliveryMethod);
         order.setDeliveryPrice(ship);
         order.setCreatedAt(new Timestamp(Calendar.getInstance().getTimeInMillis()));
-        double totalPrice =0;
+        double totalPrice = 0;
 //        int rs = orderDAO.insert(order, IPUtils.getIP(req));
         int rs = orderDAO.insert(order, "");
 
 
-
-        if(rs > 0){
+        if (rs > 0) {
             order.setId(rs);
-            for(CartItem cartItem : cartItems){
+            for (CartItem cartItem : cartItems) {
                 Product product = productDAO.selectPrevalue(cartItem.getProductId());
                 OrderItem orderItem = new OrderItem();
                 orderItem.setId(0l);
@@ -150,7 +146,7 @@ public class OrderServlet extends HttpServlet {
                 orderItem.setPrice(product.getPrice());
                 orderItem.setCreatedAt(order.getCreatedAt());
                 orderItemDAO.insert(orderItem, "");
-                totalPrice += cartItem.getQuantity() * (1-product.getDiscount()/100)*product.getPrice();
+                totalPrice += cartItem.getQuantity() * (1 - product.getDiscount() / 100) * product.getPrice();
             }
             totalPrice += shipVoucherDecrease;
             totalPrice += productVoucherDecrease;
@@ -163,16 +159,16 @@ public class OrderServlet extends HttpServlet {
             orderDetail.setTotalPrice(Math.round(totalPrice));
 //            System.out.println(orderDetail);
             orderDetailDAO.addOrderDetailNoVoucher(orderDetail);
-            if(shipVoucherId > 0){
+            if (shipVoucherId > 0) {
                 orderDetailDAO.updateShipVoucherId(shipVoucherId, orderDetail.getOrderId());
                 voucherDAO.decreaseQuantity(shipVoucherId);
             }
-            if(productVoucherId > 0){
+            if (productVoucherId > 0) {
                 orderDetailDAO.updateProductVoucherId(productVoucherId, orderDetail.getOrderId());
                 voucherDAO.decreaseQuantity(productVoucherId);
 
             }
-            for(CartItem cartItem : cartItems){
+            for (CartItem cartItem : cartItems) {
 //                cartItemDAO.delete(cartItem, IPUtils.getIP(req));
                 cartItemDAO.delete(cartItem, "");
             }

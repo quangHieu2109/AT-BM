@@ -4,8 +4,15 @@ public class Product {
     private long id;
     private String name;
     private String author;
+    private double price;
+    private double discount;
+    private int quantity;
+    private int totalBuy;
     private int pages;
     private int yearPublishing;
+    private String imageName;
+    private String createdAt;
+
     public long getId() {
         return id;
     }
@@ -30,6 +37,38 @@ public class Product {
         this.author = author;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getTotalBuy() {
+        return totalBuy;
+    }
+
+    public void setTotalBuy(int totalBuy) {
+        this.totalBuy = totalBuy;
+    }
+
     public int getPages() {
         return pages;
     }
@@ -44,6 +83,22 @@ public class Product {
 
     public void setYearPublishing(int yearPublishing) {
         this.yearPublishing = yearPublishing;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 }
 

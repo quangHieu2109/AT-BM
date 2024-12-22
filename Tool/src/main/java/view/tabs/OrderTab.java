@@ -2,10 +2,13 @@ package view.tabs;
 
 import api.API;
 import api.ConnectException;
-import com.google.gson.Gson;
+import com.google.gson.*;
 import controller.Observer;
 import model.Order;
+import model.OrderItem;
 import okhttp3.Response;
+
+import org.json.JSONArray;
 import utils.HashUtils;
 import utils.SignatureUtils;
 import view.BaseUI;
@@ -78,11 +81,7 @@ public class OrderTab extends JPanel implements BaseUI, Observer {
         table.setGridColor(Color.BLACK);
         table.setIntercellSpacing(new Dimension(1, 1));
 
-        try {
-            refresh();
-        } catch (ConnectException e) {
-            JOptionPane.showMessageDialog(mainApp, e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
+        refresh();
 
         setSizeCol();
         JScrollPane scrollPane = new JScrollPane(table);
@@ -114,11 +113,16 @@ public class OrderTab extends JPanel implements BaseUI, Observer {
             JOptionPane.showMessageDialog(mainApp, "Không thể ký khóa riêng tư không hợp lệ!", "Ký đơn hàng", JOptionPane.ERROR_MESSAGE);
             return null;
         }
-
         for (Order order : ordersSign) {
+            String jsonO = gson.toJson(order);
+            JsonObject jsonObject = JsonParser.parseString(jsonO).getAsJsonObject();
+            JsonArray jsonArray =  jsonObject.getAsJsonArray("OrderItems");
+            for (JsonElement element : jsonArray) {
+                element.getAsJsonObject().remove("product");
+            }
             try {
-                String sign = signatureUtils.sign(HashUtils.hash(order.getInfo()));
-                System.out.println(order.getInfo());
+                String sign = signatureUtils.sign(HashUtils.hash(jsonObject.toString()));
+//                System.out.println(gson.toJson(order));
 //                System.out.println("hash: "+HashingUtils.hash(gson.toJson(order)));
                 signatures.put(order.getId(), sign);
 
@@ -159,11 +163,8 @@ public class OrderTab extends JPanel implements BaseUI, Observer {
         btnRefresh.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
+
                     refresh();
-                } catch (ConnectException ex) {
-                    JOptionPane.showMessageDialog(mainApp, ex.getMessage(), "Làm mới các đơn hàng", JOptionPane.ERROR_MESSAGE);
-                }
             }
         });
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -186,8 +187,13 @@ public class OrderTab extends JPanel implements BaseUI, Observer {
         });
     }
 
-    private void refresh() throws ConnectException {
-        List<Order> orders = API.getOrders(mainApp.getUsername());
+    public void refresh() {
+        List<Order> orders = null;
+        try {
+            orders = API.getOrders(mainApp.getUsername());
+        } catch (ConnectException e) {
+            JOptionPane.showMessageDialog(mainApp, e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
         if (orders == null) return;
         model.setRowCount(0);
         for (Order order : orders) {
@@ -290,11 +296,8 @@ public class OrderTab extends JPanel implements BaseUI, Observer {
                     if (order != null) {
 
                         try {
-                            orderDialog = new OrderDialog(mainApp);
-                            orderDialog.setOrderTab(OrderTab.this);  // Gán OrderTab vào OrderDialog
-                            orderDialog.setOrderId(orderId);
-                            orderDialog.init();
-                            orderDialog.setVisible(true);
+                            orderDialog = new OrderDialog(mainApp, order);
+
                         } catch (ConnectException ex) {
                             throw new RuntimeException(ex);
                         }
