@@ -44,6 +44,7 @@
                   <th scope="col" style="min-width: 300px;"><fmt:message key="san_pham"/></th>
                   <th scope="col" style="min-width: 100px;"><fmt:message key="tong_tien"/></th>
                   <th scope="col" style="min-width: 175px;"><fmt:message key="trang_thai_don_hang"/></th>
+                  <th scope="col" style="min-width: 150px;">Edited</th>
                   <th scope="col"><fmt:message key="thao_tac"/></th>
                 </tr>
                 </thead>
@@ -75,6 +76,16 @@
                         <c:when test="${order.status == 4}">
                           <span class="badge bg-danger"><fmt:message key="tra_hang"/></span>
                         </c:when>
+                      </c:choose>
+                    </td>
+                    <td>
+                      <c:choose>
+                      <c:when test="${order.edited == true}">
+                        <span class="badge bg-danger">Có</span>
+                      </c:when>
+                      <c:when test="${order.edited==false}">
+                        <span class="badge bg-info text-dark">Không</span>
+                      </c:when>
                       </c:choose>
                     </td>
                     <td class="text-center text-nowrap">

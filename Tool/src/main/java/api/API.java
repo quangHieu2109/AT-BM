@@ -100,7 +100,6 @@ public class API {
     }
 
     public static Response savePublicKey(String username, String password, String publicKey) throws IOException {
-        System.out.println(publicKey);
         RequestBody body = new FormBody.Builder()
                 .add("username", username)
                 .add("password", password)
