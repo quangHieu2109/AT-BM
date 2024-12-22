@@ -3,6 +3,7 @@ package com.bookshopweb.servlet.client;
 import com.bookshopweb.beans.Authenticator;
 import com.bookshopweb.beans.OTP;
 import com.bookshopweb.beans.User;
+import com.bookshopweb.dao.AuthenticatorDAO;
 import com.bookshopweb.dao.OTPDAO;
 import com.bookshopweb.service.SendMail;
 import com.bookshopweb.utils.SignatureUtils;
@@ -23,6 +24,7 @@ import java.util.Random;
 @WebServlet(name = "CreateAuthenticatorServlet", value = "/createAuthenticator")
 @MultipartConfig
 public class createAuthenticatorServlet extends HttpServlet {
+    AuthenticatorDAO authenticatorDAO = new AuthenticatorDAO();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //        HttpSession session = req.getSession();
@@ -37,11 +39,21 @@ public class createAuthenticatorServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setCharacterEncoding("UTF-8");
+
         String type = req.getParameter("type");
         System.out.println(type);
         switch (type){
             case "resendOTP": {
                 sendOTP(req, resp);
+                break;
+            }
+            case "verifyOTP": {
+                verifyOTP(req, resp);
+                break;
+            }
+            case "reportKey": {
+                reportKey(req, resp);
                 break;
             }
         }
@@ -68,21 +80,19 @@ public class createAuthenticatorServlet extends HttpServlet {
         OTP userOTP = otpdao.getByUserId(user.getId());
         if(userOTP == null || userOTP.getExpireAt().getTime() >  System.currentTimeMillis()){
             resp.setStatus(400);
-            resp.setCharacterEncoding("UTF-8");
-            resp.setContentType("application/json");
+//            resp.setCharacterEncoding("UTF-8");
+//            resp.setContentType("application/json");
             resp.getWriter().write("Your account does not have OTP or OTP has expired, please select the system's OTP sending function!");
         }else{
             if(userOTP.getOtp().equals(otp)){
                 resp.setStatus(200);
             }else{
                 resp.setStatus(400);
-                resp.setCharacterEncoding("UTF-8");
-                resp.setContentType("application/json");
                 resp.getWriter().write("OTP is incorrect!");
             }
         }
     }
-    protected void verifyOTP_Web(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, NoSuchAlgorithmException, NoSuchProviderException {
+    protected void verifyOTP(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();
         OTPDAO otpdao = new OTPDAO();
         User user = (User) session.getAttribute("currentUser");
@@ -90,21 +100,53 @@ public class createAuthenticatorServlet extends HttpServlet {
         OTP userOTP = otpdao.getByUserId(user.getId());
         if(userOTP == null || userOTP.getExpireAt().getTime() <  System.currentTimeMillis()){
             resp.setStatus(400);
-            resp.setCharacterEncoding("UTF-8");
-            resp.setContentType("application/json");
-            resp.getWriter().write("Your account does not have OTP or OTP has expired, please select the system's OTP sending function!");
+            resp.getWriter().write("Bạn chưa yêu cầu gửi OTP hoặc OTP đã hết hạn!");
         }else{
             if(userOTP.getOtp().equals(otp)){
-                SignatureUtils signatureUtils = new SignatureUtils();
-                signatureUtils.genKey();
-                Authenticator authenticator = new Authenticator();
+                Authenticator authenticator = authenticatorDAO.getByUserId(user.getId());
+                if(authenticator != null && authenticator.getStatus() ==1){
+                    resp.setStatus(400);
+                    resp.getWriter().write("Tài khoản của bạn đang có một Key đang hoạt động, Vui lòng báo cáo Key trước khi tạo Key mới!");
+                }else{
+                    SignatureUtils signatureUtils = new SignatureUtils();
+                    signatureUtils.genKey();
+                    authenticator = new Authenticator();
+                    authenticator.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+                    authenticator.setStatus(1);
+                    authenticator.setUserId(user.getId());
+                    authenticator.setPublicKey(signatureUtils.getPublicKeyBase64());
+
+                }
+
+//                Authenticator authenticator = new Authenticator();
 
                 resp.setStatus(200);
             }else{
                 resp.setStatus(400);
-                resp.setCharacterEncoding("UTF-8");
-                resp.setContentType("application/json");
-                resp.getWriter().write("OTP is incorrect!");
+                resp.getWriter().write("OTP không chính xác!");
+            }
+        }
+    }
+    protected void reportKey(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        User user = (User) session.getAttribute("currentUser");
+        Authenticator authenticator = authenticatorDAO.getByUserId(user.getId());
+        // Kiểm tra xem người dùng có tạo khóa chưa
+        if(authenticator == null){
+            resp.setStatus(400);
+            resp.getWriter().write("Bạn không có key nào, không thể báo cáo!");
+        }else{
+            // Kiểm tra khóa trước đó có còn đang hoạt động không
+            if(authenticator.getStatus() == 0){
+                // Khôgn còn họat động -> không báo cáo dc
+                resp.setStatus(400);
+                resp.getWriter().write("Key của bạn đã được báo cáo trước đó!");
+            }else{
+                // Còn hoạt động -> báo cáo khóa thành công
+                authenticator.setStatus(0);
+                authenticatorDAO.updateStatus(authenticator);
+                resp.setStatus(200);
+                resp.getWriter().write("Báo cáo key thành công!");
             }
         }
     }

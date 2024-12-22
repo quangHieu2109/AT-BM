@@ -23,3 +23,35 @@ $('#togglePrivateKey').click(function() {
         icon.removeClass('bi-eye-slash').addClass('bi-eye');
     }
 });
+$('#reportKey').on('click', function (){
+    $.ajax({
+        url: '/createAuthenticator',
+        type: 'POST',
+        data: {
+            'type':'reportKey'
+        },
+        success: function (repsonse) {
+            alert(repsonse)
+        },
+        error: function (response) {
+            console.log(response)
+            alert(response.message)
+        }
+    })
+})
+
+$(document).ready(function (){
+    $.ajax({
+        url: '/authenticator',
+        type: 'POST',
+
+        success: function (response) {
+            // console.log(response)
+            $('#table_body').append(response)
+        },
+        error: function (response) {
+            console.log(response)
+            alert(response.message)
+        }
+    })
+})
