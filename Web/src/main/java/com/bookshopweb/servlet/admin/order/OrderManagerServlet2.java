@@ -4,6 +4,7 @@ import com.bookshopweb.beans.*;
 import com.bookshopweb.dao.*;
 import com.bookshopweb.utils.HashUtils;
 import com.bookshopweb.utils.IPUtils;
+import com.bookshopweb.utils.SignatureUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -31,6 +32,7 @@ public class OrderManagerServlet2 extends HttpServlet {
     OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
     ProductDAO productDAO = new ProductDAO();
     OrderSignatureDAO orderSignatureDAO = new OrderSignatureDAO();
+    AuthenticatorDAO authenticator = new AuthenticatorDAO();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -217,8 +219,25 @@ public class OrderManagerServlet2 extends HttpServlet {
             }
             Gson gson = new Gson();
             OrderSignature orderSignature = orderSignatureDAO.getByOrderId(order.getId());
-            boolean eidt = !(orderSignature==null || orderSignature.getHashOrderInfo().equals(HashUtils.hash(order.getInfo())));
-            if(eidt){
+            SignatureUtils signatureUtils = new SignatureUtils();
+            boolean edit = false;
+
+            try {
+                Authenticator auth = authenticator.getById(orderSignature.getAuthId());
+                if (auth != null && orderSignature != null) {
+                    String publicKey = auth.getPublicKey();
+                    if (publicKey == null || publicKey.isEmpty()) {
+                        throw new IllegalArgumentException("Public key is null or empty");
+                    }
+                    signatureUtils.loadPublicKey(publicKey);
+
+                    String hashOrderInfo = HashUtils.hash(order.getInfo());
+                    edit = !signatureUtils.verify(hashOrderInfo, orderSignature.getSignature());
+                }
+            } catch (Exception e) {
+                edit = false; // Đảm bảo không để trạng thái xác minh không rõ ràng
+            }
+            if(edit){
                 switch (status) {
                     case -1:
                         updateStatus = "<select class=\"form-select\" onchange=\"changeStatus(" + order.getId() + ", this.value)\" " +
@@ -267,7 +286,7 @@ public class OrderManagerServlet2 extends HttpServlet {
                         break;
                 }
             }
-            String edited = eidt?"Có":"Không";
+            String edited = edit?"Có":"Không";
             String saveBtn = "<button style=\"width: fit-content; padding: 0.175rem 0.175rem;\" class=\"btn btn-secondary m-auto\" id=\"p" + order.getId() + "\">Save</button>";
             String detailBtn = "<button style=\"width: fit-content; padding: 0.175rem 0.175rem\" class=\"btn btn-primary m-auto\" onclick=\"detail(" + order.getId() + ")\">Detail</button>";
             jsonObject.addProperty("id", order.getId());
