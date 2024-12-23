@@ -106,7 +106,7 @@ public class OrderSwingServlet extends HttpServlet {
                 OrderSignature orderSignature = orderSignatureDAO.getByOrderId(order.getId());
                 if(!orderSignature.getHashOrderInfo().equals(hashOrder)){
                     resp.setStatus(400);
-                    order.setStatus(4);
+                    order.setStatus(3);
                     orderDAO.update(order, "");
                     resp.getWriter().write("Đơn hàng "+orderSignature.getOrderId()+" đã bị hủy do có sự chỉnh sửa không hợp lệ!");
                     return;
