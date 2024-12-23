@@ -5,6 +5,7 @@ import com.bookshopweb.dao.*;
 import com.bookshopweb.dto.OrderResponse;
 import com.bookshopweb.utils.HashUtils;
 import com.bookshopweb.utils.Protector;
+import com.bookshopweb.utils.SignatureUtils;
 import com.bookshopweb.utils.VoucherUtils;
 
 import javax.servlet.ServletException;
@@ -33,6 +34,7 @@ public class OrderServlet extends HttpServlet {
     private final OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
     private final VoucherDAO voucherDAO = new VoucherDAO();
     private final OrderSignatureDAO orderSignatureDAO = new OrderSignatureDAO();
+    private final AuthenticatorDAO authenticator = new AuthenticatorDAO();
 
     private static final int ORDERS_PER_PAGE = 3;
 
@@ -83,7 +85,27 @@ public class OrderServlet extends HttpServlet {
                 OrderDetail orderDetail = orderDetailDAO.getByOrderId(order.getId());
                 if(orderDetail !=null) order.setTotalPrice(orderDetail.getTotalPrice());
                 OrderSignature orderSignature = orderSignatureDAO.getByOrderId(order.getId());
-                boolean edit = !(orderSignature == null || orderSignature.getHashOrderInfo().equals(HashUtils.hash(order.getInfo())));
+//                boolean edit = !(orderSignature == null || orderSignature.getHashOrderInfo().equals(HashUtils.hash(order.getInfo())));
+                SignatureUtils signatureUtils = new SignatureUtils();
+                boolean edit = false;
+
+                try {
+                    Authenticator auth = authenticator.getById(orderSignature.getAuthId());
+                    if (auth != null && orderSignature != null) {
+                        String publicKey = auth.getPublicKey();
+                        if (publicKey == null || publicKey.isEmpty()) {
+                            throw new IllegalArgumentException("Public key is null or empty");
+                        }
+                        signatureUtils.loadPublicKey(publicKey);
+
+                        String hashOrderInfo = HashUtils.hash(order.getInfo());
+                        edit = !signatureUtils.verify(hashOrderInfo, orderSignature.getSignature());
+                    }else{
+                        edit = !(orderSignature == null || orderSignature.getHashOrderInfo().equals(HashUtils.hash(order.getInfo())));
+                    }
+                } catch (Exception e) {
+                    edit = false; // Đảm bảo không để trạng thái xác minh không rõ ràng
+                }
                 OrderResponse orderResponse = new OrderResponse(order.getId(), formattedDateTime, check(orderItemDAO.getProductNamesByOrderId(order.getId())), order.getStatus(), total + order.getDeliveryPrice(), edit);
 
                 orderResponses.add(orderResponse);

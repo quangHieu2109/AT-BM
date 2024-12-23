@@ -71,16 +71,7 @@ public class OrderSwingServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
 
         String orderSignatures = req.getParameter("orderSignatures");
-        System.out.println("orderSignatures "+orderSignatures);
-        StringBuilder payload = new StringBuilder();
-        String line;
-        BufferedReader reader = req.getReader();
-        while ((line = reader.readLine()) != null) {
-            payload.append(line);
-        }
 
-        // In ra payload
-        System.out.println("Payload: " + payload.toString());
         JSONArray jsonArray = new JSONArray(orderSignatures);
         SignatureUtils signatureUtils = new SignatureUtils();
         Authenticator authenticator;
@@ -110,7 +101,7 @@ public class OrderSwingServlet extends HttpServlet {
                 // Kiểm tra chữ ký có đúng người đặt hàng ký không
                 String hashOrder = HashUtils.hash(new OrderDAO().selectPrevalue(order.getId()).getInfo());
 //                signatureUtils.sign(hashOrder)
-//                System.out.println(order.getInfo());
+                System.out.println(order.getInfo());
 //                System.out.println(hashOrder);
                 OrderSignature orderSignature = orderSignatureDAO.getByOrderId(order.getId());
                 if(!orderSignature.getHashOrderInfo().equals(hashOrder)){
