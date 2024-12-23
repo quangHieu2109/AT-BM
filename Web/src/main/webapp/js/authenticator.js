@@ -32,6 +32,7 @@ $('#reportKey').on('click', function (){
         },
         success: function (repsonse) {
             alert(repsonse)
+            loadAuth()
         },
         error: function (response) {
             console.log(response)
@@ -39,8 +40,8 @@ $('#reportKey').on('click', function (){
         }
     })
 })
-
-$(document).ready(function (){
+function loadAuth(){
+    $('#table_body').empty()
     $.ajax({
         url: '/authenticator',
         type: 'POST',
@@ -54,4 +55,5 @@ $(document).ready(function (){
             alert(response.message)
         }
     })
-})
+}
+$(document).ready(loadAuth())
