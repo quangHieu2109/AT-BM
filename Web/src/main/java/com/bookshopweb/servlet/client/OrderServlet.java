@@ -100,6 +100,8 @@ public class OrderServlet extends HttpServlet {
 
                         String hashOrderInfo = HashUtils.hash(order.getInfo());
                         edit = !signatureUtils.verify(hashOrderInfo, orderSignature.getSignature());
+                    }else{
+                        edit = !(orderSignature == null || orderSignature.getHashOrderInfo().equals(HashUtils.hash(order.getInfo())));
                     }
                 } catch (Exception e) {
                     edit = false; // Đảm bảo không để trạng thái xác minh không rõ ràng
