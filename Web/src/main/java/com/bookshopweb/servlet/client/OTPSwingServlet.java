@@ -131,10 +131,12 @@ public class OTPSwingServlet extends HttpServlet {
         OTPDAO otpdao = new OTPDAO();
         String otp = req.getParameter("otp");
         OTP userOTP = otpdao.getByUserId(user.getId());
+        // Kiểm tra xem người dùng đã yêu cầu gửi OTP chưa, nếu rồi thì kt xem OTP hết hạn chưa
         if (userOTP == null || userOTP.getExpireAt().getTime() < System.currentTimeMillis()) {
             resp.setStatus(400);
             resp.getWriter().write("Tài khoản của bạn chưa có OTP hoặc OTP đã hết hạn, vui lòng thực hiện yêu cầu gửi OTP mới!");
         } else {
+            // Kiểm tra OTP người dùng nhập có đúng không
             if (userOTP.getOtp().equals(otp)) {
                 userOTP.setStatus(1);
                 otpdao.updateByOTP(userOTP);
@@ -186,14 +188,18 @@ public class OTPSwingServlet extends HttpServlet {
     }
     protected void reportKey(HttpServletRequest req, HttpServletResponse resp, User user) throws ServletException, IOException {
         Authenticator authenticator = authenticatorDAO.getByUserId(user.getId());
+        // Kiểm tra xem người dùng có tạo khóa chưa
         if(authenticator == null){
             resp.setStatus(400);
             resp.getWriter().write("Bạn không có key nào, không thể báo cáo!");
         }else{
+            // Kiểm tra khóa trước đó có còn đang hoạt động không
             if(authenticator.getStatus() == 0){
+                // Khôgn còn họat động -> không báo cáo dc
                 resp.setStatus(400);
                 resp.getWriter().write("Key của bạn đã được báo cáo trước đó!");
             }else{
+                // Còn hoạt động -> báo cáo khóa thành công
                 authenticator.setStatus(0);
                 authenticatorDAO.updateStatus(authenticator);
                 resp.setStatus(200);

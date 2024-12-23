@@ -27,6 +27,33 @@ $('#resendOTP').on("click", function () {
         }
     });
 });
+$('#verifyOTP').on('click', function (){
+    var otp = $('#inputOTP').val();
+    if(otp.length != 6){
+        alert("OTP không hợp lệ, OTP là chuỗi 6 kí tự")
+    }else{
+        $.ajax({
+            url: '/createAuthenticator',
+            type: 'POST',
+            data: {
+                'type':'verifyOTP',
+                'otp':otp
+            },
+            success: function (response) {
+
+                alert("OTP mới đã được gửi đến email của bạn")
+            },
+            error: function (response) {
+                $('#notifi_sendOTP').text("Gửi OTP thất bại, vui lòng thử lại sau!");
+                console.log(response);
+            },
+            complete: function () {
+                // Mở khóa nút sau khi nhận phản hồi từ máy chủ
+                $('#resendOTP').prop('disabled', false);
+            }
+        });
+    }
+})
 $('#inputOTP').on('input', function () {
     let otp = $('#inputOTP').val(); // Sử dụng .val() để lấy giá trị từ input
     if (otp.length > 0) {

@@ -112,17 +112,17 @@ public class OrderSwingServlet extends HttpServlet {
 //                signatureUtils.sign(hashOrder)
 //                System.out.println(order.getInfo());
 //                System.out.println(hashOrder);
-                if (!signatureUtils.verify(hashOrder, signature)) {
-                    resp.setStatus(400);
-                    resp.getWriter().write("Chữ ký không hợp lệ!");
-                    return;
-                }
                 OrderSignature orderSignature = orderSignatureDAO.getByOrderId(order.getId());
                 if(!orderSignature.getHashOrderInfo().equals(hashOrder)){
                     resp.setStatus(400);
                     order.setStatus(4);
                     orderDAO.update(order, "");
                     resp.getWriter().write("Đơn hàng "+orderSignature.getOrderId()+" đã bị hủy do có sự chỉnh sửa không hợp lệ!");
+                    return;
+                }
+                if (!signatureUtils.verify(hashOrder, signature)) {
+                    resp.setStatus(400);
+                    resp.getWriter().write("Chữ ký không hợp lệ!");
                     return;
                 }
                 orderSignature.setAuthId(authenticator.getId());

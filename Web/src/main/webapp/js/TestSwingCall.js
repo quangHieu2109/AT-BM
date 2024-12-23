@@ -149,3 +149,17 @@ function reportKey(){
         }
     })
 }
+
+function checkEdited(){
+    $.ajax({
+        url: '/orderSignature?orderId=33',
+        type: 'GET',
+
+        success: function (repsonse) {
+            console.log(repsonse)
+        },
+        error: function (response) {
+            console.log(response)
+        }
+    })
+}
