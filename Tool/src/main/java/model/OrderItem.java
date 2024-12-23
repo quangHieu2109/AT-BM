@@ -1,5 +1,7 @@
 package model;
 
+import com.google.gson.JsonObject;
+
 public class OrderItem {
     private long id;
     private long productId;
@@ -48,6 +50,16 @@ public class OrderItem {
 
     public double getDiscount() {
         return discount;
+    }
+    public JsonObject getInfo() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", this.id);
+        jsonObject.addProperty("productId", this.productId);
+        jsonObject.addProperty("quantity", this.quantity);
+        jsonObject.addProperty("price", this.price);
+        jsonObject.addProperty("discount", this.discount);
+
+        return jsonObject;
     }
 
 }

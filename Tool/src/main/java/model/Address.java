@@ -1,5 +1,7 @@
 package model;
 
+import com.google.gson.JsonObject;
+
 public class Address {
     private long id;
     private String province;
@@ -57,5 +59,14 @@ public class Address {
 
     public String getText(){
         return houseNumber + ", " + ward + ", " + district + ", " + province;
+    }
+    public JsonObject getInfo() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", this.id);
+        jsonObject.addProperty("province", this.province);
+        jsonObject.addProperty("district", this.district);
+        jsonObject.addProperty("ward", this.ward);
+        jsonObject.addProperty("houseNumber", this.houseNumber);
+        return jsonObject;
     }
 }
