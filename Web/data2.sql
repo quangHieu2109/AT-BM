@@ -65,12 +65,16 @@ CREATE TABLE IF NOT EXISTS `authenticator` (
   PRIMARY KEY (`id`),
   KEY `FK__user` (`userId`),
   CONSTRAINT `FK__user` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table bookshopdb.authenticator: ~2 rows (approximately)
+-- Dumping data for table bookshopdb.authenticator: ~6 rows (approximately)
 INSERT INTO `authenticator` (`id`, `userId`, `publicKey`, `createdAt`, `status`, `updatedAt`) VALUES
 	(6, 1, 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAitnQrchz1jZP28opOQka5JnWeKHtIOnZY/3AQXJUO3Jl695ZQ27oDpXVivU1gHcT3GMZJQ78XwFAl9ObBceU91U3JIAQ4mvUbfCcDRe+cdkNtC4FHqgKYouI0aXztYrzc3Eu5HS8FyHg2GwVx/SEaiBATSBIoUK1cJAkUS3tWdJVQy9F3eU9EctpGO28m9h6fAsD0bO6u6F993jnFAY9ZA1+HnVGkeQDwjGJC4pFc73TILs4seyF8hoqKocZjnS7r8iXZueDuIZEs/LNoEwxN5K2PqVnJYfN8YUH63pF2dUMfaGADUZbRTR43UrZnbTdV/MGGz+CnVc/alPHMysHjwIDAQAB', '2024-12-16 05:30:49', b'0', '2024-12-16 16:47:43'),
-	(7, 1, 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAitnQrchz1jZP28opOQka5JnWeKHtIOnZY/3AQXJUO3Jl695ZQ27oDpXVivU1gHcT3GMZJQ78XwFAl9ObBceU91U3JIAQ4mvUbfCcDRe+cdkNtC4FHqgKYouI0aXztYrzc3Eu5HS8FyHg2GwVx/SEaiBATSBIoUK1cJAkUS3tWdJVQy9F3eU9EctpGO28m9h6fAsD0bO6u6F993jnFAY9ZA1+HnVGkeQDwjGJC4pFc73TILs4seyF8hoqKocZjnS7r8iXZueDuIZEs/LNoEwxN5K2PqVnJYfN8YUH63pF2dUMfaGADUZbRTR43UrZnbTdV/MGGz+CnVc/alPHMysHjwIDAQAB', '2024-12-16 05:30:49', b'1', '2024-12-17 04:19:30');
+	(7, 1, 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAitnQrchz1jZP28opOQka5JnWeKHtIOnZY/3AQXJUO3Jl695ZQ27oDpXVivU1gHcT3GMZJQ78XwFAl9ObBceU91U3JIAQ4mvUbfCcDRe+cdkNtC4FHqgKYouI0aXztYrzc3Eu5HS8FyHg2GwVx/SEaiBATSBIoUK1cJAkUS3tWdJVQy9F3eU9EctpGO28m9h6fAsD0bO6u6F993jnFAY9ZA1+HnVGkeQDwjGJC4pFc73TILs4seyF8hoqKocZjnS7r8iXZueDuIZEs/LNoEwxN5K2PqVnJYfN8YUH63pF2dUMfaGADUZbRTR43UrZnbTdV/MGGz+CnVc/alPHMysHjwIDAQAB', '2024-12-16 05:30:49', b'0', '2024-12-21 08:08:45'),
+	(8, 1, 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAos4uVCtCBlNoA9iXr5BUjIOrNUC/QACo/NYDjmhqUeTmabKkdldAljrb5ly913i+g0DK5/HvW+dpxXuiBxvGGQpTRbikNQsUsrZ8d10cBw6BfPtPe2wiEj6lsHrUGiFr+8mBgL+rh/1hdbcD73KmlmGd/CZtlVZbQpbq2M25qNskRFfhiJqVyyQKnRIQf/jf4IUA1jZjd60e7IB5T2Nn7Nr/DvdrpdnnyIutiaE1M60UKk8m66/dz8hrZj6dz8rsjJa56H+5/vHZLWfY3Swe23FVSODLlyEaA0vecJD+PqP9WyEiXN7YBr6OOSgEgAhMlCyE76sWFXBhHVj5uLs/yQIDAQAB', '2024-12-22 14:34:47', b'0', '2024-12-22 14:43:53'),
+	(9, 1, 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAos4uVCtCBlNoA9iXr5BUjIOrNUC/QACo/NYDjmhqUeTmabKkdldAljrb5ly913i+g0DK5/HvW+dpxXuiBxvGGQpTRbikNQsUsrZ8d10cBw6BfPtPe2wiEj6lsHrUGiFr+8mBgL+rh/1hdbcD73KmlmGd/CZtlVZbQpbq2M25qNskRFfhiJqVyyQKnRIQf/jf4IUA1jZjd60e7IB5T2Nn7Nr/DvdrpdnnyIutiaE1M60UKk8m66/dz8hrZj6dz8rsjJa56H+5/vHZLWfY3Swe23FVSODLlyEaA0vecJD+PqP9WyEiXN7YBr6OOSgEgAhMlCyE76sWFXBhHVj5uLs/yQIDAQAB', '2024-12-22 14:44:15', b'0', '2024-12-22 15:17:09'),
+	(10, 1, 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqeecfjGmTEUQy2/VKFfNMQT8cfKK99Suo1kM85xQuhCGE2kLLSVWxtx/mL613wC8juvVIpl/Lr9TCTAKJ9ter6yO5L9Z/xvf94aNBB2mj2BfVqlNN+DTOd1nn5+j8wJ34mRoLhciK0RGrYyw58tjC0qcloYr4S0lZhB8MAeljd3D1YQ+S3NjKtPxX2x2JnhIQZMkXlN4dK2xip1F8Swsx1lw+xZ4fFSaZ5Z6ssvkvntEZNrxOai6D2JJlajX+ppSQ3cy90/4AusHbDOCPrNakL7civ3NxkZdczfrynLQS2kabo6ABo+yaiHAoC4gqE5nliMtN+5e+o4i5Rh7eP7SLQIDAQAB', '2024-12-22 15:24:23', b'0', '2024-12-23 05:29:26'),
+	(11, 1, 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6EJEk7MOSizHxHijOGGNgwnXdfljbkvA/n+kUnEKSf+g+TdFjbdn176zMptigfiZf67s188NgA8v553IDJltAWyLwAz+2yyZbCqQxB3UbaBdoc+gLE5voZI8dFv7KIqb5kfAH6Dy+N5cU6LpcmBDZ3uTlYLEBRN3+19JbpGC6wYDYLJU9POUcRAte4nhV+9JYL7tuAnRvXcszREjftm9T+TXt+FVojloEQ67S3OL5l8iMvyYOJBwczFUKiECrgL0OXnoInxMeM6t0ie4mWbqeVSnyZGW9oo+3pEghLkFfzRkOsTdXhSRFeKSemhOZObUBPtY8SYr+1kZKWYjLt76dwIDAQAB', '2024-12-23 05:30:11', b'1', NULL);
 
 -- Dumping structure for table bookshopdb.cart
 CREATE TABLE IF NOT EXISTS `cart` (
@@ -105,9 +109,9 @@ CREATE TABLE IF NOT EXISTS `cart_item` (
   KEY `idx_cart_item_product` (`productId`),
   CONSTRAINT `fk_cart_item_cart` FOREIGN KEY (`cartId`) REFERENCES `cart` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_cart_item_product` FOREIGN KEY (`productId`) REFERENCES `product` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table bookshopdb.cart_item: ~12 rows (approximately)
+-- Dumping data for table bookshopdb.cart_item: ~9 rows (approximately)
 INSERT INTO `cart_item` (`id`, `cartId`, `productId`, `quantity`, `createdAt`, `updatedAt`) VALUES
 	(1, 2, 55, 3, '2021-07-13 03:21:51', NULL),
 	(2, 2, 36, 2, '2021-07-05 00:21:45', NULL),
@@ -195,7 +199,7 @@ CREATE TABLE IF NOT EXISTS `log` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table bookshopdb.log: ~235 rows (approximately)
+-- Dumping data for table bookshopdb.log: ~274 rows (approximately)
 INSERT INTO `log` (`id`, `ip`, `levelLog`, `res`, `preValue`, `curValue`, `createAt`, `updateAt`) VALUES
 	(1719986696178, '42.112.79.162', 2, 'Insert on table User', 'null', '{"id":0,"username":"user13333","password":"16DEDE70EF3D625C8A073E422784DCA9","fullname":"Hiếu Ngô Quang Hiếu","email":"hiu@123.com","phoneNumber":"0361235351","gender":0,"role":"CUSTOMER","createAt":"Jul 3, 2024, 1:04:10 PM","googleUser":false,"accuracy":true}', '2024-07-03 06:04:10', '2024-07-03 06:04:12'),
 	(1720018401685, '42.112.79.162', 3, 'Update on table CartItem', '{"id":41,"cartId":8,"productId":93,"quantity":1,"createdAt":"Jun 5, 2024, 2:50:19 PM"}', '{"id":41,"cartId":8,"productId":93,"quantity":1111,"createdAt":"Jun 5, 2024, 2:50:19 PM"}', '2024-06-05 07:50:19', '2024-07-03 14:51:53'),
@@ -445,7 +449,32 @@ INSERT INTO `log` (`id`, `ip`, `levelLog`, `res`, `preValue`, `curValue`, `creat
 	(1734672074573, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":34,"productId":90,"price":205442.0,"discount":20.0,"quantity":2,"createdAt":"Dec 20, 2024, 12:19:49 PM"}', '2024-12-20 05:19:49', '2024-12-20 05:19:49'),
 	(1734672091508, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":35,"productId":61,"price":422493.0,"discount":20.0,"quantity":1,"createdAt":"Dec 20, 2024, 12:20:23 PM"}', '2024-12-20 05:20:23', '2024-12-20 05:20:23'),
 	(1734672102281, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":36,"productId":57,"price":153427.0,"discount":0.0,"quantity":2,"createdAt":"Dec 20, 2024, 12:20:45 PM"}', '2024-12-20 05:20:45', '2024-12-20 05:20:45'),
-	(1734672109543, '', 4, 'Delete on table CartItem', '{"id":76,"cartId":8,"productId":61,"quantity":1,"createdAt":"Dec 20, 2024, 12:20:14 PM"}', 'null', '2024-12-20 05:20:14', '2024-12-20 05:20:23');
+	(1734672109543, '', 4, 'Delete on table CartItem', '{"id":76,"cartId":8,"productId":61,"quantity":1,"createdAt":"Dec 20, 2024, 12:20:14 PM"}', 'null', '2024-12-20 05:20:14', '2024-12-20 05:20:23'),
+	(1734878476616, '', 3, 'Update on table Order', '{"id":34,"userId":1,"status":-1,"deliveryMethod":1,"deliveryPrice":35500.0,"createdAt":"Dec 20, 2024, 12:19:49 PM","updatedAt":"Dec 20, 2024, 12:28:06 PM","totalPrice":577666.0}', '{"id":34,"userId":1,"status":4,"deliveryMethod":1,"deliveryPrice":35500.0,"createdAt":"Dec 20, 2024, 12:19:49 PM","updatedAt":"Dec 20, 2024, 12:28:06 PM","totalPrice":577666.0}', '2024-12-20 05:19:49', '2024-12-22 14:41:00'),
+	(1734878493826, '', 3, 'Update on table Order', '{"id":33,"userId":1,"status":-1,"deliveryMethod":1,"deliveryPrice":216000.0,"createdAt":"Dec 19, 2024, 12:08:52 AM","totalPrice":1086556.0}', '{"id":33,"userId":1,"status":4,"deliveryMethod":1,"deliveryPrice":216000.0,"createdAt":"Dec 19, 2024, 12:08:52 AM","totalPrice":1086556.0}', '2024-12-18 17:08:52', '2024-12-22 14:40:51'),
+	(1734878552844, '1.53.54.112', 2, 'Insert on table CartItem', 'null', '{"id":0,"cartId":8,"productId":31,"quantity":1,"createdAt":"Dec 22, 2024, 9:42:08 PM"}', '2024-12-22 14:42:08', '2024-12-22 14:42:08'),
+	(1734878554138, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":37,"productId":61,"price":422493.0,"discount":20.0,"quantity":1,"createdAt":"Dec 22, 2024, 9:42:32 PM"}', '2024-12-22 14:42:32', '2024-12-22 14:42:32'),
+	(1734878556155, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":37,"productId":39,"price":176598.0,"discount":0.0,"quantity":1,"createdAt":"Dec 22, 2024, 9:42:32 PM"}', '2024-12-22 14:42:32', '2024-12-22 14:42:32'),
+	(1734878562170, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":37,"productId":31,"price":231331.0,"discount":20.0,"quantity":1,"createdAt":"Dec 22, 2024, 9:42:32 PM"}', '2024-12-22 14:42:32', '2024-12-22 14:42:32'),
+	(1734878579348, '', 3, 'Update on table Order', '{"id":36,"userId":1,"status":-1,"deliveryMethod":1,"deliveryPrice":416000.0,"createdAt":"Dec 20, 2024, 12:20:45 PM","updatedAt":"Dec 20, 2024, 12:28:01 PM","totalPrice":306854.0}', '{"id":36,"userId":1,"status":4,"deliveryMethod":1,"deliveryPrice":416000.0,"createdAt":"Dec 20, 2024, 12:20:45 PM","updatedAt":"Dec 20, 2024, 12:28:01 PM","totalPrice":306854.0}', '2024-12-20 05:20:45', '2024-12-22 14:41:43'),
+	(1734878582211, '', 4, 'Delete on table CartItem', '{"id":77,"cartId":8,"productId":31,"quantity":1,"createdAt":"Dec 22, 2024, 9:42:08 PM"}', 'null', '2024-12-22 14:42:08', '2024-12-22 14:42:32'),
+	(1734878589708, '1.53.54.112', 2, 'Insert on table CartItem', 'null', '{"id":0,"cartId":8,"productId":61,"quantity":1,"createdAt":"Dec 22, 2024, 9:42:18 PM"}', '2024-12-22 14:42:18', '2024-12-22 14:42:18'),
+	(1734878596407, '1.53.54.112', 2, 'Insert on table CartItem', 'null', '{"id":0,"cartId":8,"productId":39,"quantity":1,"createdAt":"Dec 22, 2024, 9:42:13 PM"}', '2024-12-22 14:42:13', '2024-12-22 14:42:13'),
+	(1734878601191, '', 4, 'Delete on table CartItem', '{"id":79,"cartId":8,"productId":61,"quantity":1,"createdAt":"Dec 22, 2024, 9:42:18 PM"}', 'null', '2024-12-22 14:42:18', '2024-12-22 14:42:32'),
+	(1734878650202, '', 4, 'Delete on table CartItem', '{"id":78,"cartId":8,"productId":39,"quantity":1,"createdAt":"Dec 22, 2024, 9:42:13 PM"}', 'null', '2024-12-22 14:42:13', '2024-12-22 14:42:32'),
+	(1734880288141, '', 4, 'Delete on table CartItem', '{"id":80,"cartId":8,"productId":99,"quantity":4,"createdAt":"Dec 22, 2024, 10:11:10 PM"}', 'null', '2024-12-22 15:11:10', '2024-12-22 15:11:19'),
+	(1734880293289, '1.53.54.112', 2, 'Insert on table CartItem', 'null', '{"id":0,"cartId":8,"productId":99,"quantity":4,"createdAt":"Dec 22, 2024, 10:11:10 PM"}', '2024-12-22 15:11:10', '2024-12-22 15:11:11'),
+	(1734880333118, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":38,"productId":99,"price":199763.0,"discount":20.0,"quantity":4,"createdAt":"Dec 22, 2024, 10:11:19 PM"}', '2024-12-22 15:11:19', '2024-12-22 15:11:19'),
+	(1734880398686, '1.53.54.112', 2, 'Insert on table CartItem', 'null', '{"id":0,"cartId":8,"productId":14,"quantity":1,"createdAt":"Dec 22, 2024, 10:13:15 PM"}', '2024-12-22 15:13:15', '2024-12-22 15:13:15'),
+	(1734880417668, '1.53.54.112', 2, 'Insert on table CartItem', 'null', '{"id":0,"cartId":8,"productId":22,"quantity":1,"createdAt":"Dec 22, 2024, 10:13:12 PM"}', '2024-12-22 15:13:12', '2024-12-22 15:13:12'),
+	(1734880425943, '', 4, 'Delete on table CartItem', '{"id":82,"cartId":8,"productId":14,"quantity":1,"createdAt":"Dec 22, 2024, 10:13:15 PM"}', 'null', '2024-12-22 15:13:15', '2024-12-22 15:13:33'),
+	(1734880445897, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":39,"productId":94,"price":332072.0,"discount":20.0,"quantity":1,"createdAt":"Dec 22, 2024, 10:13:33 PM"}', '2024-12-22 15:13:33', '2024-12-22 15:13:33'),
+	(1734880445931, '', 4, 'Delete on table CartItem', '{"id":83,"cartId":8,"productId":94,"quantity":1,"createdAt":"Dec 22, 2024, 10:13:17 PM"}', 'null', '2024-12-22 15:13:17', '2024-12-22 15:13:33'),
+	(1734880454970, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":40,"productId":22,"price":116529.0,"discount":0.0,"quantity":1,"createdAt":"Dec 22, 2024, 10:13:35 PM"}', '2024-12-22 15:13:35', '2024-12-22 15:13:35'),
+	(1734880481910, '', 2, 'Insert on table OrderItem', 'null', '{"id":0,"orderId":39,"productId":14,"price":247115.0,"discount":20.0,"quantity":1,"createdAt":"Dec 22, 2024, 10:13:33 PM"}', '2024-12-22 15:13:33', '2024-12-22 15:13:33'),
+	(1734880482394, '1.53.54.112', 2, 'Insert on table CartItem', 'null', '{"id":0,"cartId":8,"productId":94,"quantity":1,"createdAt":"Dec 22, 2024, 10:13:17 PM"}', '2024-12-22 15:13:17', '2024-12-22 15:13:18'),
+	(1734880512989, '', 4, 'Delete on table CartItem', '{"id":81,"cartId":8,"productId":22,"quantity":1,"createdAt":"Dec 22, 2024, 10:13:12 PM"}', 'null', '2024-12-22 15:13:12', '2024-12-22 15:13:35'),
+	(1734931725385, '', 3, 'Update on table Order', '{"id":36,"userId":1,"status":-1,"deliveryMethod":1,"deliveryPrice":416000.0,"createdAt":"Dec 20, 2024, 12:20:45 PM","updatedAt":"Dec 22, 2024, 11:23:40 PM","totalPrice":306854.0}', '{"id":36,"userId":1,"status":4,"deliveryMethod":1,"deliveryPrice":416000.0,"createdAt":"Dec 20, 2024, 12:20:45 PM","updatedAt":"Dec 22, 2024, 11:23:40 PM","totalPrice":306854.0}', '2024-12-20 05:20:45', '2024-12-23 05:28:38');
 
 -- Dumping structure for table bookshopdb.orders
 CREATE TABLE IF NOT EXISTS `orders` (
@@ -459,9 +488,9 @@ CREATE TABLE IF NOT EXISTS `orders` (
   PRIMARY KEY (`id`),
   KEY `idx_orders_user` (`userId`),
   CONSTRAINT `fk_orders_user` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table bookshopdb.orders: ~32 rows (approximately)
+-- Dumping data for table bookshopdb.orders: ~36 rows (approximately)
 INSERT INTO `orders` (`id`, `userId`, `status`, `deliveryMethod`, `deliveryPrice`, `createdAt`, `updatedAt`) VALUES
 	(1, 4, 4, 1, 10000, '2024-12-11 10:25:07', '2024-07-09 13:04:16'),
 	(2, 5, 2, 2, 50000, '2024-12-11 10:25:08', '2024-07-09 13:02:44'),
@@ -491,10 +520,14 @@ INSERT INTO `orders` (`id`, `userId`, `status`, `deliveryMethod`, `deliveryPrice
 	(27, 1, 1, 1, 15000, '2024-12-11 10:25:19', '2024-12-18 16:07:05'),
 	(28, 1, 2, 1, 15000, '2024-12-11 10:25:19', '2024-07-09 13:03:11'),
 	(30, 1, 3, 1, 15000, '2024-12-11 10:25:20', '2023-07-09 13:03:18'),
-	(33, 1, -1, 1, 216000, '2024-12-18 17:08:52', NULL),
-	(34, 1, -1, 1, 35500, '2024-12-20 05:19:49', '2024-12-20 05:28:06'),
-	(35, 1, -1, 1, 216000, '2024-12-20 05:20:23', NULL),
-	(36, 1, -1, 1, 416000, '2024-12-20 05:20:45', '2024-12-20 05:28:01');
+	(33, 1, -1, 1, 216000, '2024-12-18 17:08:52', '2024-12-22 16:23:46'),
+	(34, 1, -1, 1, 35500, '2024-12-20 05:19:49', '2024-12-22 16:23:43'),
+	(35, 1, 0, 1, 216000, '2024-12-20 05:20:23', '2024-12-22 15:04:59'),
+	(36, 1, 4, 1, 416000, '2024-12-20 05:20:45', '2024-12-22 16:23:40'),
+	(37, 1, 0, 1, 45500, '2024-12-22 14:42:32', '2024-12-22 15:04:52'),
+	(38, 1, 0, 1, 45500, '2024-12-22 15:11:19', '2024-12-22 15:11:33'),
+	(39, 1, 0, 1, 36001, '2024-12-22 15:13:33', '2024-12-23 05:30:46'),
+	(40, 1, 0, 1, 36001, '2024-12-22 15:13:35', '2024-12-23 05:30:30');
 
 -- Dumping structure for table bookshopdb.order_detail
 CREATE TABLE IF NOT EXISTS `order_detail` (
@@ -515,12 +548,16 @@ CREATE TABLE IF NOT EXISTS `order_detail` (
   CONSTRAINT `FK_order_detail_voucher_2` FOREIGN KEY (`productVoucherId`) REFERENCES `voucher` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=1734328121274 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table bookshopdb.order_detail: ~1 rows (approximately)
+-- Dumping data for table bookshopdb.order_detail: ~8 rows (approximately)
 INSERT INTO `order_detail` (`orderId`, `addressId`, `shipVoucherId`, `shipVoucherDecrease`, `productVoucherId`, `productVoucherDecrease`, `totalPrice`) VALUES
 	(33, 33, NULL, 0, NULL, 0, 1086556),
 	(34, 33, NULL, 0, NULL, 0, 577666),
 	(35, 33, NULL, 0, NULL, 0, 1044386),
-	(36, 33, NULL, 0, NULL, 0, 306854);
+	(36, 33, NULL, 0, NULL, 0, 306854),
+	(37, 33, NULL, 0, NULL, 0, 699657),
+	(38, 33, NULL, 0, NULL, 0, 639242),
+	(39, 33, NULL, 0, NULL, 0, 463350),
+	(40, 33, NULL, 0, NULL, 0, 116529);
 
 -- Dumping structure for table bookshopdb.order_item
 CREATE TABLE IF NOT EXISTS `order_item` (
@@ -537,9 +574,9 @@ CREATE TABLE IF NOT EXISTS `order_item` (
   KEY `idx_order_item_product` (`productId`),
   CONSTRAINT `fk_order_item_orders` FOREIGN KEY (`orderId`) REFERENCES `orders` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_order_item_product` FOREIGN KEY (`productId`) REFERENCES `product` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=135 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table bookshopdb.order_item: ~72 rows (approximately)
+-- Dumping data for table bookshopdb.order_item: ~84 rows (approximately)
 INSERT INTO `order_item` (`id`, `orderId`, `productId`, `price`, `discount`, `quantity`, `createdAt`, `updatedAt`) VALUES
 	(1, 1, 78, 286587, 0, 4, '2021-06-26 20:11:05', NULL),
 	(2, 2, 21, 29619, 0, 2, '2021-03-26 03:39:47', NULL),
@@ -610,14 +647,21 @@ INSERT INTO `order_item` (`id`, `orderId`, `productId`, `price`, `discount`, `qu
 	(70, 30, 46, 384754, 20, 1, '2024-05-21 09:30:15', NULL),
 	(71, 30, 94, 332072, 20, 1, '2024-05-21 09:30:15', NULL),
 	(72, 30, 14, 247115, 20, 1, '2024-05-21 09:30:15', NULL),
-	(120, 33, 39, 176598, 0, 3, '2024-12-18 17:08:52', NULL),
+	(120, 33, 39, 176598, 0, 10, '2024-12-20 05:47:22', NULL),
 	(121, 33, 46, 384754, 20, 1, '2024-12-18 17:08:52', NULL),
 	(122, 33, 33, 155599, 20, 2, '2024-12-18 17:08:52', NULL),
-	(123, 34, 33, 155599, 20, 2, '2024-12-20 05:19:49', NULL),
+	(123, 34, 33, 155599, 20, 5, '2024-12-20 05:45:05', NULL),
 	(124, 34, 90, 205442, 20, 2, '2024-12-20 05:19:49', NULL),
 	(125, 35, 61, 422493, 20, 1, '2024-12-20 05:20:23', NULL),
-	(126, 35, 39, 176598, 0, 4, '2024-12-20 05:20:23', NULL),
-	(127, 36, 57, 153427, 0, 2, '2024-12-20 05:20:45', NULL);
+	(126, 35, 80, 176598, 0, 4, '2024-12-22 16:36:13', NULL),
+	(127, 36, 57, 153427, 0, 3, '2024-12-20 05:45:00', NULL),
+	(128, 37, 61, 422493, 20, 1, '2024-12-22 14:42:32', NULL),
+	(129, 37, 39, 176598, 0, 1, '2024-12-22 14:42:32', NULL),
+	(130, 37, 31, 231331, 20, 1, '2024-12-22 14:42:32', NULL),
+	(131, 38, 99, 199763, 20, 4, '2024-12-22 15:11:19', NULL),
+	(132, 39, 94, 332072, 20, 1, '2024-12-22 15:13:33', NULL),
+	(133, 39, 14, 247115, 20, 1, '2024-12-22 15:13:33', NULL),
+	(134, 40, 22, 116529, 0, 1, '2024-12-22 15:13:35', NULL);
 
 -- Dumping structure for table bookshopdb.order_signature
 CREATE TABLE IF NOT EXISTS `order_signature` (
@@ -634,14 +678,18 @@ CREATE TABLE IF NOT EXISTS `order_signature` (
   KEY `FK_order_signature_authenticator` (`authId`),
   CONSTRAINT `FK_order_signature_authenticator` FOREIGN KEY (`authId`) REFERENCES `authenticator` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_order_signature_orders` FOREIGN KEY (`orderId`) REFERENCES `orders` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table bookshopdb.order_signature: ~1 rows (approximately)
+-- Dumping data for table bookshopdb.order_signature: ~8 rows (approximately)
 INSERT INTO `order_signature` (`id`, `orderId`, `authId`, `signature`, `hashOrderInfo`, `createdAt`, `updatedAt`, `status`) VALUES
 	(11, 33, NULL, NULL, 'ff881f9968e36b63f8928cb8cdcbe2fc26f75551f9561f78eb20b9ee01b62531', '2024-12-18 17:08:52', NULL, b'1'),
 	(12, 34, NULL, NULL, '59dc16c9fea157163ccdb9a2b6e0dfe034b066e2329bb4d291add3cbbe39b114', '2024-12-20 05:19:49', NULL, b'1'),
-	(13, 35, NULL, NULL, '8d270208c655baff4efb1d0f924d989c21978367a42451ce5c87c2081c870fde', '2024-12-20 05:20:23', NULL, b'1'),
-	(14, 36, NULL, NULL, '1a0198a64158de971c90bc62e3cf5c9c0dc98201980a90e1a6879edcdf185f3f', '2024-12-20 05:20:45', NULL, b'1');
+	(13, 35, NULL, 'cbBr9Xe8zuqEqZCo7IiUIWSE3oTs4XVBJ/lSmd9SnLQm4sapG6kAgY9XEaXt+T9WK79ZmOTlCUgTGXQ7Y8w+nBqP2Ib746N0lbEez6oqQ/7zO2qkxvzBARb7s9lv8HLS3P81lTTQdD9qnFWvk8du/TNHIbgEFmwadHDhPyrRKSHirbK1u2W7Aw0MrvICwqOkgDG1e5gS5BJvIGO8fLRreT2d0onDUoHjZ9lV5DZWNp5k9OPB7Jkj/a0sq80t46ECknEyosBIbAsBhsTvMysNCqkoWftWfMsaEXepdGQEy184Ul0ULRFlRIAQrcaJxRLjDpVorl9A3iJEMeT4ZAHPjg==', '8d270208c655baff4efb1d0f924d989c21978367a42451ce5c87c2081c870fde', '2024-12-20 05:20:23', '2024-12-20 05:20:23', b'1'),
+	(14, 36, NULL, NULL, '1a0198a64158de971c90bc62e3cf5c9c0dc98201980a90e1a6879edcdf185f3f', '2024-12-20 05:20:45', NULL, b'1'),
+	(15, 37, NULL, 'fmeOnN9msNU2SwXq0+IPAxz1xe/g9pF7BMFAp1E8/RpWuw6LctKLdQRbHwr8jtZU8DXO7ArbBOlQ42Zv2Xl6WzQZ4PgIlgMardWZ4qRKcR8gT9t8s4hpntAIUcpDYsqHdKR0k5VS+jy2AA0FA6yozRIo4vmXVFr7GnZBWpByRzeH7HnwSHFDqm1bGLj6eZMrTnKO3rjo5KwUBzNmUptX5DO9MXj+qFSt41B+PXKfqQhWV8ytXIf61hzKGwFt2jc8dETHQ/IhCdvf69aSWV5qeYBDQr6/g4T1aAqmNNU7Rw+fJ57f+A+tZIbbjLa077HUKi+iNR3KWHgBasOwRHZ1yw==', 'e4e405315bf3b794df40989b796149e36a626972e575435a6db8b4f157ee441c', '2024-12-22 14:42:32', '2024-12-22 14:42:32', b'1'),
+	(16, 38, NULL, 'HgCI6BMa8KYpej87uvduhYh6HejZIbDzjWKMNdCDjYPFmRAocK0JFXECZtWnRXznNlz5KseqKhoSh+H+KoCdtm7nxSXKUiDRmFvnYpZmaISe7QIESI0/AwhhZJ5kCIKRhW6wyfnmV7SZr6O5v9IPTHm8/W+Ll6rE/PCsLotTNUbdTFHaWPOIrocBVcWGtvxn0oGUTcBdjEOmghPzHrmdRY/7KqbsuyunaPyi2Jfwntgr0laH1fuLjtNar7N9InLx1oXHH9ATb8IdvHwhkUl88DafBJMBXqUuwwZ0ZewKNNukJrUmjumpFtXvE2QDhS478H2NwGvUXqXqlQdriFaiSg==', '3919a6860a9be2ae8254dcbf4f1bd7792542953ed0f6a5f4ebdd947f113733ea', '2024-12-22 15:11:19', '2024-12-22 15:11:19', b'1'),
+	(17, 39, 11, 'NdxwapRIiMhONpJJCMcE6o/B4i5r1wHm1Eujqv6hoD2LVxJI6Qnnl7YKlC0IGr5CrrJQr9LqAoyda28+a0Qvbxzoq6O18mTuYVwQgkzpGlP/WqxO8At3wqdUlHAtX8JG1TuSbsWqTX+TBoexECkW4XDTD1DUaYZfDeRaX021igbpI8B4iRjGQYu9wfucOL0RztZnj4zdjHSMqQ/Jmk/hsJTsfA7ExenwD6xGSIqEIblFnjQYO7JQ1XQH50gemaum2z82v2qpEYLPAxe3r6dqfHcEUPtqxupKwg/Nb9/m6qkIj9CYz+bP4IDnEul3HvVj+eoyaApANpVCIdwl5F+40A==', '7a14dca021b65613d14e522dc10932383601cf225d3568d4ad89243327855a55', '2024-12-22 15:13:33', '2024-12-23 05:30:46', b'1'),
+	(18, 40, 11, 'mMvObPaH79T1DRLliDBOzXXDSILL4IG4QkGAt7rEkKF6QqnYnv5Zw4bR6Qq4prfqOVBlViIJDwT7s8hT/xCBC7buAhPRsit5vCe854KmI/t6vbuPb24Ee/zN1HBLEkZsi/QOBox6qpqgtUdItfI6lQton1NtVMC9YVtBxv1ZWohJ5WMv/8lgp34ugLQgmvR8/53ejrr6UrzCKQ1ky7DRLYJTloGKPvc+zHCidI4hmivvxPe529MybXVpfKCh3GwEOsDQ2/T5dpAarlgQg+hQWFGdFh4p9uydqgFNVl9/r/Bpv3dVvw1kR/yiQuA3L9rB7XNeUTyCuf/at7yxUITv/g==', '31ef822e436ad5bb549c4ac9beff0013ac1be3c55a34a99d4b210d9c2c0b917', '2024-12-22 15:13:36', '2024-12-23 05:30:30', b'1');
 
 -- Dumping structure for table bookshopdb.otp
 CREATE TABLE IF NOT EXISTS `otp` (
@@ -653,7 +701,7 @@ CREATE TABLE IF NOT EXISTS `otp` (
   PRIMARY KEY (`id`),
   KEY `FK__user2` (`userId`),
   CONSTRAINT `FK__user2` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Dumping data for table bookshopdb.otp: ~0 rows (approximately)
 
@@ -1197,7 +1245,7 @@ INSERT INTO `product_review` (`id`, `userId`, `productId`, `ratingScore`, `conte
 CREATE TABLE IF NOT EXISTS `user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `username` varchar(25) DEFAULT NULL,
-  `password` varchar(32) DEFAULT NULL,
+  `password` varchar(200) DEFAULT NULL,
   `fullname` varchar(50) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
   `phoneNumber` varchar(11) DEFAULT NULL,
@@ -1212,13 +1260,13 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 -- Dumping data for table bookshopdb.user: ~7 rows (approximately)
 INSERT INTO `user` (`id`, `username`, `password`, `fullname`, `email`, `phoneNumber`, `gender`, `role`, `createAt`) VALUES
-	(1, 'user1', '202CB962AC59075B964B07152D234B70', 'Dunn Mcpherson', '21130356@st.hcmuaf.edu.vn', '0989894900', b'0', 'ADMIN', '2024-12-13 16:29:47'),
-	(2, 'user2', '202CB962AC59075B964B07152D234B70', 'Foreman Carter', 'foremancarter@recrisys.com', '0993194154', b'0', 'EMPLOYEE', '2024-03-27 14:08:39'),
-	(3, 'user3', '202CB962AC59075B964B07152D234B70', 'Felecia Cabrera', 'feleciacabrera@recrisys.com', '0930174351', b'1', 'EMPLOYEE', '2024-03-27 14:08:39'),
-	(4, 'user4', '202CB962AC59075B964B07152D234B70', 'Juliette Mcdowell', 'juliettemcdowell@recrisys.com', '0911925643', b'1', 'CUSTOMER', '2024-03-27 14:08:39'),
-	(5, 'user5', '202CB962AC59075B964B07152D234B70', 'Vilma Spencer', 'vilmaspencer@recrisys.com', '0987509391', b'1', 'CUSTOMER', '2024-03-27 14:08:39'),
-	(6, 'hao', '32791E666FEF96B588DB16200D5FDA94', 'Quang Hiu', 'abc@gmail.com', '0123123123', b'0', 'CUSTOMER', '2024-03-27 14:08:39'),
-	(9, 'user111', '123', 'Quang Hiu', 'hiu@g.com', '(NULL)', b'0', 'CUSTOMER', '2024-06-05 15:55:58');
+	(1, 'user1', 'a16323b774d427c05b6d186f161d4a6771922a62', 'Dunn Mcpherson', '21130356@st.hcmuaf.edu.vn', '0989894900', b'0', 'ADMIN', '2024-12-23 14:38:23'),
+	(2, 'user2', 'a16323b774d427c05b6d186f161d4a6771922a62', 'Foreman Carter', 'foremancarter@recrisys.com', '0993194154', b'0', 'EMPLOYEE', '2024-12-23 14:38:23'),
+	(3, 'user3', 'a16323b774d427c05b6d186f161d4a6771922a62', 'Felecia Cabrera', 'feleciacabrera@recrisys.com', '0930174351', b'1', 'EMPLOYEE', '2024-12-23 14:38:23'),
+	(4, 'user4', 'a16323b774d427c05b6d186f161d4a6771922a62', 'Juliette Mcdowell', 'juliettemcdowell@recrisys.com', '0911925643', b'1', 'CUSTOMER', '2024-12-23 14:38:23'),
+	(5, 'user5', 'a16323b774d427c05b6d186f161d4a6771922a62', 'Vilma Spencer', 'vilmaspencer@recrisys.com', '0987509391', b'1', 'CUSTOMER', '2024-12-23 14:38:23'),
+	(6, 'hao', 'a16323b774d427c05b6d186f161d4a6771922a62', 'Quang Hiu', 'abc@gmail.com', '0123123123', b'0', 'CUSTOMER', '2024-12-23 14:38:23'),
+	(9, 'user111', 'a16323b774d427c05b6d186f161d4a6771922a62', 'Quang Hiu', 'hiu@g.com', '(NULL)', b'0', 'CUSTOMER', '2024-12-23 14:38:23');
 
 -- Dumping structure for table bookshopdb.voucher
 CREATE TABLE IF NOT EXISTS `voucher` (

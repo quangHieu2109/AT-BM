@@ -7,14 +7,15 @@ import java.security.NoSuchAlgorithmException;
 
 public class HashingUtils {
     public static String hash(String s) {
+        s+="@#$%^%$#*&^";
         String hashed = "";
         try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(s.getBytes(StandardCharsets.UTF_8));
-            byte[] digest = md.digest();
-            BigInteger bi = new BigInteger(1, digest);
-            hashed = String.format("%0" + (digest.length << 1) + "X", bi);
-        } catch (NoSuchAlgorithmException e) {
+            MessageDigest md = MessageDigest.getInstance("SHA1");
+            byte[] bytes = s.getBytes("UTF-8");
+            byte[] digest = md.digest(bytes);
+            BigInteger re = new BigInteger(1, digest);
+            hashed =  re.toString(16);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return hashed;
